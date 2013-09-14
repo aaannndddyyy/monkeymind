@@ -29,36 +29,17 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#ifndef MONKEYMIND_TIME_H
+#define MONKEYMIND_TIME_H
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+enum subjective_time
 {
-	int i, j, k;
+    MM_TIME_LONG_AGO = 0,
+	MM_TIME_RECENTLY,
+	MM_TIME_NOW,
+	MM_TIME_NEAR_FUTURE,
+	MM_TIME_DISTANT_FUTURE,
+    MM_SUBJECTIVE_TIMES
+};
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
-
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
-
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
-}
+#endif

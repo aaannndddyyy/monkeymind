@@ -29,36 +29,37 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#ifndef MONKEYMIND_NARRATIVE_H
+#define MONKEYMIND_NARRATIVE_H
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+#include <stdio.h>
+#include <string.h>
+#include "monkeymind_object.h"
+
+/* the maximum number of steps within a narrative sequence */
+#define MM_MAX_NARRATIVE_LENGTH  16
+
+typedef struct
 {
-	int i, j, k;
+	mm_object who;
+	mm_object what;
+	mm_object where;
+	mm_object when;
+	mm_object why;
+	mm_object way;
+	mm_object means;
+} mm_circumstance;
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+typedef struct
+{
+    /* a unique reference for the narrative */
+    unsigned int id;
 
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
+    /* the number of steps in the narrative */
+    unsigned int length;
 
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
-}
+    /* array storing the steps in the narrative */
+    mm_circumstance step[MM_MAX_NARRATIVE_LENGTH];
+} mm_narrative;
+
+#endif

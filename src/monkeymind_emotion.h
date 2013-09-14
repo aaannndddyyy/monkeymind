@@ -29,36 +29,30 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#ifndef MONKEYMIND_EMOTION_H
+#define MONKEYMIND_EMOTION_H
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
-{
-	int i, j, k;
+/* emotions binary coded according to the Lövheim Cube
+   Lövheim H. A new three-dimensional model for emotions and
+   monoamine neurotransmitters. (2012). Med Hypotheses,
+   78, 341-348. doi:10.1016/j.mehy.2011.11.016 PMID 22153577 */
+#define MM_EMOTION_SHAME      0
+#define MM_EMOTION_DISTRESS   1
+#define MM_EMOTION_FEAR       2
+#define MM_EMOTION_ANGER      3
+#define MM_EMOTION_DISGUST    4
+#define MM_EMOTION_SURPRISE   5
+#define MM_EMOTION_JOY        6
+#define MM_EMOTION_EXCITEMENT 7
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+unsigned char mm_neuro_to_emotion(unsigned int serotonin,
+								  unsigned int dopamine,
+								  unsigned int noradrenaline,
+								  unsigned int neurotransmitter_max);
+void mm_emotion_to_neuro(unsigned char emotion,
+						 unsigned int * serotonin,
+						 unsigned int * dopamine,
+						 unsigned int * noradrenaline,
+						 unsigned int neurotransmitter_max);
 
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
-
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
-}
+#endif

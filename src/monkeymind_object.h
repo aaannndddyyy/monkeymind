@@ -29,36 +29,45 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#ifndef MONKEYMIND_OBJECT_H
+#define MONKEYMIND_OBJECT_H
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+#include <stdio.h>
+#include <string.h>
+
+/* the maximum number of properties of an object */
+#define MM_MAX_OBJECT_PROPERTIES  8
+
+enum property_types
 {
-	int i, j, k;
+	MM_PROPERTY_NONE = 0,
+    MM_PROPERTY_OBJECT,
+    MM_PROPERTY_NARRATIVE,
+	MM_PROPERTY_DAY,
+	MM_PROPERTY_FIRST_NAME,
+	MM_PROPERTY_LAST_NAME,
+	MM_PROPERTY_PLACE_X,
+	MM_PROPERTY_PLACE_Y,
+	MM_PROPERTY_PLACE_Z,
+	MM_PROPERTY_TERRITORY,
+	MM_PROPERTY_EMOTION,
+	MM_PROPERTY_MEETER,
+	MM_PROPERTY_MET,
+	MM_PROPERTIES
+};
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+typedef struct
+{
+    unsigned int id;
 
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
+    /* a number of properties of the object */
+    unsigned int length;
+    unsigned int property_type[MM_MAX_OBJECT_PROPERTIES];
+    unsigned int property_value[MM_MAX_OBJECT_PROPERTIES];
 
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
-}
+    /* how often has this feature been observed or known */
+    unsigned int property_frequency[MM_MAX_OBJECT_PROPERTIES];
+    unsigned int observations;
+} mm_object;
+
+#endif

@@ -29,36 +29,14 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#ifndef MONKEYMIND_RAND_H
+#define MONKEYMIND_RAND_H
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+typedef struct
 {
-	int i, j, k;
+	unsigned int value[4];
+} mm_random_seed;
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+unsigned int mm_rand(mm_random_seed * seed);
 
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
-
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
-}
+#endif

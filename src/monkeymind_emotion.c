@@ -29,36 +29,36 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#include "monkeymind_emotion.h"
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+/* convert a set of neurotransmitter levels into a single value
+   indicating the type of emotion */
+unsigned char mm_neuro_to_emotion(unsigned int serotonin,
+								  unsigned int dopamine,
+								  unsigned int noradrenaline,
+								  unsigned int neurotransmitter_max)
 {
-	int i, j, k;
+	unsigned int threshold = neurotransmitter_max>>1;
+	unsigned char emotion = 0;
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+	if (noradrenaline >= threshold) emotion |= 1;
+	if (dopamine >= threshold) emotion |= 2;
+	if (serotonin >= threshold) emotion |= 4;
+	return emotion;
+}
 
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
+/* convert an emotion into a set of neurotransmitter levels */
+void mm_emotion_to_neuro(unsigned char emotion,
+						 unsigned int * serotonin,
+						 unsigned int * dopamine,
+						 unsigned int * noradrenaline,
+						 unsigned int neurotransmitter_max)
+{
+	*serotonin = 0;
+	*dopamine = 0;
+	*noradrenaline = 0;
 
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
+	if (emotion & 1) *noradrenaline = neurotransmitter_max;
+	if (emotion & 2) *dopamine = neurotransmitter_max;
+	if (emotion & 4) *serotonin = neurotransmitter_max;
 }

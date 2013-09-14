@@ -33,6 +33,7 @@
 
 #include <stdio.h>
 #include "monkeymind.h"
+#include "monkeymind_social.h"
 
 int main(int argc, char* argv[])
 {

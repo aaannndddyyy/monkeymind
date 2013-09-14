@@ -29,36 +29,41 @@
 
 ****************************************************************/
 
-#include "monkeymind.h"
+#ifndef MONKEYMIND_LANGUAGE_H
+#define MONKEYMIND_LANGUAGE_H
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+/* the number of instructions in the language machine */
+#define MM_SIZE_LANGUAGE_INSTRUCTIONS 128
+
+/* te number of arguments which each language machine
+   instruction takes */
+#define MM_SIZE_LANGUAGE_ARGS    2
+
+enum language_machine_functions
 {
-	int i, j, k;
+    MM_INSTRUCTION_NONE = 0,
+	MM_INSTRUCTION_ADD,
+	MM_INSTRUCTION_REMOVE,
+	MM_INSTRUCTION_INSERT,
+	MM_INSTRUCTION_COPY,
+	MM_INSTRUCTIONS
+};
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+/* representation of a language machine instruction */
+typedef struct
+{
+	unsigned char function;
+	unsigned int argument[MM_SIZE_LANGUAGE_ARGS];
+	/* flags for relative or absolute addressing */
+	unsigned char flags;
+} mm_language_instruction;
 
-	/* initially random language machine */
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
-	}
+/* the language machine is just a program containing a series
+   of instructions */
+typedef struct
+{
+	mm_language_instruction instruction[MM_SIZE_LANGUAGE_INSTRUCTIONS];
+} mm_language;
 
-	/* assign id numbers to spatial map */
-	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
-		mind->spatial[i].id = i;
-	}
-}
+
+#endif
