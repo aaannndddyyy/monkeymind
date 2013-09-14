@@ -81,6 +81,11 @@ void mm_init(monkeymind * mind)
 			}
 		}
 	}
+
+	/* assign id numbers to spatial map */
+	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
+		mind->spatial[i].id = i;
+	}
 }
 
 /* convert a set of neurotransmitter levels into a single value
