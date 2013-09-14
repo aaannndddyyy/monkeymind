@@ -31,12 +31,64 @@
 
 #include "monkeymind.h"
 
+/* Xorshift */
+unsigned int mm_rand(mm_random_seed * seed)
+{
+	unsigned int t;
+
+	/* avoid singularity */
+	if (seed->value[0]+seed->value[1]+
+		seed->value[2]+seed->value[3] == 0) {
+		seed->value[0] = 123456789;
+		seed->value[1] = 362436069;
+		seed->value[2] = 521288629;
+		seed->value[3] = 88675123;
+	}
+
+	t = seed->value[0] ^ (seed->value[0] << 11);
+	seed->value[0] = seed->value[1];
+	seed->value[1] = seed->value[2];
+	seed->value[2] = seed->value[3];
+	seed->value[3] =
+		seed->value[3] ^
+		(seed->value[3] >> 19) ^
+		(t ^ (t >> 8));
+	return seed->value[3];
+}
+
+/* initialises a mind */
+void mm_init(monkeymind * mind)
+{
+	int i, j, k;
+
+	memset((void*)mind->narrative, '\0',
+		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
+	memset((void*)mind->social_graph, '\0',
+		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
+	memset((void*)mind->spatial, '\0',
+		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+
+	/* initially random language machine */
+	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
+			mind->language[i].instruction[j].function =
+				mm_rand(&mind->seed) & 255;
+			mind->language[i].instruction[j].flags =
+				mm_rand(&mind->seed) & 255;
+			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
+				mind->language[i].instruction[j].argument[k] =
+					mm_rand(&mind->seed);
+			}
+		}
+	}
+}
+
 /* convert a set of neurotransmitter levels into a single value
    indicating the type of emotion */
-unsigned char neuro_to_emotion(unsigned int serotonin,
-							   unsigned int dopamine,
-							   unsigned int noradrenaline,
-							   unsigned int neurotransmitter_max)
+unsigned char mm_neuro_to_emotion(unsigned int serotonin,
+								  unsigned int dopamine,
+								  unsigned int noradrenaline,
+								  unsigned int neurotransmitter_max)
 {
 	unsigned int threshold = neurotransmitter_max>>1;
 	unsigned char emotion = 0;
@@ -48,11 +100,11 @@ unsigned char neuro_to_emotion(unsigned int serotonin,
 }
 
 /* convert an emotion into a set of neurotransmitter levels */
-void emotion_to_neuro(unsigned char emotion,
-					  unsigned int * serotonin,
-					  unsigned int * dopamine,
-					  unsigned int * noradrenaline,
-					  unsigned int neurotransmitter_max)
+void mm_emotion_to_neuro(unsigned char emotion,
+						 unsigned int * serotonin,
+						 unsigned int * dopamine,
+						 unsigned int * noradrenaline,
+						 unsigned int neurotransmitter_max)
 {
 	*serotonin = 0;
 	*dopamine = 0;

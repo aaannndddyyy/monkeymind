@@ -36,6 +36,8 @@
 
 int main(int argc, char* argv[])
 {
+	monkeymind mind;
 
+	mm_init(&mind);
 	return 1;
 }

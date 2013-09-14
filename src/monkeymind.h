@@ -32,6 +32,9 @@
 #ifndef MONKEYMIND_H
 #define MONKEYMIND_H
 
+#include <stdio.h>
+#include <string.h>
+
 /* the maximum number of properties of an object */
 #define MM_MAX_OBJECT_PROPERTIES  8
 
@@ -47,6 +50,12 @@
 /* te number of arguments which each language machine
    instruction takes */
 #define MM_SIZE_LANGUAGE_ARGS    2
+
+/* the number of instructions in the language machine */
+#define MM_SIZE_LANGUAGE_INSTRUCTIONS 128
+
+/* dimension of a 2D map within which the agent is located */
+#define MM_SIZE_SPATIAL          32
 
 /* emotions binary coded according to the Lövheim Cube
    Lövheim H. A new three-dimensional model for emotions and
@@ -143,26 +152,45 @@ typedef struct
 	unsigned char flags;
 } mm_language_instruction;
 
-
+/* the language machine is just a program containing a series
+   of instructions */
 typedef struct
 {
-	unsigned short
+	mm_language_instruction instruction[MM_SIZE_LANGUAGE_INSTRUCTIONS];
 } mm_language;
 
 typedef struct
 {
+	unsigned int value[4];
+} mm_random_seed;
+
+typedef struct
+{
+	mm_random_seed seed;
+
+	/* memory which may contain a number of narratives */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];
+
+	/* details of each known agent */
     mm_object social_graph[MM_SIZE_SOCIAL_GRAPH];
+
+	/* language machinery associated with each social graph entry */
+	mm_language language[MM_SIZE_SOCIAL_GRAPH];
+
+	/* spatial memory */
+	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
 } monkeymind;
 
-unsigned char neuro_to_emotion(unsigned int serotonin,
-							   unsigned int dopamine,
-							   unsigned int noradrenaline,
-							   unsigned int neurotransmitter_max);
-void emotion_to_neuro(unsigned char emotion,
-					  unsigned int * serotonin,
-					  unsigned int * dopamine,
-					  unsigned int * noradrenaline,
-					  unsigned int neurotransmitter_max);
+void mm_init(monkeymind * mind);
+unsigned int mm_rand(mm_random_seed * seed);
+unsigned char mm_neuro_to_emotion(unsigned int serotonin,
+								  unsigned int dopamine,
+								  unsigned int noradrenaline,
+								  unsigned int neurotransmitter_max);
+void mm_emotion_to_neuro(unsigned char emotion,
+						 unsigned int * serotonin,
+						 unsigned int * dopamine,
+						 unsigned int * noradrenaline,
+						 unsigned int neurotransmitter_max);
 
 #endif
