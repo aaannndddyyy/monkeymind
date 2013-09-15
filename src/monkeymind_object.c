@@ -127,3 +127,22 @@ int mm_obj_prop_add(mm_object * obj,
 	obj->length++;
 	return index;
 }
+
+/* removes a property from an object */
+int mm_obj_prop_remove(mm_object * obj,
+					   unsigned int property_type)
+{
+	int i, index;
+
+	if (obj->length == 0) return -1;
+
+	index = mm_obj_prop_index(obj, property_type);
+	if (index == -1) return -1;
+
+	for (i = index+1; i < obj->length; i++) {
+		obj->property_type[i-1] = obj->property_type[i];
+		obj->property_value[i-1] = obj->property_value[i];
+	}
+	obj->length--;
+	return 0;
+}

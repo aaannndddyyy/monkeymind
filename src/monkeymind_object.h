@@ -105,5 +105,7 @@ int mm_obj_prop_index(mm_object * obj,
 int mm_obj_prop_add(mm_object * obj,
 					unsigned int property_type,
 					unsigned int property_value);
+int mm_obj_prop_remove(mm_object * obj,
+					   unsigned int property_type);
 
 #endif
