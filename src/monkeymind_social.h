@@ -36,8 +36,18 @@
 #include <string.h>
 #include "monkeymind.h"
 
-void mm_meet(monkeymind * meeter, monkeymind * met);
-void mm_speak(monkeymind * speaker,
-			  monkeymind * listener);
+/* property indexes of meeter and met beings */
+#define MEETER_ID   0
+#define MEETER_NAME 1
+#define MET_ID      2
+#define MET_NAME    3
+
+#define SOCIAL_GRAPH_ENTRY_EXISTS(mind,index) \
+	(!((mind->social_graph[index].property_value[MEETER_ID] == 0) &&	\
+	   (mind->social_graph[index].property_value[MET_ID] == 0)))
+
+int mm_social_index_from_id(monkeymind * mind, unsigned int met_id);
+void mm_social_meet(monkeymind * meeter, monkeymind * met);
+void mm_social_speak(monkeymind * speaker, monkeymind * listener);
 
 #endif
