@@ -155,3 +155,16 @@ unsigned int mm_obj_prop_get(mm_object * obj,
 	if (index > -1) return obj->property_value[index];
 	return 0;
 }
+
+/* sets an object property value */
+int mm_obj_prop_set(mm_object * obj,
+					unsigned int property_type,
+					unsigned int property_value)
+{
+	int index = mm_obj_prop_index(obj, property_type);
+	if (index > -1) {
+		obj->property_value[index] = property_value;
+		return 0;
+	}
+	return -1;
+}
