@@ -34,11 +34,14 @@
 #include <stdio.h>
 #include "monkeymind.h"
 #include "monkeymind_social.h"
+#include "monkeymind_unittests.h"
 
 int main(int argc, char* argv[])
 {
 	monkeymind mind;
 
 	mm_init(&mind);
+
+	mm_run_tests();
 	return 1;
 }
