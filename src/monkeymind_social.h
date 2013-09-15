@@ -47,6 +47,7 @@
 	   (mind->social_graph[index].property_value[MET_ID] == 0)))
 
 int mm_social_index_from_id(monkeymind * mind, unsigned int met_id);
+int mm_social_index_from_name(monkeymind * mind, unsigned int met_name);
 void mm_social_meet(monkeymind * meeter, monkeymind * met);
 void mm_social_speak(monkeymind * speaker, monkeymind * listener);
 
