@@ -47,6 +47,13 @@ void mm_set_property(monkeymind * mind,
 	mm_obj_prop_set(&mind->properties, property_type, property_value);
 }
 
+/* remove a property type from an individual */
+void mm_remove_property(monkeymind * mind,
+						unsigned int property_type)
+{
+	mm_obj_prop_remove(&mind->properties, property_type);
+}
+
 /* initialises a mind */
 void mm_init(monkeymind * mind)
 {
