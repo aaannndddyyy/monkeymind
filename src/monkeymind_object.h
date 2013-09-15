@@ -107,5 +107,7 @@ int mm_obj_prop_add(mm_object * obj,
 					unsigned int property_value);
 int mm_obj_prop_remove(mm_object * obj,
 					   unsigned int property_type);
+unsigned int mm_obj_prop_get(mm_object * obj,
+							 unsigned int property_type);
 
 #endif

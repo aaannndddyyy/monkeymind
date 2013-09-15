@@ -146,3 +146,12 @@ int mm_obj_prop_remove(mm_object * obj,
 	obj->length--;
 	return 0;
 }
+
+/* returns the value of the given object property */
+unsigned int mm_obj_prop_get(mm_object * obj,
+							 unsigned int property_type)
+{
+	int index = mm_obj_prop_index(obj, property_type);
+	if (index > -1) return obj->property_value[index];
+	return 0;
+}
