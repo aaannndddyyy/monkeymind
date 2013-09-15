@@ -70,6 +70,8 @@ void mm_init(monkeymind * mind)
 		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
 	memset((void*)mind->social_graph, '\0',
 		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
+	memset((void*)mind->social_stereotype, '\0',
+		   MM_SIZE_SOCIAL_STEREOTYPES * sizeof(mm_object));
 	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));

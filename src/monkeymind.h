@@ -50,6 +50,9 @@
 /* dimension of a 2D map within which the agent is located */
 #define MM_SIZE_SPATIAL          32
 
+/* the maximum number of abstract social categories */
+#define MM_SIZE_SOCIAL_STEREOTYPES 32
+
 typedef struct
 {
     unsigned int id;
@@ -64,6 +67,9 @@ typedef struct
 
 	/* details of each known agent */
     mm_object social_graph[MM_SIZE_SOCIAL_GRAPH];
+
+	/* abstracted individuals */
+    mm_object social_stereotype[MM_SIZE_SOCIAL_STEREOTYPES];
 
 	/* language machinery associated with each social graph entry */
 	mm_language language[MM_SIZE_SOCIAL_GRAPH];
