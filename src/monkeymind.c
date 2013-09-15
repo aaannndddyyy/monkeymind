@@ -31,6 +31,22 @@
 
 #include "monkeymind.h"
 
+/* adds a property to the individual */
+void mm_add_property(monkeymind * mind,
+					 unsigned int property_type,
+					 unsigned int property_value)
+{
+	mm_obj_prop_add(&mind->properties, property_type, property_value);
+}
+
+/* sets a property of the individualk */
+void mm_set_property(monkeymind * mind,
+					 unsigned int property_type,
+					 unsigned int property_value)
+{
+	mm_obj_prop_set(&mind->properties, property_type, property_value);
+}
+
 /* initialises a mind */
 void mm_init(monkeymind * mind)
 {
@@ -40,6 +56,7 @@ void mm_init(monkeymind * mind)
 		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
 	memset((void*)mind->social_graph, '\0',
 		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
+	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
 

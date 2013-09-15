@@ -56,6 +56,9 @@ typedef struct
 
 	mm_random_seed seed;
 
+	/* intrinsic properties of te individual */
+	mm_object properties;
+
 	/* memory which may contain a number of narratives */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];
 
@@ -69,6 +72,12 @@ typedef struct
 	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
 } monkeymind;
 
+void mm_add_property(monkeymind * mind,
+					 unsigned int property_type,
+					 unsigned int property_value);
+void mm_set_property(monkeymind * mind,
+					 unsigned int property_type,
+					 unsigned int property_value);
 void mm_init(monkeymind * mind);
 
 #endif
