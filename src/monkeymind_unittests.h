@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "monkeymind.h"
 
 void mm_run_tests();

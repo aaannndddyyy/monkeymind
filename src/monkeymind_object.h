@@ -36,7 +36,7 @@
 #include <string.h>
 
 /* the maximum number of properties of an object */
-#define MM_MAX_OBJECT_PROPERTIES  8
+#define MM_MAX_OBJECT_PROPERTIES  16
 
 enum relation_types
 {

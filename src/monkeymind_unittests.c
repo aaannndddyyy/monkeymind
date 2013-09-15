@@ -42,9 +42,70 @@ static void test_init()
 	printf("Ok\n");
 }
 
+static void test_object_add_remove_properties()
+{
+	mm_object obj;
+	unsigned int i;
+	unsigned int props[] = {
+		3,6268,
+		7,3568,
+		1,56437,
+		99,6732,
+		40,1357,
+		42,6267,
+		23,536774,
+		50,2435,
+		49,23566,
+		12,2356
+	};
+
+	printf("test_object_add_remove_properties...");
+
+	/* clear */
+	obj.length = 0;
+	for (i = 0; i < 10; i++) {
+		obj.property_type[i] = 0;
+		obj.property_value[i] = 0;
+	}
+
+	/* add the properties */
+	for (i = 0; i < 10; i++) {
+		mm_obj_prop_add(&obj,props[i*2],props[i*2+1]);
+	}
+
+	/* check that 10 properties were added */
+	assert(obj.length == 10);
+
+	/* check that values are non-zero */
+	for (i = 0; i < 10; i++) {
+		assert(obj.property_type[i] > 0);
+		assert(obj.property_value[i] > 0);
+	}
+
+	/* check that the property types are in order */
+	for (i = 1; i < 10; i++) {
+		assert(obj.property_type[i-1] <= obj.property_type[i]);
+	}
+
+	/* property 23 exists in the list */
+	assert(mm_obj_prop_index(&obj,23) > -1);
+
+	/* remove it */
+	mm_obj_prop_remove(&obj,23);
+
+	/* check that the list size is reduced */
+	assert(obj.length = 9);
+
+	/* check that property 23 no longer exists */
+	assert(mm_obj_prop_index(&obj,23) == -1);
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
+	test_object_add_remove_properties();
 
 	printf("All tests passed\n");
 }
