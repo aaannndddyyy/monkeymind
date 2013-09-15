@@ -30,3 +30,100 @@
 ****************************************************************/
 
 #include "monkeymind_object.h"
+
+/*
+static void mm_object_sort(mm_object * obj)
+{
+	unsigned int i, j, min, index;
+	unsigned int temp_type, temp_value;
+
+	for (i = 0; i < obj->length; i++) {
+		min = obj->property_type[i];
+		index = i;
+		for (j = i+1; i < obj->length; j++) {
+			if (obj->property_type[j] < min) {
+				min = obj->property_type[j];
+				index = j;
+			}
+		}
+		if (index > i) {
+			temp_type = obj->property_type[i];
+			temp_value = obj->property_value[i];
+			obj->property_type[i] = obj->property_type[index];
+			obj->property_value[i] = obj->property_value[index];
+			obj->property_type[index] = temp_type;
+			obj->property_type[index] = temp_value;
+		}
+	}
+}
+*/
+
+/* returns the array index of a given property type
+   or -1 if not found */
+int mm_obj_prop_index(mm_object * obj,
+					  unsigned int property_type)
+{
+	int index = -1, start_index, end_index, curr_index;
+
+	start_index = 0;
+	end_index = obj->length-1;
+	curr_index = start_index + ((end_index-start_index)/2);
+	while ((curr_index != start_index) &&
+		   (curr_index != end_index)) {
+		if (property_type < obj->property_type[curr_index]) {
+			end_index = curr_index;
+		}
+		else {
+			if (property_type > obj->property_type[curr_index]) {
+				start_index = curr_index;
+			}
+			else {
+				index = curr_index;
+				break;
+			}
+		}
+		curr_index = start_index + ((end_index-start_index)/2);
+	}
+
+	return index;
+}
+
+/* adds a property to an object and returns its array index */
+int mm_obj_prop_add(mm_object * obj,
+					unsigned int property_type,
+					unsigned int property_value)
+{
+	int i, index = 0;
+
+	if (obj->length >= MM_MAX_OBJECT_PROPERTIES) return -1;
+
+	index = mm_obj_prop_index(obj, property_type);
+	if (index == -1) {
+		/* property doesn't already exist
+		   so find a location for it */
+		index = 0;
+		while (index < obj->length) {
+			if (obj->property_type[index] > property_type) {
+				break;
+			}
+			index++;
+		}
+	}
+	else {
+		/* overwrite existing entry for this property type */
+		obj->property_value[index] = property_value;
+		return index;
+	}
+
+	if (index < obj->length) {
+		/* insert */
+		for (i = obj->length-1; i >= index; i--) {
+			obj->property_type[i+1] = obj->property_type[i];
+			obj->property_value[i+1] = obj->property_value[i];
+		}
+	}
+	obj->property_type[index] = property_type;
+	obj->property_value[index] = property_value;
+	obj->length++;
+	return index;
+}

@@ -38,21 +38,50 @@
 /* the maximum number of properties of an object */
 #define MM_MAX_OBJECT_PROPERTIES  8
 
+enum relation_types
+{
+	MM_RELATION_SELF,
+	MM_RELATION_BROTHER,
+	MM_RELATION_SISTER,
+	MM_RELATION_FATHER,
+	MM_RELATION_MOTHER,
+	MM_RELATION_GRANDFATHER,
+	MM_RELATION_GRANDMOTHER,
+	MM_RELATION_UNCLE,
+	MM_RELATION_AUNT,
+	MM_RELATIONS
+};
+
 enum property_types
 {
 	MM_PROPERTY_NONE = 0,
-    MM_PROPERTY_OBJECT,
-    MM_PROPERTY_NARRATIVE,
-	MM_PROPERTY_DAY,
+
+	/* who */
+	MM_PROPERTY_MEETER,
+	MM_PROPERTY_MET,
 	MM_PROPERTY_FIRST_NAME,
 	MM_PROPERTY_LAST_NAME,
+	MM_PROPERTY_RELATION,
+
+	/* what */
+    MM_PROPERTY_OBJECT,
+    MM_PROPERTY_NARRATIVE,
+	MM_PROPERTY_EMOTION,
+	MM_PROPERTY_HEIGHT,
+	MM_PROPERTY_WEIGHT,
+	MM_PROPERTY_HAIR_LENGTH,
+	MM_PROPERTY_HAIR_COLOUR,
+
+	/* where */
 	MM_PROPERTY_PLACE_X,
 	MM_PROPERTY_PLACE_Y,
 	MM_PROPERTY_PLACE_Z,
 	MM_PROPERTY_TERRITORY,
-	MM_PROPERTY_EMOTION,
-	MM_PROPERTY_MEETER,
-	MM_PROPERTY_MET,
+
+	/* when */
+	MM_PROPERTY_DAY,
+	MM_PROPERTY_SUBJECTIVE_TIME,
+
 	MM_PROPERTIES
 };
 
@@ -69,5 +98,12 @@ typedef struct
     unsigned int property_frequency[MM_MAX_OBJECT_PROPERTIES];
     unsigned int observations;
 } mm_object;
+
+
+int mm_obj_prop_index(mm_object * obj,
+					  unsigned int property_type);
+int mm_obj_prop_add(mm_object * obj,
+					unsigned int property_type,
+					unsigned int property_value);
 
 #endif
