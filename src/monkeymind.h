@@ -78,6 +78,8 @@ void mm_add_property(monkeymind * mind,
 void mm_set_property(monkeymind * mind,
 					 unsigned int property_type,
 					 unsigned int property_value);
+unsigned int mm_get_property(monkeymind * mind,
+							 unsigned int property_type);
 void mm_remove_property(monkeymind * mind,
 						unsigned int property_type);
 void mm_init(monkeymind * mind);

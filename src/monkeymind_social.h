@@ -42,6 +42,9 @@
 #define MET_ID      2
 #define MET_NAME    3
 
+/* maximum number of observations of an individual */
+#define MM_SOCIAL_MAX_OBSERVATIONS 32000
+
 #define SOCIAL_GRAPH_ENTRY_EXISTS(mind,index) \
 	(!((mind->social_graph[index].property_value[MEETER_ID] == 0) &&	\
 	   (mind->social_graph[index].property_value[MET_ID] == 0)))

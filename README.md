@@ -4,6 +4,8 @@ which may be exchanged, retold, mutated, negated and so on and to move towards
 a situation where agents posess a socially constructed identity and are
 capable of self reflection.
 
+Monkeymind is not intended to simulate any particular primate cognition in detail.  It's an obstract model.
+
 Some guiding assumptions are:
 
  * The brain is not a homogeneous lump of jelly.  It has discernable architecture.
@@ -14,3 +16,4 @@ Some guiding assumptions are:
  * Shared knowledge of the state of other individuals means that it's possible to coordinate better as a group, facilitating group survival (eg. as hunters or as a team whose members perform different roles).
  * Obtaining interesting cognitive behaviors requres the generation of a dense psychological jungle.  For a social creature, navigating the psychological or sociological landscape of competing desires and social status is as important as navigating the physical landscape.
  * Identity arrises from the mechanisms of social coordination.  It is socially constructed.
+ * The ultimate arbiter of intelligence is survival, not utility.  Many behaviors characteristic of primates are not really fully explicable in utilitarian terms.
