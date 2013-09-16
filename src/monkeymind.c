@@ -36,7 +36,7 @@ void mm_add_property(monkeymind * mind,
 					 unsigned int property_type,
 					 unsigned int property_value)
 {
-	mm_obj_prop_add(&mind->properties, property_type, property_value);
+	mm_obj_prop_add(mind->properties, property_type, property_value);
 }
 
 /* sets a property of the individualk */
@@ -44,21 +44,21 @@ void mm_set_property(monkeymind * mind,
 					 unsigned int property_type,
 					 unsigned int property_value)
 {
-	mm_obj_prop_set(&mind->properties, property_type, property_value);
+	mm_obj_prop_set(mind->properties, property_type, property_value);
 }
 
 /* gets a property of the individual */
 unsigned int mm_get_property(monkeymind * mind,
 							 unsigned int property_type)
 {
-	return mm_obj_prop_get(&mind->properties, property_type);
+	return mm_obj_prop_get(mind->properties, property_type);
 }
 
 /* remove a property type from an individual */
 void mm_remove_property(monkeymind * mind,
 						unsigned int property_type)
 {
-	mm_obj_prop_remove(&mind->properties, property_type);
+	mm_obj_prop_remove(mind->properties, property_type);
 }
 
 /* initialise the language machine */
@@ -93,10 +93,17 @@ static void mm_init_spatial(monkeymind * mind)
 
 /* initialises a mind */
 void mm_init(monkeymind * mind,
+			 unsigned int id,
 			 unsigned char sex,
 			 unsigned char first_name,
 			 unsigned char surname)
 {
+	mm_object * individual;
+	unsigned int name;
+
+	mind->id = id;
+	name = MM_NAME(sex,first_name,surname);
+
 	memset((void*)mind->narrative, '\0',
 		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
 	memset((void*)mind->social_graph, '\0',
@@ -110,6 +117,18 @@ void mm_init(monkeymind * mind,
 	mm_init_language(mind);
 	mm_init_spatial(mind);
 
-	mm_set_property(mind, MM_PROPERTY_NAME,
-					MM_NAME(sex,first_name,surname));
+	mind->properties = &mind->social_graph[0];
+
+    individual = &mind->social_graph[0];
+	individual->property_type[MEETER_ID] = MM_PROPERTY_MEETER;
+	individual->property_value[MEETER_ID] = id;
+	individual->property_type[MEETER_NAME] = MM_PROPERTY_NAME;
+	individual->property_value[MEETER_NAME] = name;
+	individual->property_type[MET_ID] = MM_PROPERTY_MET;
+	individual->property_value[MET_ID] = id;
+	individual->property_type[MET_NAME] = MM_PROPERTY_NAME;
+	individual->property_value[MET_NAME] = name;
+	individual->length = 4;
+
+	mm_set_property(mind, MM_PROPERTY_NAME, name);
 }

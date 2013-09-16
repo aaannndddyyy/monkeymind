@@ -41,6 +41,14 @@
 #include "monkeymind_narrative.h"
 #include "monkeymind_language.h"
 
+/* property indexes of meeter and met beings */
+enum {
+    MEETER_ID = 0,
+    MEETER_NAME,
+    MET_ID,
+    MET_NAME
+};
+
 /* size of narrative memory */
 #define MM_SIZE_NARRATIVES         32
 
@@ -71,7 +79,7 @@ typedef struct
 	mm_random_seed seed;
 
 	/* intrinsic properties of the individual */
-	mm_object properties;
+	mm_object * properties;
 
 	/* memory which may contain a number of narratives */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];
@@ -100,6 +108,7 @@ unsigned int mm_get_property(monkeymind * mind,
 void mm_remove_property(monkeymind * mind,
 						unsigned int property_type);
 void mm_init(monkeymind * mind,
+			 unsigned int id,
 			 unsigned char sex,
 			 unsigned char first_name,
 			 unsigned char surname);

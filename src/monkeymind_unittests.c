@@ -37,7 +37,7 @@ static void test_init()
 
 	printf("test_init...");
 
-	mm_init(&mind,MM_SEX_FEMALE,3,6);
+	mm_init(&mind, 1000, MM_SEX_FEMALE,3,6);
 
 	printf("Ok\n");
 }
@@ -129,12 +129,41 @@ void test_name()
 void test_social_meet()
 {
 	monkeymind m0, m1, m2;
+	int i;
 
 	printf("test_social_meet...");
 
-	mm_init(&m0,MM_SEX_MALE,10,20);
-	mm_init(&m1,MM_SEX_FEMALE,11,31);
-	mm_init(&m2,MM_SEX_FEMALE,7,8);
+	mm_init(&m0, 1000, MM_SEX_MALE,10,20);
+	mm_init(&m1, 2000, MM_SEX_FEMALE,11,31);
+	mm_init(&m2, 3000, MM_SEX_FEMALE,7,8);
+
+	mm_social_meet(&m0,&m1);
+	mm_social_meet(&m0,&m2);
+	mm_social_meet(&m0,&m1);
+
+	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+		switch(i) {
+		case 0: {
+			assert((&m0)->social_graph[i].property_value[MET_ID]==1000);
+			break;
+		}
+		case 1: {
+			assert((&m0)->social_graph[i].property_value[MET_ID]==2000);
+			break;
+		}
+		case 2: {
+			assert((&m0)->social_graph[i].property_value[MET_ID]==3000);
+			break;
+		}
+		}
+
+		if (i < 3) {
+			assert(SOCIAL_GRAPH_ENTRY_EXISTS(&m0,i));
+		}
+		else {
+			assert(!SOCIAL_GRAPH_ENTRY_EXISTS(&m0,i));
+		}
+	}
 
 	printf("Ok\n");
 }

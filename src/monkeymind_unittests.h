@@ -36,6 +36,7 @@
 #include <string.h>
 #include <assert.h>
 #include "monkeymind.h"
+#include "monkeymind_social.h"
 
 void mm_run_tests();
 

@@ -75,7 +75,7 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 	individual->length = 4;
 
 	/* remember properties of the met individual */
-	mm_obj_copy(&met->properties, individual);
+	mm_obj_copy(met->properties, individual);
 
 	if (familiar == 0) {
 		/* first meeting */
@@ -94,6 +94,7 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 	}
 }
 
+/* two individuals meet */
 void mm_social_meet(monkeymind * meeter, monkeymind * met)
 {
 	unsigned char familiar = 0;
@@ -105,7 +106,7 @@ void mm_social_meet(monkeymind * meeter, monkeymind * met)
 		}
 		else {
 			/* find the last entry */
-			for (index = MM_SIZE_SOCIAL_GRAPH-1; index > 0; index--) {
+			for (index = MM_SIZE_SOCIAL_GRAPH-1; index >= 0; index--) {
 				if (SOCIAL_GRAPH_ENTRY_EXISTS(meeter,index)) {
 					index++;
 					break;
