@@ -47,10 +47,57 @@ static int mm_social_forget(monkeymind * mind)
 	return index;
 }
 
+/* the prejudice function */
+static void mm_social_evaluate(monkeymind * meeter, monkeymind * met,
+							   mm_object * social_graph_entry)
+{
+	/* TODO */
+}
+
+/* adds a social graph enry at the given index */
+static void mm_social_add(monkeymind * meeter, monkeymind * met,
+						  int index, unsigned char familiar)
+{
+	int i;
+	mm_object * individual;
+
+    individual = &meeter->social_graph[index];
+	individual->property_type[MEETER_ID] = MM_PROPERTY_MEETER;
+	individual->property_value[MEETER_ID] = meeter->id;
+	individual->property_type[MEETER_NAME] = MM_PROPERTY_NAME;
+	individual->property_value[MEETER_NAME] =
+		mm_get_property(meeter, MM_PROPERTY_NAME);
+	individual->property_type[MET_ID] = MM_PROPERTY_MET;
+	individual->property_value[MET_ID] = met->id;
+	individual->property_type[MET_NAME] = MM_PROPERTY_NAME;
+	individual->property_value[MET_NAME] =
+		mm_get_property(met, MM_PROPERTY_NAME);
+	individual->length = 4;
+
+	/* remember properties of the met individual */
+	mm_obj_copy(&met->properties, individual);
+
+	if (familiar == 0) {
+		/* first meeting */
+		individual->observations = 1;
+		mm_social_evaluate(meeter, met, individual);
+	}
+	else {
+		/* subsequent meetings */
+		individual->observations++;
+		if (meeter->social_graph[index].observations >=
+			MM_SOCIAL_MAX_OBSERVATIONS) {
+			for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+				meeter->social_graph[i].observations >>= 1;
+			}
+		}
+	}
+}
+
 void mm_social_meet(monkeymind * meeter, monkeymind * met)
 {
-	mm_object * individual;
-	int i, index = mm_social_index_from_id(meeter, met->id);
+	unsigned char familiar = 0;
+	int index = mm_social_index_from_id(meeter, met->id);
 	if (index == -1) {
 		/* are all array entries occupied? */
 		if (SOCIAL_GRAPH_ENTRY_EXISTS(meeter,MM_SIZE_SOCIAL_GRAPH-1)) {
@@ -67,30 +114,11 @@ void mm_social_meet(monkeymind * meeter, monkeymind * met)
 		}
 	}
 	else {
-		/* increase the number of observations of the met individual */
-		if (meeter->social_graph[index].observations >=
-			MM_SOCIAL_MAX_OBSERVATIONS) {
-			for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-				meeter->social_graph[i].observations >>= 1;
-			}
-		}
-		meeter->social_graph[index].observations++;
+		familiar = 1;
 	}
 	if (index == -1) return;
 
-    individual = &meeter->social_graph[index];
-	individual->property_type[MEETER_ID] = MM_PROPERTY_MEETER;
-	individual->property_value[MEETER_ID] = meeter->id;
-	individual->property_type[MEETER_NAME] = MM_PROPERTY_NAME;
-	individual->property_value[MEETER_NAME] =
-		mm_get_property(meeter, MM_PROPERTY_NAME);
-	individual->property_type[MET_ID] = MM_PROPERTY_MET;
-	individual->property_value[MET_ID] = met->id;
-	individual->property_type[MET_NAME] = MM_PROPERTY_NAME;
-	individual->property_value[MET_NAME] =
-		mm_get_property(met, MM_PROPERTY_NAME);
-
-	individual->length = 4;
+	mm_social_add(meeter, met, index, familiar);
 }
 
 void mm_social_speak(monkeymind * speaker, monkeymind * listener)

@@ -59,7 +59,7 @@ typedef struct
 
 	mm_random_seed seed;
 
-	/* intrinsic properties of te individual */
+	/* intrinsic properties of the individual */
 	mm_object properties;
 
 	/* memory which may contain a number of narratives */

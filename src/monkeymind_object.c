@@ -128,6 +128,18 @@ int mm_obj_prop_add(mm_object * obj,
 	return index;
 }
 
+/* copies one object to another */
+void mm_obj_copy(mm_object *src, mm_object * dest)
+{
+	int i;
+
+	for (i = 0; i < src->length; i++) {
+	    mm_obj_prop_add(dest,
+						src->property_type[i],
+						src->property_value[i]);
+	}
+}
+
 /* removes a property from an object */
 int mm_obj_prop_remove(mm_object * obj,
 					   unsigned int property_type)
