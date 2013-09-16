@@ -42,16 +42,27 @@
 #include "monkeymind_language.h"
 
 /* size of narrative memory */
-#define MM_SIZE_NARRATIVES       32
+#define MM_SIZE_NARRATIVES         32
 
 /* maximum size of the social graph */
-#define MM_SIZE_SOCIAL_GRAPH     32
+#define MM_SIZE_SOCIAL_GRAPH       32
 
 /* dimension of a 2D map within which the agent is located */
-#define MM_SIZE_SPATIAL          32
+#define MM_SIZE_SPATIAL            32
 
 /* the maximum number of abstract social categories */
 #define MM_SIZE_SOCIAL_STEREOTYPES 32
+
+#define MM_SEX_MALE                0
+#define MM_SEX_FEMALE              1
+
+/* name is stored as a single 32bit number,
+   and contains sex, first name and last name */
+#define MM_NAME(sex, first_name, surname) \
+	( ((((sex)&255)<<8)|((first_name)&255)) | ((surname)<<16) )
+#define MM_SEX(name)             (((name)>>8)&255)
+#define MM_FIRST_NAME(name)      ((name)&255)
+#define MM_SURNAME(name)         ((name)>>16)
 
 typedef struct
 {

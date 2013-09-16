@@ -102,10 +102,35 @@ static void test_object_add_remove_properties()
 	printf("Ok\n");
 }
 
+void test_name()
+{
+	unsigned int first_name = 10;
+	unsigned int sex = MM_SEX_FEMALE;
+	unsigned int surname = 125;
+	unsigned int name;
+	unsigned int extract_first_name, extract_surname, extract_sex;
+
+	printf("test_name...");
+
+	name = MM_NAME(sex,first_name,surname);
+
+	extract_first_name = MM_FIRST_NAME(name);
+	assert(extract_first_name == first_name);
+
+	extract_sex = MM_SEX(name);
+	assert(extract_sex == sex);
+
+	extract_surname = MM_SURNAME(name);
+	assert(extract_surname == surname);
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
 	test_object_add_remove_properties();
+	test_name();
 
 	printf("All tests passed\n");
 }
