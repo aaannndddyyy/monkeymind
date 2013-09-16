@@ -61,20 +61,10 @@ void mm_remove_property(monkeymind * mind,
 	mm_obj_prop_remove(&mind->properties, property_type);
 }
 
-/* initialises a mind */
-void mm_init(monkeymind * mind)
+/* initialise the language machine */
+static void mm_init_language(monkeymind * mind)
 {
 	int i, j, k;
-
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
-	memset((void*)mind->social_graph, '\0',
-		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
-	memset((void*)mind->social_stereotype, '\0',
-		   MM_SIZE_SOCIAL_STEREOTYPES * sizeof(mm_object));
-	memset((void*)&mind->properties, '\0', sizeof(mm_object));
-	memset((void*)mind->spatial, '\0',
-		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
 
 	/* initially random language machine */
 	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
@@ -89,9 +79,37 @@ void mm_init(monkeymind * mind)
 			}
 		}
 	}
+}
 
-	/* assign id numbers to spatial map */
+/* initialise the spatial memory */
+static void mm_init_spatial(monkeymind * mind)
+{
+	int i;
+
 	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
 		mind->spatial[i].id = i;
 	}
+}
+
+/* initialises a mind */
+void mm_init(monkeymind * mind,
+			 unsigned char sex,
+			 unsigned char first_name,
+			 unsigned char surname)
+{
+	memset((void*)mind->narrative, '\0',
+		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
+	memset((void*)mind->social_graph, '\0',
+		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
+	memset((void*)mind->social_stereotype, '\0',
+		   MM_SIZE_SOCIAL_STEREOTYPES * sizeof(mm_object));
+	memset((void*)&mind->properties, '\0', sizeof(mm_object));
+	memset((void*)mind->spatial, '\0',
+		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+
+	mm_init_language(mind);
+	mm_init_spatial(mind);
+
+	mm_set_property(mind, MM_PROPERTY_NAME,
+					MM_NAME(sex,first_name,surname));
 }

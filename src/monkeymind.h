@@ -99,6 +99,9 @@ unsigned int mm_get_property(monkeymind * mind,
 							 unsigned int property_type);
 void mm_remove_property(monkeymind * mind,
 						unsigned int property_type);
-void mm_init(monkeymind * mind);
+void mm_init(monkeymind * mind,
+			 unsigned char sex,
+			 unsigned char first_name,
+			 unsigned char surname);
 
 #endif

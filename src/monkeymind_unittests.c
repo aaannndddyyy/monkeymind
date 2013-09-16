@@ -37,7 +37,7 @@ static void test_init()
 
 	printf("test_init...");
 
-	mm_init(&mind);
+	mm_init(&mind,MM_SEX_FEMALE,3,6);
 
 	printf("Ok\n");
 }
@@ -126,11 +126,25 @@ void test_name()
 	printf("Ok\n");
 }
 
+void test_social_meet()
+{
+	monkeymind m0, m1, m2;
+
+	printf("test_social_meet...");
+
+	mm_init(&m0,MM_SEX_MALE,10,20);
+	mm_init(&m1,MM_SEX_FEMALE,11,31);
+	mm_init(&m2,MM_SEX_FEMALE,7,8);
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
 	test_object_add_remove_properties();
 	test_name();
+	test_social_meet();
 
 	printf("All tests passed\n");
 }

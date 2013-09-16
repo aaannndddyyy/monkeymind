@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 {
 	monkeymind mind;
 
-	mm_init(&mind);
+	mm_init(&mind,MM_SEX_FEMALE,8,2);
 
 	mm_run_tests();
 	return 1;
