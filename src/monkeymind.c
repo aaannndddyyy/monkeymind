@@ -113,6 +113,8 @@ void mm_init(monkeymind * mind,
 	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+	memset((void*)mind->property_matrix, '\0',
+		   MM_PROPERTIES * MM_PROPERTIES * sizeof(int));
 
 	mm_init_language(mind);
 	mm_init_spatial(mind);
@@ -120,15 +122,18 @@ void mm_init(monkeymind * mind,
 	mind->properties = &mind->social_graph[0];
 
     individual = &mind->social_graph[0];
-	individual->property_type[MEETER_ID] = MM_PROPERTY_MEETER;
-	individual->property_value[MEETER_ID] = id;
-	individual->property_type[MEETER_NAME] = MM_PROPERTY_NAME;
-	individual->property_value[MEETER_NAME] = name;
-	individual->property_type[MET_ID] = MM_PROPERTY_MET;
-	individual->property_value[MET_ID] = id;
-	individual->property_type[MET_NAME] = MM_PROPERTY_NAME;
-	individual->property_value[MET_NAME] = name;
-	individual->length = 4;
+
+	mm_obj_prop_set_index(individual, MEETER_ID,
+						  MM_PROPERTY_MEETER, id);
+
+	mm_obj_prop_set_index(individual, MEETER_NAME,
+						  MM_PROPERTY_NAME, name);
+
+	mm_obj_prop_set_index(individual, MET_ID,
+						  MM_PROPERTY_MET, id);
+
+	mm_obj_prop_set_index(individual, MET_NAME,
+						  MM_PROPERTY_NAME, name);
 
 	mm_set_property(mind, MM_PROPERTY_NAME, name);
 }

@@ -39,6 +39,9 @@
 /* maximum number of observations of an individual */
 #define MM_SOCIAL_MAX_OBSERVATIONS 32000
 
+/* neutral friend or foe value within a 32bit integer */
+#define MM_NEUTRAL                 65535
+
 #define SOCIAL_GRAPH_ENTRY_EXISTS(mind,index) \
 	(!(((mind)->social_graph[index].property_value[MEETER_ID] == 0) &&	\
 	   ((mind)->social_graph[index].property_value[MET_ID] == 0)))

@@ -71,6 +71,8 @@ enum property_types
 	MM_PROPERTY_HAIR_LENGTH,
 	MM_PROPERTY_HAIR_COLOUR,
 
+	MM_PROPERTY_FRIEND_OR_FOE,
+
 	/* where */
 	MM_PROPERTY_PLACE_X,
 	MM_PROPERTY_PLACE_Y,
@@ -112,5 +114,9 @@ int mm_obj_prop_set(mm_object * obj,
 					unsigned int property_type,
 					unsigned int property_value);
 void mm_obj_copy(mm_object *src, mm_object * dest);
+void mm_obj_prop_set_index(mm_object * obj,
+						   int index,
+						   unsigned int property_type,
+						   unsigned int property_value);
 
 #endif

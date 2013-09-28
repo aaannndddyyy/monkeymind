@@ -79,10 +79,66 @@ static int mm_social_forget(monkeymind * mind)
 }
 
 /* the prejudice function */
-static void mm_social_evaluate(monkeymind * meeter, monkeymind * met,
+static void mm_social_evaluate(monkeymind * meeter,
+							   monkeymind * met,
 							   mm_object * social_graph_entry)
 {
-	/* TODO */
+	unsigned int fof = MM_NEUTRAL;
+
+	/* TODO: add a friend or foe property */
+
+	mm_obj_prop_add(social_graph_entry,
+					MM_PROPERTY_FRIEND_OR_FOE, fof);
+}
+
+/* update a coocurrence matrix of the properties of
+   known individuals */
+static void mm_update_property_matrix(monkeymind * mind,
+									  int index)
+{
+	int i, j, max = 0, min = 0, incr;
+	mm_object * individual;
+	unsigned int p0, p1;
+
+	/* for every individual in the social graph */
+	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
+	individual = &mind->social_graph[index];
+
+	/* friendly or unfriendly? */
+	printf("test3 %d\n",mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE));
+	if (mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE) >= MM_NEUTRAL) {
+		incr = 1;
+	}
+	else {
+		incr = -1;
+	}
+
+	/* combinations of properties for this individual */
+	for (i = 4; i < individual->length; i++) {
+		p0 = individual->property_type[i];
+		for (j = i+1; j < individual->length; j++) {
+			p1 = individual->property_type[j];
+			mind->property_matrix[p0*MM_PROPERTIES + p1]+=incr;
+			mind->property_matrix[p1*MM_PROPERTIES + p0]+=incr;
+		}
+	}
+
+	/* find the maximum activation */
+	for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
+		if (mind->property_matrix[i] > max) {
+			max = mind->property_matrix[i];
+		}
+		if (mind->property_matrix[i] < min) {
+			min = mind->property_matrix[i];
+		}
+	}
+
+	/* normalise if out of range */
+	if ((max > 64000) || (min < -64000)) {
+		for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
+			mind->property_matrix[i] /= 2;
+		}
+	}
 }
 
 /* adds a social graph enry at the given index */
@@ -111,7 +167,9 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 	if (familiar == 0) {
 		/* first meeting */
 		individual->observations = 1;
+		printf("test4 %d ",individual->length);
 		mm_social_evaluate(meeter, met, individual);
+		printf("%d\n",individual->length);
 	}
 	else {
 		/* subsequent meetings */
@@ -123,6 +181,8 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 			}
 		}
 	}
+
+	mm_update_property_matrix(meeter, index);
 }
 
 /* two individuals meet */

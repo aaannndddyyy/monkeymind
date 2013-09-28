@@ -180,3 +180,14 @@ int mm_obj_prop_set(mm_object * obj,
 	}
 	return -1;
 }
+
+/* set an object property at a specific index */
+void mm_obj_prop_set_index(mm_object * obj,
+						   int index,
+						   unsigned int property_type,
+						   unsigned int property_value)
+{
+	obj->property_type[index] = property_type;
+	obj->property_value[index] = property_value;
+	if (index >= obj->length) obj->length = (unsigned int)index+1;
+}

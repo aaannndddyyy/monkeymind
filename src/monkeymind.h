@@ -81,6 +81,9 @@ typedef struct
 	/* intrinsic properties of the individual */
 	mm_object * properties;
 
+	/* coocurrence matrix for properties of known individuals */
+	int property_matrix[MM_PROPERTIES*MM_PROPERTIES];
+
 	/* memory which may contain a number of narratives */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];
 
