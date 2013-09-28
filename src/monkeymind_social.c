@@ -37,7 +37,7 @@ int mm_social_index_from_id(monkeymind * mind, unsigned int met_id)
 {
 	int i;
 
-	for (i = 1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
 		if (mind->social_graph[i].property_value[MET_ID] == met_id) {
 			return i;
@@ -52,7 +52,7 @@ int mm_social_index_from_name(monkeymind * mind, unsigned int met_name)
 {
 	int i;
 
-	for (i = 1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
 		if (mind->social_graph[i].property_value[MET_NAME] == met_name) {
 			return i;
@@ -68,7 +68,7 @@ static int mm_social_forget(monkeymind * mind)
 	unsigned int min_observations = mind->social_graph[0].observations;
 
 	/* pick the individual with the fewest observations */
-	for (i = 1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
 		if (mind->social_graph[i].observations < min_observations) {
 			min_observations = mind->social_graph[i].observations;

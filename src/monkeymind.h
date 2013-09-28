@@ -49,6 +49,9 @@ enum {
     MET_NAME
 };
 
+/* social graph array index of the self */
+#define MM_SELF                    0
+
 /* size of narrative memory */
 #define MM_SIZE_NARRATIVES         32
 

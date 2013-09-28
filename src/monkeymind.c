@@ -119,9 +119,9 @@ void mm_init(monkeymind * mind,
 	mm_init_language(mind);
 	mm_init_spatial(mind);
 
-	mind->properties = &mind->social_graph[0];
+	mind->properties = &mind->social_graph[MM_SELF];
 
-    individual = &mind->social_graph[0];
+    individual = &mind->social_graph[MM_SELF];
 
 	mm_obj_prop_set_index(individual, MEETER_ID,
 						  MM_PROPERTY_MEETER, id);
