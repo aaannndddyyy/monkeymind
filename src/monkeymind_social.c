@@ -1,3 +1,4 @@
+
 /****************************************************************
 
  Monkeymind - an experimental cogitive architecture
@@ -68,7 +69,7 @@ static int mm_social_forget(monkeymind * mind)
 	unsigned int min_observations = mind->social_graph[0].observations;
 
 	/* pick the individual with the fewest observations */
-	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+	for (i = 1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
 		if (mind->social_graph[i].observations < min_observations) {
 			min_observations = mind->social_graph[i].observations;
@@ -105,7 +106,6 @@ static void mm_update_property_matrix(monkeymind * mind,
 	individual = &mind->social_graph[index];
 
 	/* friendly or unfriendly? */
-	printf("test3 %d\n",mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE));
 	if (mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE) >= MM_NEUTRAL) {
 		incr = 1;
 	}
@@ -167,9 +167,7 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 	if (familiar == 0) {
 		/* first meeting */
 		individual->observations = 1;
-		printf("test4 %d ",individual->length);
 		mm_social_evaluate(meeter, met, individual);
-		printf("%d\n",individual->length);
 	}
 	else {
 		/* subsequent meetings */

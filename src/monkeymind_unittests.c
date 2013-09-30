@@ -144,11 +144,10 @@ void test_social_meet()
 	/* check properties matrix entries have been made */
 	ctr = 0;
 	for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
-		if (((&m0)->property_matrix[i] > MM_NEUTRAL-3) &&
-			((&m0)->property_matrix[i] < MM_NEUTRAL+3))
+		if ((&m0)->property_matrix[i] != 0)
 			ctr++;
 	}
-	assert(ctr > 0);
+	assert(ctr == 3*2);
 
 	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		switch(i) {
