@@ -149,16 +149,21 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 	mm_object * individual;
 
     individual = &meeter->social_graph[index];
-	individual->property_type[MEETER_ID] = MM_PROPERTY_MEETER;
-	individual->property_value[MEETER_ID] = meeter->id;
-	individual->property_type[MEETER_NAME] = MM_PROPERTY_NAME;
-	individual->property_value[MEETER_NAME] =
-		mm_get_property(meeter, MM_PROPERTY_NAME);
-	individual->property_type[MET_ID] = MM_PROPERTY_MET;
-	individual->property_value[MET_ID] = met->id;
-	individual->property_type[MET_NAME] = MM_PROPERTY_NAME;
-	individual->property_value[MET_NAME] =
-		mm_get_property(met, MM_PROPERTY_NAME);
+
+	mm_obj_prop_set_index(individual, MEETER_ID,
+						  MM_PROPERTY_MEETER, meeter->id);
+
+	mm_obj_prop_set_index(individual, MEETER_NAME,
+						  MM_PROPERTY_NAME,
+						  mm_get_property(meeter, MM_PROPERTY_NAME));
+
+	mm_obj_prop_set_index(individual, MET_ID,
+						  MM_PROPERTY_MET, met->id);
+
+	mm_obj_prop_set_index(individual, MET_NAME,
+						  MM_PROPERTY_NAME,
+						  mm_get_property(met, MM_PROPERTY_NAME));
+
 	individual->length = 4;
 
 	/* remember properties of the met individual */

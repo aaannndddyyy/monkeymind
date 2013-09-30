@@ -45,7 +45,7 @@ static void test_init()
 static void test_object_add_remove_properties()
 {
 	mm_object obj;
-	unsigned int i;
+	unsigned int i, prop_value;
 	unsigned int props[] = {
 		3,6268,
 		7,3568,
@@ -71,7 +71,10 @@ static void test_object_add_remove_properties()
 	/* add the properties */
 	for (i = 0; i < 10; i++) {
 		mm_obj_prop_add(&obj,props[i*2],props[i*2+1]);
+		prop_value = mm_obj_prop_get(&obj,props[i*2]);
+		assert(props[i*2+1] == prop_value);
 	}
+
 
 	/* check that 10 properties were added */
 	assert(obj.length == 10);
@@ -129,7 +132,7 @@ void test_name()
 void test_social_meet()
 {
 	monkeymind m0, m1, m2;
-	int i, ctr;
+	int i, ctr, fof;
 
 	printf("test_social_meet...");
 
@@ -143,11 +146,15 @@ void test_social_meet()
 
 	/* check properties matrix entries have been made */
 	ctr = 0;
+	fof = 0;
 	for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
-		if ((&m0)->property_matrix[i] != 0)
+		if ((&m0)->property_matrix[i] != 0) {
 			ctr++;
+			fof += (&m0)->property_matrix[i];
+		}
 	}
-	assert(ctr == 3*2);
+	assert(ctr == 2);
+	assert(fof > 0);
 
 	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		switch(i) {

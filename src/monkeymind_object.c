@@ -65,21 +65,42 @@ int mm_obj_prop_index(mm_object * obj,
 {
 	int index = -1, start_index, end_index, curr_index;
 
+	if (obj->length == 1) {
+		if (obj->property_type[0] == property_type) {
+			return 0;
+		}
+	}
+
 	start_index = 0;
 	end_index = obj->length-1;
 	curr_index = start_index + ((end_index-start_index)/2);
-	while ((curr_index != start_index) &&
+
+	if (property_type == obj->property_type[end_index]) {
+		index = end_index;
+	}
+	else if (property_type == obj->property_type[start_index]) {
+		index = start_index;
+	}
+
+	while ((index == -1) &&
+		   (curr_index != start_index) &&
 		   (curr_index != end_index)) {
+
 		if (property_type < obj->property_type[curr_index]) {
 			end_index = curr_index;
+			if (property_type == obj->property_type[end_index]) {
+				index = end_index;
+			}
 		}
 		else {
 			if (property_type > obj->property_type[curr_index]) {
 				start_index = curr_index;
+				if (property_type == obj->property_type[start_index]) {
+					index = start_index;
+				}
 			}
 			else {
 				index = curr_index;
-				break;
 			}
 		}
 		curr_index = start_index + ((end_index-start_index)/2);

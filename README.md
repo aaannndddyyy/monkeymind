@@ -17,3 +17,8 @@ Some guiding assumptions are:
  * Obtaining interesting cognitive behaviors requres the generation of a dense psychological jungle.  For a social creature, navigating the psychological or sociological landscape of competing desires and social status is as important as navigating the physical landscape.
  * Identity arrises from the mechanisms of social coordination.  It is socially constructed.
  * The ultimate arbiter of intelligence is survival, not utility.  Many behaviors characteristic of primates are not really fully explicable in utilitarian terms.
+
+Property Matrix
+---------------
+
+Each agent can have a number of peoperties.  When two agents meet the coocurrence of properties is plotted within a 2D matrix, and this is used as the basis for forming stereotypes.  Each point in the matrix is incremented according to whether the met agent is judged to be friendly or unfriendly.  Negative values in the matrix correspond to feature correspondences for probably hostile agents whereas positive values correspond to the feature correspondences of friendly agents.
