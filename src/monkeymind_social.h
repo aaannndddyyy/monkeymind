@@ -43,8 +43,8 @@
 #define MM_NEUTRAL                 65535
 
 #define SOCIAL_GRAPH_ENTRY_EXISTS(mind,index) \
-	(!(((mind)->social_graph[index].property_value[MEETER_ID] == 0) &&	\
-	   ((mind)->social_graph[index].property_value[MET_ID] == 0)))
+	(!((mm_obj_prop_get(&((mind)->social_graph[index]), MM_PROPERTY_MEETER) == 0) && \
+	   (mm_obj_prop_get(&((mind)->social_graph[index]), MM_PROPERTY_MET) == 0)))
 
 int mm_social_index_from_id(monkeymind * mind, unsigned int met_id);
 int mm_social_index_from_name(monkeymind * mind, unsigned int met_name);

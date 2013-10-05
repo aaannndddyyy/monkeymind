@@ -60,6 +60,8 @@ enum property_types
 	MM_PROPERTY_MEETER,
 	MM_PROPERTY_MET,
 	MM_PROPERTY_NAME,
+	MM_PROPERTY_MEETER_NAME,
+	MM_PROPERTY_MET_NAME,
 	MM_PROPERTY_RELATION,
 
 	/* what */
@@ -110,13 +112,11 @@ int mm_obj_prop_remove(mm_object * obj,
 					   unsigned int property_type);
 unsigned int mm_obj_prop_get(mm_object * obj,
 							 unsigned int property_type);
+unsigned int mm_obj_prop_get_index(mm_object * obj,
+								   int index);
 int mm_obj_prop_set(mm_object * obj,
 					unsigned int property_type,
 					unsigned int property_value);
 void mm_obj_copy(mm_object *src, mm_object * dest);
-void mm_obj_prop_set_index(mm_object * obj,
-						   int index,
-						   unsigned int property_type,
-						   unsigned int property_value);
 
 #endif

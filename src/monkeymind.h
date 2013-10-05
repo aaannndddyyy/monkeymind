@@ -41,14 +41,6 @@
 #include "monkeymind_narrative.h"
 #include "monkeymind_language.h"
 
-/* property indexes of meeter and met beings */
-enum {
-    MEETER_ID = 0,
-    MEETER_NAME,
-    MET_ID,
-    MET_NAME
-};
-
 /* social graph array index of the self */
 #define MM_SELF                    0
 

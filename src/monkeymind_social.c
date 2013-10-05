@@ -40,7 +40,8 @@ int mm_social_index_from_id(monkeymind * mind, unsigned int met_id)
 
 	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
-		if (mind->social_graph[i].property_value[MET_ID] == met_id) {
+		if (mm_obj_prop_get(&mind->social_graph[i],
+							MM_PROPERTY_MEETER) == met_id) {
 			return i;
 		}
 	}
@@ -55,7 +56,8 @@ int mm_social_index_from_name(monkeymind * mind, unsigned int met_name)
 
 	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
-		if (mind->social_graph[i].property_value[MET_NAME] == met_name) {
+		if (mm_obj_prop_get(&mind->social_graph[i],
+							MM_PROPERTY_MET_NAME) == met_name) {
 			return i;
 		}
 	}
@@ -114,7 +116,7 @@ static void mm_update_property_matrix(monkeymind * mind,
 	}
 
 	/* combinations of properties for this individual */
-	for (i = 4; i < individual->length; i++) {
+	for (i = 0; i < individual->length; i++) {
 		p0 = individual->property_type[i];
 		for (j = i+1; j < individual->length; j++) {
 			p1 = individual->property_type[j];
@@ -150,24 +152,22 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 
     individual = &meeter->social_graph[index];
 
-	mm_obj_prop_set_index(individual, MEETER_ID,
-						  MM_PROPERTY_MEETER, meeter->id);
-
-	mm_obj_prop_set_index(individual, MEETER_NAME,
-						  MM_PROPERTY_NAME,
-						  mm_get_property(meeter, MM_PROPERTY_NAME));
-
-	mm_obj_prop_set_index(individual, MET_ID,
-						  MM_PROPERTY_MET, met->id);
-
-	mm_obj_prop_set_index(individual, MET_NAME,
-						  MM_PROPERTY_NAME,
-						  mm_get_property(met, MM_PROPERTY_NAME));
-
-	individual->length = 4;
-
 	/* remember properties of the met individual */
 	mm_obj_copy(met->properties, individual);
+
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MEETER, meeter->id);
+
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MEETER_NAME,
+					mm_get_property(meeter, MM_PROPERTY_NAME));
+
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MET, met->id);
+
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MET_NAME,
+					mm_get_property(met, MM_PROPERTY_NAME));
 
 	if (familiar == 0) {
 		/* first meeting */
@@ -193,6 +193,7 @@ void mm_social_meet(monkeymind * meeter, monkeymind * met)
 {
 	unsigned char familiar = 0;
 	int index = mm_social_index_from_id(meeter, met->id);
+
 	if (index == -1) {
 		/* are all array entries occupied? */
 		if (SOCIAL_GRAPH_ENTRY_EXISTS(meeter,MM_SIZE_SOCIAL_GRAPH-1)) {

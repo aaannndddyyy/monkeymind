@@ -122,18 +122,19 @@ void mm_init(monkeymind * mind,
 	mind->properties = &mind->social_graph[MM_SELF];
 
     individual = &mind->social_graph[MM_SELF];
+	individual->length = 0;
 
-	mm_obj_prop_set_index(individual, MEETER_ID,
-						  MM_PROPERTY_MEETER, id);
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MEETER, id);
 
-	mm_obj_prop_set_index(individual, MEETER_NAME,
-						  MM_PROPERTY_NAME, name);
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MEETER_NAME, name);
 
-	mm_obj_prop_set_index(individual, MET_ID,
-						  MM_PROPERTY_MET, id);
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MET, id);
 
-	mm_obj_prop_set_index(individual, MET_NAME,
-						  MM_PROPERTY_NAME, name);
+	mm_obj_prop_add(individual,
+					MM_PROPERTY_MET_NAME, name);
 
 	mm_set_property(mind, MM_PROPERTY_NAME, name);
 }

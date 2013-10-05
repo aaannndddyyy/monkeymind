@@ -133,6 +133,7 @@ void test_social_meet()
 {
 	monkeymind m0, m1, m2;
 	int i, ctr, fof;
+	mm_object * g;
 
 	printf("test_social_meet...");
 
@@ -153,32 +154,26 @@ void test_social_meet()
 			fof += (&m0)->property_matrix[i];
 		}
 	}
-	assert(ctr == 2);
+	assert(ctr > 0);
 	assert(fof > 0);
 
-	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		switch(i) {
-		case 0: {
-			assert((&m0)->social_graph[i].property_value[MET_ID]==1000);
-			break;
-		}
-		case 1: {
-			assert((&m0)->social_graph[i].property_value[MET_ID]==2000);
-			break;
-		}
-		case 2: {
-			assert((&m0)->social_graph[i].property_value[MET_ID]==3000);
-			break;
-		}
-		}
-
-		if (i < 3) {
+	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
+		if (i <= 2) {
 			assert(SOCIAL_GRAPH_ENTRY_EXISTS(&m0,i));
 		}
 		else {
 			assert(!SOCIAL_GRAPH_ENTRY_EXISTS(&m0,i));
 		}
 	}
+
+	g = &m0.social_graph[MM_SELF+1];
+	assert(mm_obj_prop_get(g,MM_PROPERTY_MET) == 2000);
+	printf("test %d\n",mm_obj_prop_get(g,MM_PROPERTY_MEETER));
+	assert(mm_obj_prop_get(g,MM_PROPERTY_MEETER) == 1000);
+
+	g = &m0.social_graph[MM_SELF+2];
+	assert(mm_obj_prop_get(g,MM_PROPERTY_MET) == 3000);
+	assert(mm_obj_prop_get(g,MM_PROPERTY_MEETER) == 1000);
 
 	printf("Ok\n");
 }

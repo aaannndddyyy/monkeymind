@@ -31,33 +31,6 @@
 
 #include "monkeymind_object.h"
 
-/*
-static void mm_object_sort(mm_object * obj)
-{
-	unsigned int i, j, min, index;
-	unsigned int temp_type, temp_value;
-
-	for (i = 0; i < obj->length; i++) {
-		min = obj->property_type[i];
-		index = i;
-		for (j = i+1; i < obj->length; j++) {
-			if (obj->property_type[j] < min) {
-				min = obj->property_type[j];
-				index = j;
-			}
-		}
-		if (index > i) {
-			temp_type = obj->property_type[i];
-			temp_value = obj->property_value[i];
-			obj->property_type[i] = obj->property_type[index];
-			obj->property_value[i] = obj->property_value[index];
-			obj->property_type[index] = temp_type;
-			obj->property_type[index] = temp_value;
-		}
-	}
-}
-*/
-
 /* returns the array index of a given property type
    or -1 if not found */
 int mm_obj_prop_index(mm_object * obj,
@@ -200,15 +173,4 @@ int mm_obj_prop_set(mm_object * obj,
 		return 0;
 	}
 	return -1;
-}
-
-/* set an object property at a specific index */
-void mm_obj_prop_set_index(mm_object * obj,
-						   int index,
-						   unsigned int property_type,
-						   unsigned int property_value)
-{
-	obj->property_type[index] = property_type;
-	obj->property_value[index] = property_value;
-	if (index >= obj->length) obj->length = (unsigned int)index+1;
 }
