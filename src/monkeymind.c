@@ -136,5 +136,5 @@ void mm_init(monkeymind * mind,
 	mm_obj_prop_add(individual,
 					MM_PROPERTY_MET_NAME, name);
 
-	mm_set_property(mind, MM_PROPERTY_NAME, name);
+	mm_add_property(mind, MM_PROPERTY_NAME, name);
 }

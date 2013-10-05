@@ -133,13 +133,26 @@ void test_social_meet()
 {
 	monkeymind m0, m1, m2;
 	int i, ctr, fof;
+	unsigned int name;
 	mm_object * g;
 
 	printf("test_social_meet...");
 
-	mm_init(&m0, 1000, MM_SEX_MALE,10,20);
-	mm_init(&m1, 2000, MM_SEX_FEMALE,11,31);
-	mm_init(&m2, 3000, MM_SEX_FEMALE,7,8);
+	mm_init(&m0, 1000, MM_SEX_MALE, 10,20);
+	mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31);
+	mm_init(&m2, 3000, MM_SEX_FEMALE, 7,8);
+
+	name = mm_get_property(&m0, MM_PROPERTY_NAME);
+	assert(MM_FIRST_NAME(name) == 10);
+	assert(MM_SURNAME(name) == 20);
+
+	name = mm_get_property(&m1, MM_PROPERTY_NAME);
+	assert(MM_FIRST_NAME(name) == 11);
+	assert(MM_SURNAME(name) == 31);
+
+	name = mm_get_property(&m2, MM_PROPERTY_NAME);
+	assert(MM_FIRST_NAME(name) == 7);
+	assert(MM_SURNAME(name) == 8);
 
 	mm_social_meet(&m0,&m1);
 	mm_social_meet(&m0,&m2);
@@ -158,7 +171,7 @@ void test_social_meet()
 	assert(fof > 0);
 
 	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		if (i <= 2) {
+		if (i <= 3) {
 			assert(SOCIAL_GRAPH_ENTRY_EXISTS(&m0,i));
 		}
 		else {
@@ -168,12 +181,23 @@ void test_social_meet()
 
 	g = &m0.social_graph[MM_SELF+1];
 	assert(mm_obj_prop_get(g,MM_PROPERTY_MET) == 2000);
-	printf("test %d\n",mm_obj_prop_get(g,MM_PROPERTY_MEETER));
 	assert(mm_obj_prop_get(g,MM_PROPERTY_MEETER) == 1000);
+	name = mm_obj_prop_get(g,MM_PROPERTY_MET_NAME);
+	assert(MM_FIRST_NAME(name) == 11);
+	assert(MM_SURNAME(name) == 31);
+	name = mm_obj_prop_get(g,MM_PROPERTY_MEETER_NAME);
+	assert(MM_FIRST_NAME(name) == 10);
+	assert(MM_SURNAME(name) == 20);
 
 	g = &m0.social_graph[MM_SELF+2];
 	assert(mm_obj_prop_get(g,MM_PROPERTY_MET) == 3000);
 	assert(mm_obj_prop_get(g,MM_PROPERTY_MEETER) == 1000);
+	name = mm_obj_prop_get(g,MM_PROPERTY_MEETER_NAME);
+	assert(MM_FIRST_NAME(name) == 10);
+	assert(MM_SURNAME(name) == 20);
+	name = mm_obj_prop_get(g,MM_PROPERTY_MET_NAME);
+	assert(MM_FIRST_NAME(name) == 7);
+	assert(MM_SURNAME(name) == 8);
 
 	printf("Ok\n");
 }
