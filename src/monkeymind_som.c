@@ -6,6 +6,8 @@ void mm_som_init(mm_som * s,
 				 unsigned int learning_radius,
 				 mm_random_seed * seed)
 {
+	unsigned int i;
+
 	s->dimension = dimension;
 	s->vector_length = vector_length;
 	s->learning_radius = learning_radius;
@@ -15,7 +17,10 @@ void mm_som_init(mm_som * s,
 		   MM_SOM_MAX_DIMENSION*MM_SOM_MAX_DIMENSION*
 		   sizeof(int));
 
-	/* TODO random weights */
+	/* random weights */
+	for (i = 0; i < s->dimension*s->dimension*s->vector_length; i++) {
+		s->weight[i] = (unsigned char)(mm_rand(s->seed) & 255);
+	}
 }
 
 void mm_som_update(mm_som * s,
