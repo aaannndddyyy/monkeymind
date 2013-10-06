@@ -94,51 +94,40 @@ static void mm_social_evaluate(monkeymind * meeter,
 					MM_PROPERTY_FRIEND_OR_FOE, fof);
 }
 
-/* update a coocurrence matrix of the properties of
-   known individuals */
-static void mm_update_property_matrix(monkeymind * mind,
-									  int index)
+/* categorise an entry within the social graph */
+static void mm_social_categorisation(monkeymind * mind,
+									 int index)
 {
-	int i, j, max = 0, min = 0, incr;
 	mm_object * individual;
-	unsigned int p0, p1;
+	int incr;
+	unsigned int min,max,p,v,i;
+	unsigned char normalised_properties[MM_PROPERTIES];
 
 	/* for every individual in the social graph */
 	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
 	individual = &mind->social_graph[index];
 
 	/* friendly or unfriendly? */
-	if (mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE) >= MM_NEUTRAL) {
+	if (mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE) >=
+		MM_NEUTRAL) {
 		incr = 1;
 	}
 	else {
 		incr = -1;
 	}
 
-	/* combinations of properties for this individual */
+	/* normalise property values into a single byte range */
+	memset((void*)normalised_properties, '\0',
+		   MM_PROPERTIES*sizeof(unsigned char));
 	for (i = 0; i < individual->length; i++) {
-		p0 = individual->property_type[i];
-		for (j = i+1; j < individual->length; j++) {
-			p1 = individual->property_type[j];
-			mind->property_matrix[p0*MM_PROPERTIES + p1]+=incr;
-			mind->property_matrix[p1*MM_PROPERTIES + p0]+=incr;
-		}
-	}
-
-	/* find the maximum activation */
-	for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
-		if (mind->property_matrix[i] > max) {
-			max = mind->property_matrix[i];
-		}
-		if (mind->property_matrix[i] < min) {
-			min = mind->property_matrix[i];
-		}
-	}
-
-	/* normalise if out of range */
-	if ((max > 64000) || (min < -64000)) {
-		for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
-			mind->property_matrix[i] /= 2;
+		p = individual->property_type[i];
+		min = max = 0;
+		if (mm_obj_prop_range(p, &min, &max) == 0) {
+			if (min + max > 0) {
+				v = individual->property_value[i];
+				normalised_properties[p] =
+					(unsigned char)((v - min) * 255 / max);
+			}
 		}
 	}
 }
@@ -185,7 +174,7 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 		}
 	}
 
-	mm_update_property_matrix(meeter, index);
+	mm_social_categorisation(meeter, index);
 }
 
 /* two individuals meet */

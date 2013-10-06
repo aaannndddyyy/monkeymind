@@ -88,6 +88,7 @@ enum property_types
 	MM_PROPERTIES
 };
 
+
 typedef struct
 {
     unsigned int id;
@@ -105,6 +106,8 @@ typedef struct
 
 int mm_obj_prop_index(mm_object * obj,
 					  unsigned int property_type);
+int mm_obj_prop_range(unsigned int property_type,
+					  unsigned int * min, unsigned int * max);
 int mm_obj_prop_add(mm_object * obj,
 					unsigned int property_type,
 					unsigned int property_value);

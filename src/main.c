@@ -30,8 +30,6 @@
 ****************************************************************/
 
 #include <stdio.h>
-
-#include <stdio.h>
 #include "monkeymind.h"
 #include "monkeymind_social.h"
 #include "monkeymind_unittests.h"

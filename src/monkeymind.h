@@ -38,6 +38,7 @@
 #include "monkeymind_time.h"
 #include "monkeymind_emotion.h"
 #include "monkeymind_object.h"
+#include "monkeymind_som.h"
 #include "monkeymind_narrative.h"
 #include "monkeymind_language.h"
 
@@ -59,6 +60,9 @@
 #define MM_SEX_MALE                0
 #define MM_SEX_FEMALE              1
 
+/* dimension of the SOM used to classify social properties */
+#define MM_SOCIAL_CATEGORIES_DIMENSION 64
+
 /* name is stored as a single 32bit number,
    and contains sex, first name and last name */
 #define MM_NAME(sex, first_name, surname) \
@@ -75,6 +79,8 @@ typedef struct
 
 	/* intrinsic properties of the individual */
 	mm_object * properties;
+
+	mm_som social_categories;
 
 	/* coocurrence matrix for properties of known individuals */
 	int property_matrix[MM_PROPERTIES*MM_PROPERTIES];
@@ -109,6 +115,7 @@ void mm_init(monkeymind * mind,
 			 unsigned int id,
 			 unsigned char sex,
 			 unsigned char first_name,
-			 unsigned char surname);
+			 unsigned char surname,
+			 mm_random_seed * seed);
 
 #endif

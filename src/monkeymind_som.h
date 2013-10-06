@@ -29,18 +29,33 @@
 
 ****************************************************************/
 
-#ifndef MONKEYMIND_RAND_H
-#define MONKEYMIND_RAND_H
+#ifndef MONKEYMIND_SOM_H
+#define MONKEYMIND_SOM_H
 
 #include <stdio.h>
 #include <string.h>
+#include "monkeymind_rand.h"
+
+#define MM_SOM_MAX_DIMENSION     64
+#define MM_SOM_MAX_VECTOR_LENGTH 128
 
 typedef struct
 {
-	unsigned int value[4];
-} mm_random_seed;
+	unsigned int dimension;
+	unsigned int vector_length;
+	mm_random_seed * seed;
+	unsigned char weight[MM_SOM_MAX_DIMENSION*
+						 MM_SOM_MAX_DIMENSION*
+						 MM_SOM_MAX_VECTOR_LENGTH];
+	int activation[MM_SOM_MAX_DIMENSION*
+				   MM_SOM_MAX_DIMENSION];
+	int disposition[MM_SOM_MAX_DIMENSION*
+					MM_SOM_MAX_DIMENSION];
+} mm_som;
 
-unsigned int mm_rand(mm_random_seed * seed);
-void mm_rand_copy(mm_random_seed * src, mm_random_seed * dest);
+void mm_som_init(mm_som * s,
+				 unsigned int dimension,
+				 unsigned int vector_length,
+				 mm_random_seed * seed);
 
 #endif

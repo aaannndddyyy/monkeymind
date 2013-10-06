@@ -37,7 +37,7 @@ static void test_init()
 
 	printf("test_init...");
 
-	mm_init(&mind, 1000, MM_SEX_FEMALE,3,6);
+	mm_init(&mind, 1000, MM_SEX_FEMALE,3,6,NULL);
 
 	printf("Ok\n");
 }
@@ -138,9 +138,9 @@ void test_social_meet()
 
 	printf("test_social_meet...");
 
-	mm_init(&m0, 1000, MM_SEX_MALE, 10,20);
-	mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31);
-	mm_init(&m2, 3000, MM_SEX_FEMALE, 7,8);
+	mm_init(&m0, 1000, MM_SEX_MALE, 10,20, NULL);
+	mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31, NULL);
+	mm_init(&m2, 3000, MM_SEX_FEMALE, 7,8, NULL);
 
 	name = mm_get_property(&m0, MM_PROPERTY_NAME);
 	assert(MM_FIRST_NAME(name) == 10);

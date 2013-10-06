@@ -1,5 +1,4 @@
 /****************************************************************
-
  Monkeymind - an experimental cogitive architecture
 
  =============================================================
@@ -42,7 +41,7 @@ void mm_add_property(monkeymind * mind,
 /* sets a property of the individualk */
 void mm_set_property(monkeymind * mind,
 					 unsigned int property_type,
-					 unsigned int property_value)
+ 					 unsigned int property_value)
 {
 	mm_obj_prop_set(mind->properties, property_type, property_value);
 }
@@ -96,12 +95,15 @@ void mm_init(monkeymind * mind,
 			 unsigned int id,
 			 unsigned char sex,
 			 unsigned char first_name,
-			 unsigned char surname)
+			 unsigned char surname,
+			 mm_random_seed * seed)
 {
 	mm_object * individual;
 	unsigned int name;
 
 	mind->id = id;
+	mm_rand_copy(seed, &mind->seed);
+
 	name = MM_NAME(sex,first_name,surname);
 
 	memset((void*)mind->narrative, '\0',
@@ -113,11 +115,12 @@ void mm_init(monkeymind * mind,
 	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
-	memset((void*)mind->property_matrix, '\0',
-		   MM_PROPERTIES * MM_PROPERTIES * sizeof(int));
 
 	mm_init_language(mind);
 	mm_init_spatial(mind);
+	mm_som_init(&mind->social_categories,
+				MM_SOCIAL_CATEGORIES_DIMENSION,
+				MM_PROPERTIES, &mind->seed);
 
 	mind->properties = &mind->social_graph[MM_SELF];
 

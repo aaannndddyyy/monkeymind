@@ -31,6 +31,57 @@
 
 #include "monkeymind_object.h"
 
+/* returns the range of a given object property type */
+int mm_obj_prop_range(unsigned int property_type,
+					  unsigned int * min, unsigned int * max)
+{
+    const unsigned int property_range[] = {
+	    MM_PROPERTY_NONE, 0,0,
+
+		/* who */
+		MM_PROPERTY_MEETER, 0,0,
+		MM_PROPERTY_MET, 0,0,
+		MM_PROPERTY_NAME, 0,0,
+		MM_PROPERTY_MEETER_NAME, 0,0,
+		MM_PROPERTY_MET_NAME, 0,0,
+		MM_PROPERTY_RELATION, 0,0,
+
+		/* what */
+		MM_PROPERTY_OBJECT, 0,0,
+		MM_PROPERTY_NARRATIVE, 0,0,
+		MM_PROPERTY_EMOTION, 0,0,
+		MM_PROPERTY_HEIGHT, 0,0,
+		MM_PROPERTY_WEIGHT, 0,0,
+		MM_PROPERTY_HAIR_LENGTH, 0,0,
+		MM_PROPERTY_HAIR_COLOUR, 0,0,
+
+		MM_PROPERTY_FRIEND_OR_FOE, 0,0,
+
+		/* where */
+		MM_PROPERTY_PLACE_X, 0,0,
+		MM_PROPERTY_PLACE_Y, 0,0,
+		MM_PROPERTY_PLACE_Z, 0,0,
+		MM_PROPERTY_TERRITORY, 0,0,
+
+		/* when */
+		MM_PROPERTY_DAY, 0,0,
+		MM_PROPERTY_SUBJECTIVE_TIME, 0,0,
+	};
+
+	*min = 0;
+	*max = 0;
+
+	if (property_type >= MM_PROPERTIES) {
+		printf("Property type out of range\n");
+		return -1;
+	}
+	*min = property_range[property_type*3 + 1];
+	*max = property_range[property_type*3 + 2];
+
+	return 0;
+}
+
+
 /* returns the array index of a given property type
    or -1 if not found */
 int mm_obj_prop_index(mm_object * obj,

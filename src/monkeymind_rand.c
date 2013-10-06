@@ -55,3 +55,10 @@ unsigned int mm_rand(mm_random_seed * seed)
 		(t ^ (t >> 8));
 	return seed->value[3];
 }
+
+void mm_rand_copy(mm_random_seed * src, mm_random_seed * dest)
+{
+	memcpy((void*)dest->value,
+		   (void*)src->value,
+		   4*sizeof(unsigned int));
+}
