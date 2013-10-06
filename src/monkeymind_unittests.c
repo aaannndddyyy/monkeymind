@@ -132,7 +132,7 @@ void test_name()
 void test_social_meet()
 {
 	monkeymind m0, m1, m2;
-	int i, ctr, fof;
+	int i;
 	unsigned int name;
 	mm_object * g;
 
@@ -157,18 +157,6 @@ void test_social_meet()
 	mm_social_meet(&m0,&m1);
 	mm_social_meet(&m0,&m2);
 	mm_social_meet(&m0,&m1);
-
-	/* check properties matrix entries have been made */
-	ctr = 0;
-	fof = 0;
-	for (i = 0; i < MM_PROPERTIES * MM_PROPERTIES; i++) {
-		if ((&m0)->property_matrix[i] != 0) {
-			ctr++;
-			fof += (&m0)->property_matrix[i];
-		}
-	}
-	assert(ctr > 0);
-	assert(fof > 0);
 
 	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (i <= 3) {

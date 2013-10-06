@@ -99,10 +99,19 @@ void mm_init(monkeymind * mind,
 			 mm_random_seed * seed)
 {
 	mm_object * individual;
-	unsigned int name;
+	unsigned int name, i;
 
 	mind->id = id;
-	mm_rand_copy(seed, &mind->seed);
+
+	if (seed != NULL) {
+		mm_rand_copy(seed, &mind->seed);
+	}
+	else {
+		/* a default random seed */
+		for (i = 0; i < 4; i++) {
+			mind->seed.value[i] = i;
+		}
+	}
 
 	name = MM_NAME(sex,first_name,surname);
 
@@ -115,12 +124,18 @@ void mm_init(monkeymind * mind,
 	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
+	memset((void*)&mind->social_categories_fof,'\0',
+		   MM_SOCIAL_CATEGORIES_DIMENSION*
+		   MM_SOCIAL_CATEGORIES_DIMENSION*
+		   sizeof(int));
 
 	mm_init_language(mind);
 	mm_init_spatial(mind);
 	mm_som_init(&mind->social_categories,
 				MM_SOCIAL_CATEGORIES_DIMENSION,
-				MM_PROPERTIES, &mind->seed);
+				MM_PROPERTIES,
+				MM_SOCIAL_CATEGORIES_RADIUS,
+				&mind->seed);
 
 	mind->properties = &mind->social_graph[MM_SELF];
 

@@ -43,19 +43,27 @@ typedef struct
 {
 	unsigned int dimension;
 	unsigned int vector_length;
+	unsigned int learning_radius;
 	mm_random_seed * seed;
 	unsigned char weight[MM_SOM_MAX_DIMENSION*
 						 MM_SOM_MAX_DIMENSION*
 						 MM_SOM_MAX_VECTOR_LENGTH];
 	int activation[MM_SOM_MAX_DIMENSION*
 				   MM_SOM_MAX_DIMENSION];
-	int disposition[MM_SOM_MAX_DIMENSION*
-					MM_SOM_MAX_DIMENSION];
 } mm_som;
 
 void mm_som_init(mm_som * s,
 				 unsigned int dimension,
 				 unsigned int vector_length,
+				 unsigned int learning_radius,
 				 mm_random_seed * seed);
+
+void mm_som_update(mm_som * s,
+				   unsigned char * vector,
+				   unsigned int * x, unsigned int * y);
+
+void mm_som_learn(mm_som * s,
+				  unsigned char * vector,
+				  unsigned int x, unsigned int y);
 
 #endif

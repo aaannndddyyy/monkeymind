@@ -94,27 +94,91 @@ static void mm_social_evaluate(monkeymind * meeter,
 					MM_PROPERTY_FRIEND_OR_FOE, fof);
 }
 
+/* get the existing categorisation at this location */
+static int mm_social_get_category(int * categories,
+								  unsigned int social_x,
+								  unsigned int social_y)
+{
+	unsigned int n = social_y*MM_SOCIAL_CATEGORIES_DIMENSION + social_x;
+	if (categories[n] > 0) return 1;
+	if (categories[n] < 0) return -1;
+	return 0;
+}
+
+/* update categories using the given increment */
+static void mm_social_category_update(int * categories,
+									  unsigned int social_x,
+									  unsigned int social_y,
+									  int increment)
+{
+	int x, y, dx, dy, max_radius, inner_radius, r, n;
+	unsigned char normalise = 0;
+	const int max_response = 256;
+
+	if (increment == 0) return;
+
+	max_radius =
+		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS;
+	inner_radius =
+		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS/4;
+
+	for (x = (int)social_x - MM_SOCIAL_CATEGORIES_RADIUS;
+		 x <= (int)social_x + MM_SOCIAL_CATEGORIES_RADIUS;
+		 x++) {
+		if ((x < 0) || (x >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
+			continue;
+		}
+		dx = x - (int)social_x;
+		for (y = (int)social_y - MM_SOCIAL_CATEGORIES_RADIUS;
+			 y <= (int)social_y + MM_SOCIAL_CATEGORIES_RADIUS;
+			 y++) {
+			if ((y < 0) || (y >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
+				continue;
+			}
+			dy = y - (int)social_y;
+			r = dx*dx + dy*dy;
+			if (r > max_radius) continue;
+
+			/* location within the map */
+			n = y*MM_SOCIAL_CATEGORIES_DIMENSION + x;
+
+			if (r < inner_radius) {
+				categories[n] += increment*2;
+			}
+			else {
+				categories[n] += increment;
+			}
+			/* range checking */
+			if ((categories[n] > max_response) ||
+				(categories[n] < -max_response)) {
+				normalise = 1;
+			}
+		}
+	}
+
+	/* normalise if necessary to keep values in range */
+	if (normalise == 1) {
+		for (n = 0;
+			 n < MM_SOCIAL_CATEGORIES_DIMENSION*
+				 MM_SOCIAL_CATEGORIES_DIMENSION; n++) {
+			categories[n] /= 2;
+		}
+	}
+}
+
 /* categorise an entry within the social graph */
 static void mm_social_categorisation(monkeymind * mind,
 									 int index)
 {
 	mm_object * individual;
-	int incr;
+	int increment = 0;
 	unsigned int min,max,p,v,i;
 	unsigned char normalised_properties[MM_PROPERTIES];
+	unsigned int fof, social_x=0, social_y=0;
 
 	/* for every individual in the social graph */
 	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
 	individual = &mind->social_graph[index];
-
-	/* friendly or unfriendly? */
-	if (mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE) >=
-		MM_NEUTRAL) {
-		incr = 1;
-	}
-	else {
-		incr = -1;
-	}
 
 	/* normalise property values into a single byte range */
 	memset((void*)normalised_properties, '\0',
@@ -130,6 +194,37 @@ static void mm_social_categorisation(monkeymind * mind,
 			}
 		}
 	}
+
+	/* friendly or unfriendly? */
+	fof = mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE);
+	if (fof > MM_NEUTRAL) {
+		increment = 1;
+	}
+	if (fof < MM_NEUTRAL) {
+		increment = -1;
+	}
+
+	/* find the peak response within the SOM,
+	   corresponding to the minimum Euclidean distance */
+	mm_som_update(&mind->social_categories,
+				  normalised_properties,
+				  &social_x, &social_y);
+
+	/* adjust weights within the social categorisation SOM */
+	mm_som_learn(&mind->social_categories,
+				 normalised_properties,
+				 social_x, social_y);
+
+	/* alter the friend of foe status depending upon the existing
+	   classification */
+	mm_obj_prop_set(individual, MM_PROPERTY_FRIEND_OR_FOE,
+					fof +
+					mm_social_get_category(mind->social_categories_fof,
+										   social_x, social_y));
+
+	/* alter the friend or foe values within the classifier */
+	mm_social_category_update(mind->social_categories_fof,
+							  social_x, social_y, increment);
 }
 
 /* adds a social graph enry at the given index */

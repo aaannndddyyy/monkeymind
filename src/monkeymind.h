@@ -63,6 +63,9 @@
 /* dimension of the SOM used to classify social properties */
 #define MM_SOCIAL_CATEGORIES_DIMENSION 64
 
+/* radius used to update the social classification SOM */
+#define MM_SOCIAL_CATEGORIES_RADIUS    4
+
 /* name is stored as a single 32bit number,
    and contains sex, first name and last name */
 #define MM_NAME(sex, first_name, surname) \
@@ -80,10 +83,13 @@ typedef struct
 	/* intrinsic properties of the individual */
 	mm_object * properties;
 
+	/* self-organising map for classifying met individuals */
 	mm_som social_categories;
 
-	/* coocurrence matrix for properties of known individuals */
-	int property_matrix[MM_PROPERTIES*MM_PROPERTIES];
+	/* friend or foe value for each of the locations within the
+	   social_categories SOM */
+	int social_categories_fof[MM_SOCIAL_CATEGORIES_DIMENSION*
+							  MM_SOCIAL_CATEGORIES_DIMENSION];
 
 	/* memory which may contain a number of narratives */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];
