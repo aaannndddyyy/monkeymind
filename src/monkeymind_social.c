@@ -1,4 +1,3 @@
-
 /****************************************************************
 
  Monkeymind - an experimental cogitive architecture

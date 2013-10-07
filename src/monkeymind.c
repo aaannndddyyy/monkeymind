@@ -90,6 +90,20 @@ static void mm_init_spatial(monkeymind * mind)
 	}
 }
 
+/* initially randomly assigned categories */
+static void random_categories(mm_random_seed * seed,
+							  int * categories)
+{
+	unsigned int i;
+
+	for (i = 0;
+		 i < MM_SOCIAL_CATEGORIES_DIMENSION*
+			 MM_SOCIAL_CATEGORIES_DIMENSION;
+		 i++) {
+		categories[i] = (int)(mm_rand(seed)%3) - 1;
+	}
+}
+
 /* initialises a mind */
 void mm_init(monkeymind * mind,
 			 unsigned int id,
@@ -124,10 +138,7 @@ void mm_init(monkeymind * mind,
 	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
-	memset((void*)&mind->social_categories_fof,'\0',
-		   MM_SOCIAL_CATEGORIES_DIMENSION*
-		   MM_SOCIAL_CATEGORIES_DIMENSION*
-		   sizeof(int));
+	random_categories(&mind->seed,mind->social_categories_fof);
 
 	mm_init_language(mind);
 	mm_init_spatial(mind);

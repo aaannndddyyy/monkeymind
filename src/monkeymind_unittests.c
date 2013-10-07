@@ -190,12 +190,45 @@ void test_social_meet()
 	printf("Ok\n");
 }
 
+void test_som()
+{
+	mm_som som;
+	mm_random_seed seed;
+	int i,j;
+	unsigned int dimension = 32;
+	unsigned int vector_length = 16;
+	unsigned int learning_radius = 4;
+	unsigned char vector[16];
+	unsigned int x, y;
+
+	printf("test_som...");
+
+	for (i = 0; i < 4; i++) {
+		seed.value[i] = i;
+	}
+
+	mm_som_init(&som,
+				dimension, vector_length,
+				learning_radius, &seed);
+
+	for (i = 0; i < 10000; i++) {
+		for (j = 0; j < vector_length; j++) {
+			vector[j] = mm_rand(&seed)&255;
+		}
+		mm_som_update(&som, vector, &x, &y);
+		mm_som_learn(&som, vector, x, y);
+	}
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
 	test_object_add_remove_properties();
 	test_name();
 	test_social_meet();
+	test_som();
 
 	printf("All tests passed\n");
 }
