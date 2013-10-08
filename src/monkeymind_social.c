@@ -109,6 +109,37 @@ static int mm_social_get_category(int * categories,
 	return 0;
 }
 
+/* Rebalances categories such that positive and negative values
+   have an average of zero.
+   This helps to avoid situtaions such as liking everyone
+   or hating everyone */
+static void mm_social_category_rebalance(int * categories)
+{
+	unsigned int i;
+	int average = 0, hits = 0;
+
+	for (i = 0;
+		 i < MM_SOCIAL_CATEGORIES_DIMENSION*
+			 MM_SOCIAL_CATEGORIES_DIMENSION; i++) {
+		if (categories[i] != 0) {
+			average += categories[i];
+			hits++;
+		}
+	}
+
+	if (hits == 0) return;
+
+	average /= hits;
+
+	for (i = 0;
+		 i < MM_SOCIAL_CATEGORIES_DIMENSION*
+			 MM_SOCIAL_CATEGORIES_DIMENSION; i++) {
+		if (categories[i] != 0) {
+			categories[i] -= average;
+		}
+	}
+}
+
 /* update categories using the given increment */
 static void mm_social_category_update(int * categories,
 									  unsigned int social_x,
@@ -159,6 +190,9 @@ static void mm_social_category_update(int * categories,
 			}
 		}
 	}
+
+	/* rebalance */
+	mm_social_category_rebalance(categories);
 
 	/* normalise if necessary to keep values in range */
 	if (normalise == 1) {
