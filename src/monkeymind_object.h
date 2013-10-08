@@ -63,6 +63,8 @@ enum property_types
 	MM_PROPERTY_MEETER_NAME,
 	MM_PROPERTY_MET_NAME,
 	MM_PROPERTY_RELATION,
+	MM_PROPERTY_SOCIAL_X,
+	MM_PROPERTY_SOCIAL_Y,
 
 	/* what */
     MM_PROPERTY_OBJECT,
@@ -121,5 +123,7 @@ int mm_obj_prop_set(mm_object * obj,
 					unsigned int property_type,
 					unsigned int property_value);
 void mm_obj_copy(mm_object *src, mm_object * dest);
+void mm_obj_to_vect(mm_object * obj,
+					unsigned char * vect);
 
 #endif

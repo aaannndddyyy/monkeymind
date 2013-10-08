@@ -50,5 +50,8 @@ int mm_social_index_from_id(monkeymind * mind, unsigned int met_id);
 int mm_social_index_from_name(monkeymind * mind, unsigned int met_name);
 void mm_social_meet(monkeymind * meeter, monkeymind * met);
 void mm_social_speak(monkeymind * speaker, monkeymind * listener);
+void mm_communicate_social_categorisation(monkeymind * mind,
+										  int index,
+										  monkeymind * other);
 
 #endif

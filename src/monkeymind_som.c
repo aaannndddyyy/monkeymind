@@ -30,7 +30,7 @@ void mm_som_update(mm_som * s,
 				   unsigned int * x, unsigned int * y)
 {
 	unsigned int xx, yy, i, ctr = 0, n = 0;
-	int diff, min_diff = 999999;
+	int diff, min_diff = 0;
 
 	*x = 0;
 	*y = 0;
@@ -46,7 +46,7 @@ void mm_som_update(mm_som * s,
 				s->activation[ctr] += diff;
 			}
 			/* record the highest activation */
-			if (s->activation[ctr] < min_diff) {
+			if ((s->activation[ctr] < min_diff) || (ctr==0)) {
 				*x = xx;
 				*y = yy;
 				min_diff = s->activation[ctr];

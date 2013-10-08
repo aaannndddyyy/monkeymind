@@ -165,42 +165,54 @@ static void mm_social_category_update(int * categories,
 	}
 }
 
+/* communicates the social categorisation of a given social
+   graph entry to another individual */
+void mm_communicate_social_categorisation(monkeymind * mind,
+										  int index,
+										  monkeymind * other)
+{
+	mm_object * individual;
+	unsigned int social_x, social_y;
+	unsigned char normalised_properties[MM_PROPERTIES];
+
+	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
+	individual = &mind->social_graph[index];
+
+    social_x = mm_obj_prop_get(individual, MM_PROPERTY_SOCIAL_X);
+    social_y = mm_obj_prop_get(individual, MM_PROPERTY_SOCIAL_Y);
+
+	/* normalise property values into a single byte range */
+	mm_obj_to_vect(individual, normalised_properties);
+
+	/* adjust weights within the social categorisation SOM
+	   of the other individual */
+	mm_som_learn(&other->social_categories,
+				 normalised_properties,
+				 social_x, social_y);
+}
+
 /* categorise an entry within the social graph */
 static void mm_social_categorisation(monkeymind * mind,
 									 int index)
 {
 	mm_object * individual;
-	int increment = 0;
-	unsigned int min,max,p,v,i;
+	int fof_increment = 0;
 	unsigned char normalised_properties[MM_PROPERTIES];
 	unsigned int fof, social_x=0, social_y=0;
 
-	/* for every individual in the social graph */
 	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
 	individual = &mind->social_graph[index];
 
 	/* normalise property values into a single byte range */
-	memset((void*)normalised_properties, '\0',
-		   MM_PROPERTIES*sizeof(unsigned char));
-	for (i = 0; i < individual->length; i++) {
-		p = individual->property_type[i];
-		min = max = 0;
-		if (mm_obj_prop_range(p, &min, &max) == 0) {
-			if (min + max > 0) {
-				v = individual->property_value[i];
-				normalised_properties[p] =
-					(unsigned char)((v - min) * 255 / max);
-			}
-		}
-	}
+	mm_obj_to_vect(individual, normalised_properties);
 
 	/* friendly or unfriendly? */
 	fof = mm_obj_prop_get(individual, MM_PROPERTY_FRIEND_OR_FOE);
 	if (fof > MM_NEUTRAL) {
-		increment = 1;
+		fof_increment = 1;
 	}
 	if (fof < MM_NEUTRAL) {
-		increment = -1;
+		fof_increment = -1;
 	}
 
 	/* find the peak response within the SOM,
@@ -208,6 +220,10 @@ static void mm_social_categorisation(monkeymind * mind,
 	mm_som_update(&mind->social_categories,
 				  normalised_properties,
 				  &social_x, &social_y);
+
+	/* store the categorisation as properties */
+	mm_obj_prop_add(individual, MM_PROPERTY_SOCIAL_X, social_x);
+	mm_obj_prop_add(individual, MM_PROPERTY_SOCIAL_Y, social_y);
 
 	/* adjust weights within the social categorisation SOM */
 	mm_som_learn(&mind->social_categories,
@@ -223,7 +239,7 @@ static void mm_social_categorisation(monkeymind * mind,
 
 	/* alter the friend or foe values within the classifier */
 	mm_social_category_update(mind->social_categories_fof,
-							  social_x, social_y, increment);
+							  social_x, social_y, fof_increment);
 }
 
 /* adds a social graph enry at the given index */

@@ -45,6 +45,8 @@ int mm_obj_prop_range(unsigned int property_type,
 		MM_PROPERTY_MEETER_NAME, 0,0,
 		MM_PROPERTY_MET_NAME, 0,0,
 		MM_PROPERTY_RELATION, 0,0,
+		MM_PROPERTY_SOCIAL_X, 0, 64,
+		MM_PROPERTY_SOCIAL_Y, 0, 64,
 
 		/* what */
 		MM_PROPERTY_OBJECT, 0,0,
@@ -224,4 +226,25 @@ int mm_obj_prop_set(mm_object * obj,
 		return 0;
 	}
 	return -1;
+}
+
+/* normalise property values into a single byte range */
+void mm_obj_to_vect(mm_object * obj,
+					unsigned char * vect)
+{
+	unsigned int i, p, min, max, v;
+
+	memset((void*)vect, '\0',
+		   MM_PROPERTIES*sizeof(unsigned char));
+	for (i = 0; i < obj->length; i++) {
+		p = obj->property_type[i];
+		min = max = 0;
+		if (mm_obj_prop_range(p, &min, &max) == 0) {
+			if (min + max > 0) {
+				v = obj->property_value[i];
+				vect[p] =
+					(unsigned char)((v - min) * 255 / max);
+			}
+		}
+	}
 }
