@@ -86,11 +86,16 @@ static void mm_social_evaluate(monkeymind * meeter,
 							   mm_object * social_graph_entry)
 {
 	unsigned int fof = MM_NEUTRAL;
+	unsigned int attraction = MM_NEUTRAL;
 
-	/* TODO: add a friend or foe property */
+	/* TODO: calculate or look up friend or foe value */
+
+	/* TODO: calculate or look up attraction value */
 
 	mm_obj_prop_add(social_graph_entry,
 					MM_PROPERTY_FRIEND_OR_FOE, fof);
+	mm_obj_prop_add(social_graph_entry,
+					MM_PROPERTY_ATTRACTION, attraction);
 }
 
 /* get the existing categorisation at this location */
@@ -196,9 +201,9 @@ static void mm_social_categorisation(monkeymind * mind,
 									 int index)
 {
 	mm_object * individual;
-	int fof_increment = 0;
+	int fof_increment = 0, attraction_increment = 0;
 	unsigned char normalised_properties[MM_PROPERTIES];
-	unsigned int fof, social_x=0, social_y=0;
+	unsigned int fof, attraction, social_x=0, social_y=0;
 
 	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
 	individual = &mind->social_graph[index];
@@ -213,6 +218,15 @@ static void mm_social_categorisation(monkeymind * mind,
 	}
 	if (fof < MM_NEUTRAL) {
 		fof_increment = -1;
+	}
+
+	/* attractive or unattractive? */
+	attraction = mm_obj_prop_get(individual, MM_PROPERTY_ATTRACTION);
+	if (attraction > MM_NEUTRAL) {
+		attraction_increment = 1;
+	}
+	if (attraction < MM_NEUTRAL) {
+		attraction_increment = -1;
 	}
 
 	/* find the peak response within the SOM,
@@ -233,13 +247,22 @@ static void mm_social_categorisation(monkeymind * mind,
 	/* alter the friend of foe status depending upon the existing
 	   classification */
 	mm_obj_prop_set(individual, MM_PROPERTY_FRIEND_OR_FOE,
-					fof +
 					mm_social_get_category(mind->category[MM_CATEGORY_FOF].value,
 														  social_x, social_y));
 
 	/* alter the friend or foe values within the classifier */
 	mm_social_category_update(mind->category[MM_CATEGORY_FOF].value,
 							  social_x, social_y, fof_increment);
+
+	/* alter the attraction status depending upon the existing
+	   classification */
+	mm_obj_prop_set(individual, MM_PROPERTY_ATTRACTION,
+					mm_social_get_category(mind->category[MM_CATEGORY_ATTRACTION].value,
+														  social_x, social_y));
+
+	/* alter the attraction values within the classifier */
+	mm_social_category_update(mind->category[MM_CATEGORY_ATTRACTION].value,
+							  social_x, social_y, attraction_increment);
 }
 
 /* adds a social graph enry at the given index */

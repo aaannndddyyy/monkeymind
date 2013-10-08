@@ -82,6 +82,7 @@ enum {
 
 enum {
 	MM_CATEGORY_FOF = 0,
+	MM_CATEGORY_ATTRACTION,
 	MM_CATEGORIES
 };
 
