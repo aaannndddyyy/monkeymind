@@ -284,7 +284,11 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 		}
 	}
 
+	/* make generalisations about the met individual */
 	mm_social_categorisation(meeter, index);
+
+	/* set attention to the met being */
+	meeter->attention[MM_ATTENTION_SOCIAL_GRAPH] = index;
 }
 
 /* two individuals meet */

@@ -74,6 +74,12 @@
 #define MM_FIRST_NAME(name)      ((name)&255)
 #define MM_SURNAME(name)         ((name)>>16)
 
+/* different types of attention */
+enum {
+	MM_ATTENTION_SOCIAL_GRAPH = 0,
+	MM_ATTENTION_SIZE
+};
+
 typedef struct
 {
     unsigned int id;
@@ -96,6 +102,9 @@ typedef struct
 
 	/* details of each known agent */
     mm_object social_graph[MM_SIZE_SOCIAL_GRAPH];
+
+	/* different types of attention */
+	unsigned int attention[MM_ATTENTION_SIZE];
 
 	/* abstracted individuals */
     mm_object social_stereotype[MM_SIZE_SOCIAL_STEREOTYPES];
