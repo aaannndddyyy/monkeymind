@@ -80,6 +80,17 @@ enum {
 	MM_ATTENTION_SIZE
 };
 
+enum {
+	MM_CATEGORY_FOF = 0,
+	MM_CATEGORIES
+};
+
+typedef struct
+{
+	int value[MM_SOCIAL_CATEGORIES_DIMENSION*
+			  MM_SOCIAL_CATEGORIES_DIMENSION];
+} mm_som_categories;
+
 typedef struct
 {
     unsigned int id;
@@ -92,10 +103,8 @@ typedef struct
 	/* self-organising map for classifying met individuals */
 	mm_som social_categories;
 
-	/* friend or foe value for each of the locations within the
-	   social_categories SOM */
-	int social_categories_fof[MM_SOCIAL_CATEGORIES_DIMENSION*
-							  MM_SOCIAL_CATEGORIES_DIMENSION];
+	/* friend or foe categories */
+	mm_som_categories category[MM_CATEGORIES];
 
 	/* memory which may contain a number of narratives */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];

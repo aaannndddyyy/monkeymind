@@ -37,7 +37,7 @@
 #include "monkeymind_object.h"
 
 /* the maximum number of steps within a narrative sequence */
-#define MM_MAX_NARRATIVE_LENGTH  16
+#define MM_MAX_NARRATIVE_SIZE  16
 
 typedef struct
 {
@@ -59,7 +59,7 @@ typedef struct
     unsigned int length;
 
     /* array storing the steps in the narrative */
-    mm_circumstance step[MM_MAX_NARRATIVE_LENGTH];
+    mm_circumstance step[MM_MAX_NARRATIVE_SIZE];
 } mm_narrative;
 
 #endif

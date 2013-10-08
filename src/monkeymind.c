@@ -138,7 +138,12 @@ void mm_init(monkeymind * mind,
 	memset((void*)&mind->properties, '\0', sizeof(mm_object));
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
-	random_categories(&mind->seed,mind->social_categories_fof);
+	memset((void*)mind->attention, '\0',
+		   MM_ATTENTION_SIZE*sizeof(unsigned int));
+
+	for (i = 0; i < MM_CATEGORIES; i++) {
+		random_categories(&mind->seed, mind->category[i].value);
+	}
 
 	mm_init_language(mind);
 	mm_init_spatial(mind);

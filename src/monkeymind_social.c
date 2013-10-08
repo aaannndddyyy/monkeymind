@@ -234,11 +234,11 @@ static void mm_social_categorisation(monkeymind * mind,
 	   classification */
 	mm_obj_prop_set(individual, MM_PROPERTY_FRIEND_OR_FOE,
 					fof +
-					mm_social_get_category(mind->social_categories_fof,
-										   social_x, social_y));
+					mm_social_get_category(mind->category[MM_CATEGORY_FOF].value,
+														  social_x, social_y));
 
 	/* alter the friend or foe values within the classifier */
-	mm_social_category_update(mind->social_categories_fof,
+	mm_social_category_update(mind->category[MM_CATEGORY_FOF].value,
 							  social_x, social_y, fof_increment);
 }
 
