@@ -105,7 +105,7 @@ static void test_object_add_remove_properties()
 	printf("Ok\n");
 }
 
-void test_name()
+static void test_name()
 {
 	unsigned int first_name = 10;
 	unsigned int sex = MM_SEX_FEMALE;
@@ -129,7 +129,7 @@ void test_name()
 	printf("Ok\n");
 }
 
-void test_social_meet()
+static void test_social_meet()
 {
 	monkeymind m0, m1, m2;
 	int i;
@@ -190,7 +190,7 @@ void test_social_meet()
 	printf("Ok\n");
 }
 
-void test_som()
+static void test_som()
 {
 	mm_som som;
 	mm_random_seed seed;
@@ -222,6 +222,73 @@ void test_som()
 	printf("Ok\n");
 }
 
+static void test_communicate_social_categorisation()
+{
+	monkeymind m0, m1;
+	int c, i, ctr;
+
+	printf("test_communicate_social_categorisation...");
+
+	mm_init(&m0, 1000, MM_SEX_MALE, 10,20, NULL);
+	mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31, NULL);
+
+	mm_social_meet(&m0,&m1);
+
+	for (c = 0; c < MM_CATEGORIES; c++) {
+		for (i = 0; i < MM_SOCIAL_CATEGORIES_DIMENSION*
+				 MM_SOCIAL_CATEGORIES_DIMENSION; i++) {
+			m0.category[c].value[i] = 10;
+			m1.category[c].value[i] = 20;
+		}
+	}
+
+	mm_communicate_social_categorisation(&m0, 1, &m1);
+
+	ctr = 0;
+	for (c = 0; c < MM_CATEGORIES; c++) {
+		for (i = 0; i < MM_SOCIAL_CATEGORIES_DIMENSION*
+				 MM_SOCIAL_CATEGORIES_DIMENSION; i++) {
+			if (m1.category[c].value[i] < 20) {
+				ctr++;
+				assert(m1.category[c].value[i] >= 18);
+			}
+		}
+	}
+
+	assert(ctr > MM_SOCIAL_CATEGORIES_RADIUS*2*
+		   MM_CATEGORIES);
+	assert(ctr < MM_SOCIAL_CATEGORIES_RADIUS*
+		   MM_SOCIAL_CATEGORIES_RADIUS*4*MM_CATEGORIES);
+
+	for (c = 0; c < MM_CATEGORIES; c++) {
+		for (i = 0; i < MM_SOCIAL_CATEGORIES_DIMENSION*
+				 MM_SOCIAL_CATEGORIES_DIMENSION; i++) {
+			m0.category[c].value[i] = 20;
+			m1.category[c].value[i] = 10;
+		}
+	}
+
+	mm_communicate_social_categorisation(&m0, 1, &m1);
+
+	ctr = 0;
+	for (c = 0; c < MM_CATEGORIES; c++) {
+		for (i = 0; i < MM_SOCIAL_CATEGORIES_DIMENSION*
+				 MM_SOCIAL_CATEGORIES_DIMENSION; i++) {
+			if (m1.category[c].value[i] > 10) {
+				ctr++;
+				assert(m1.category[c].value[i] <= 12);
+			}
+		}
+	}
+
+	assert(ctr > MM_SOCIAL_CATEGORIES_RADIUS*2*
+		   MM_CATEGORIES);
+	assert(ctr < MM_SOCIAL_CATEGORIES_RADIUS*
+		   MM_SOCIAL_CATEGORIES_RADIUS*4*MM_CATEGORIES);
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
@@ -229,6 +296,7 @@ void mm_run_tests()
 	test_name();
 	test_social_meet();
 	test_som();
+	test_communicate_social_categorisation();
 
 	printf("All tests passed\n");
 }
