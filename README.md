@@ -4,7 +4,7 @@ which may be exchanged, retold, mutated, negated and so on and to move towards
 a situation where agents posess a socially constructed identity and are
 capable of self reflection.
 
-Monkeymind is not intended to simulate any particular primate cognition in detail.  It's an obstract model.
+Monkeymind is not intended to simulate any particular primate cognition in detail.  It's an abstract model.
 
 Some guiding assumptions are:
 
@@ -18,7 +18,8 @@ Some guiding assumptions are:
  * Identity arrises from the mechanisms of social coordination.  It is socially constructed.
  * The ultimate arbiter of intelligence is survival, not utility.  Many behaviors characteristic of primates are not really fully explicable in utilitarian terms.
 
-Property Matrix
----------------
 
-Each agent can have a number of peoperties.  When two agents meet the coocurrence of properties is plotted within a 2D matrix, and this is used as the basis for forming stereotypes.  Each point in the matrix is incremented according to whether the met agent is judged to be friendly or unfriendly.  Negative values in the matrix correspond to feature correspondences for probably hostile agents whereas positive values correspond to the feature correspondences of friendly agents.
+Abstract Persons
+----------------
+
+Other individuals who are met are categorised using a self-origanising map, and maps may be partially aligned during conversation.  Friend or foe, or attraction values are then indexed against the 2D map.

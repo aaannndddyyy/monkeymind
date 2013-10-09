@@ -204,6 +204,67 @@ static void mm_social_category_update(int * categories,
 	}
 }
 
+/* align the som categories of another agent with those of the current agent */
+static void mm_align_categories(monkeymind * mind,
+								unsigned int social_x,
+								unsigned int social_y,
+								monkeymind * other)
+{
+	int max_radius, inner_radius, i, x, y;
+	int r, n, dx, dy, dcat;
+
+	max_radius =
+		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS;
+	inner_radius =
+		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS/4;
+
+	for (i = 0; i < MM_CATEGORIES; i++) {
+		for (x = (int)social_x - MM_SOCIAL_CATEGORIES_RADIUS;
+			 x <= (int)social_x + MM_SOCIAL_CATEGORIES_RADIUS;
+			 x++) {
+			if ((x < 0) || (x >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
+				continue;
+			}
+			dx = x - (int)social_x;
+			for (y = (int)social_y - MM_SOCIAL_CATEGORIES_RADIUS;
+				 y <= (int)social_y + MM_SOCIAL_CATEGORIES_RADIUS;
+				 y++) {
+				if ((y < 0) || (y >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
+					continue;
+				}
+				dy = y - (int)social_y;
+				r = dx*dx + dy*dy;
+				if (r > max_radius) continue;
+
+				/* location within the map */
+				n = y*MM_SOCIAL_CATEGORIES_DIMENSION + x;
+
+				dcat = mind->category[i].value[n] -
+					other->category[i].value[n];
+
+				if ((dcat < 2) && (dcat > -2)) continue;
+
+				if (r < inner_radius) {
+					if (dcat > 0) {
+						other->category[i].value[n] += 2;
+					}
+					else {
+						other->category[i].value[n] -= 2;
+					}
+				}
+				else {
+					if (dcat > 0) {
+						other->category[i].value[n]++;
+					}
+					else {
+						other->category[i].value[n]--;
+					}
+				}
+			}
+		}
+	}
+}
+
 /* communicates the social categorisation of a given social
    graph entry to another individual */
 void mm_communicate_social_categorisation(monkeymind * mind,
@@ -228,6 +289,9 @@ void mm_communicate_social_categorisation(monkeymind * mind,
 	mm_som_learn(&other->social_categories,
 				 normalised_properties,
 				 social_x, social_y);
+
+	/* align the categories */
+	mm_align_categories(mind, social_x, social_y, other);
 }
 
 /* categorise an entry within the social graph */
