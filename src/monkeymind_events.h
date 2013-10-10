@@ -2,6 +2,10 @@
 
  Monkeymind - an experimental cogitive architecture
 
+ The event memory is similar to a hippocampus, recording
+ the stream of perceived circumstances, then filtering
+ out (or compressing) the relevant from the forgettable
+
  =============================================================
 
  Copyright 2013 Bob Mottram
@@ -29,27 +33,31 @@
 
 ****************************************************************/
 
+#ifndef MONKEYMIND_EVENTS_H
+#define MONKEYMIND_EVENTS_H
+
+#include <stdio.h>
+#include <string.h>
+#include "monkeymind_rand.h"
+#include "monkeymind_time.h"
+#include "monkeymind_object.h"
 #include "monkeymind_narrative.h"
 
-void mm_circumstance_copy(mm_circumstance * src,
-						  mm_circumstance * dest)
-{
-	mm_obj_copy(&src->who, &dest->who);
-	mm_obj_copy(&src->what, &dest->what);
-	mm_obj_copy(&src->where, &dest->where);
-	mm_obj_copy(&src->when, &dest->when);
-	mm_obj_copy(&src->why, &dest->why);
-	mm_obj_copy(&src->way, &dest->way);
-	mm_obj_copy(&src->means, &dest->means);
-}
+#define MM_EVENT_MEMORY_SIZE 128
 
-int mm_circumstance_exists(mm_circumstance * c)
+typedef struct
 {
-	return (mm_obj_exists(&c->who) ||
-			mm_obj_exists(&c->what) ||
-			mm_obj_exists(&c->where) ||
-			mm_obj_exists(&c->when) ||
-			mm_obj_exists(&c->why) ||
-			mm_obj_exists(&c->way) ||
-			mm_obj_exists(&c->means));
-}
+	/* the sequence of observed events */
+	mm_circumstance sequence[MM_EVENT_MEMORY_SIZE];
+
+	/* current index within the series */
+	unsigned int index;
+} mm_events;
+
+void mm_events_init(mm_events * events);
+void mm_events_add(mm_events * events,
+				   mm_circumstance * observation);
+unsigned int mm_events_max(mm_events * events);
+mm_circumstance * mm_events_get(mm_events * events, unsigned int timestep);
+
+#endif

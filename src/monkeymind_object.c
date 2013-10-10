@@ -248,3 +248,8 @@ void mm_obj_to_vect(mm_object * obj,
 		}
 	}
 }
+
+int mm_obj_exists(mm_object * obj)
+{
+	return (obj->length > 0);
+}

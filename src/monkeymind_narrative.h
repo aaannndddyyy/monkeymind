@@ -62,4 +62,9 @@ typedef struct
     mm_circumstance step[MM_MAX_NARRATIVE_SIZE];
 } mm_narrative;
 
+void mm_circumstance_copy(mm_circumstance * src,
+						  mm_circumstance * dest);
+
+int mm_circumstance_exists(mm_circumstance * c);
+
 #endif

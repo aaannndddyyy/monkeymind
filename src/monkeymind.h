@@ -41,6 +41,7 @@
 #include "monkeymind_som.h"
 #include "monkeymind_narrative.h"
 #include "monkeymind_language.h"
+#include "monkeymind_events.h"
 
 /* social graph array index of the self */
 #define MM_SELF                    0
@@ -107,7 +108,13 @@ typedef struct
 	/* friend or foe categories */
 	mm_som_categories category[MM_CATEGORIES];
 
-	/* memory which may contain a number of narratives */
+	/* Memory of recent sequences of events.
+	   This is similar to a hippocampus */
+	mm_events events;
+
+	/* memory which may contain a number of narratives
+	   which have been created from the sequence of
+	   events */
 	mm_narrative narrative[MM_SIZE_NARRATIVES];
 
 	/* details of each known agent */
@@ -126,6 +133,7 @@ typedef struct
 	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
 } monkeymind;
 
+void mm_observe(monkeymind * mind, mm_circumstance * observation);
 void mm_add_property(monkeymind * mind,
 					 unsigned int property_type,
 					 unsigned int property_value);

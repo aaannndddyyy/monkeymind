@@ -30,6 +30,12 @@
 
 #include "monkeymind.h"
 
+/* make an observation */
+void mm_observe(monkeymind * mind, mm_circumstance * observation)
+{
+	mm_events_add(&mind->events, observation);
+}
+
 /* adds a property to the individual */
 void mm_add_property(monkeymind * mind,
 					 unsigned int property_type,
@@ -145,6 +151,7 @@ void mm_init(monkeymind * mind,
 		random_categories(&mind->seed, mind->category[i].value);
 	}
 
+	mm_events_init(&mind->events);
 	mm_init_language(mind);
 	mm_init_spatial(mind);
 	mm_som_init(&mind->social_categories,

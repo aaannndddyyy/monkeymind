@@ -107,6 +107,7 @@ typedef struct
 } mm_object;
 
 
+int mm_obj_exists(mm_object * obj);
 int mm_obj_prop_index(mm_object * obj,
 					  unsigned int property_type);
 int mm_obj_prop_range(unsigned int property_type,
