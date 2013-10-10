@@ -41,17 +41,6 @@
 
 typedef struct
 {
-	mm_object who;
-	mm_object what;
-	mm_object where;
-	mm_object when;
-	mm_object why;
-	mm_object way;
-	mm_object means;
-} mm_circumstance;
-
-typedef struct
-{
     /* a unique reference for the narrative */
     unsigned int id;
 
@@ -59,12 +48,7 @@ typedef struct
     unsigned int length;
 
     /* array storing the steps in the narrative */
-    mm_circumstance step[MM_MAX_NARRATIVE_SIZE];
+    mm_object step[MM_MAX_NARRATIVE_SIZE];
 } mm_narrative;
-
-void mm_circumstance_copy(mm_circumstance * src,
-						  mm_circumstance * dest);
-
-int mm_circumstance_exists(mm_circumstance * c);
 
 #endif

@@ -31,6 +31,13 @@
 
 #include "monkeymind_object.h"
 
+/* initialise an object */
+void mm_obj_init(mm_object * obj)
+{
+	obj->length = 0;
+	obj->observations = 0;
+}
+
 /* returns the range of a given object property type */
 int mm_obj_prop_range(unsigned int property_type,
 					  unsigned int * min, unsigned int * max)

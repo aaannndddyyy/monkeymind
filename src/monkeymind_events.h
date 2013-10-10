@@ -48,7 +48,7 @@
 typedef struct
 {
 	/* the sequence of observed events */
-	mm_circumstance sequence[MM_EVENT_MEMORY_SIZE];
+	mm_object sequence[MM_EVENT_MEMORY_SIZE];
 
 	/* current index within the series */
 	unsigned int index;
@@ -56,8 +56,8 @@ typedef struct
 
 void mm_events_init(mm_events * events);
 void mm_events_add(mm_events * events,
-				   mm_circumstance * observation);
+				   mm_object * observation);
 unsigned int mm_events_max(mm_events * events);
-mm_circumstance * mm_events_get(mm_events * events, unsigned int timestep);
+mm_object * mm_events_get(mm_events * events, unsigned int timestep);
 
 #endif

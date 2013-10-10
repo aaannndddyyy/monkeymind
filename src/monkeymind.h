@@ -133,7 +133,7 @@ typedef struct
 	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
 } monkeymind;
 
-void mm_observe(monkeymind * mind, mm_circumstance * observation);
+void mm_observe(monkeymind * mind, mm_object * observation);
 void mm_add_property(monkeymind * mind,
 					 unsigned int property_type,
 					 unsigned int property_value);

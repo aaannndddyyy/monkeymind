@@ -31,7 +31,7 @@
 #include "monkeymind.h"
 
 /* make an observation */
-void mm_observe(monkeymind * mind, mm_circumstance * observation)
+void mm_observe(monkeymind * mind, mm_object * observation)
 {
 	mm_events_add(&mind->events, observation);
 }

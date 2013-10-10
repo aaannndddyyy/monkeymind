@@ -40,17 +40,17 @@ void mm_events_init(mm_events * events)
 	events->index = 0;
 
 	memset((void*)events->sequence, '\0',
-		   sizeof(mm_circumstance)*MM_EVENT_MEMORY_SIZE);
+		   sizeof(mm_object)*MM_EVENT_MEMORY_SIZE);
 }
 
 /* add an event to the sequence */
 void mm_events_add(mm_events * events,
-				   mm_circumstance * observation)
+				   mm_object * observation)
 {
-	if (!mm_circumstance_exists(observation)) return;
+	if (!mm_obj_exists(observation)) return;
 
 	/* store the observation */
-	mm_circumstance_copy(observation, &events->sequence[events->index]);
+	mm_obj_copy(observation, &events->sequence[events->index]);
 
 	/* increment the location in the sequence */
 	events->index++;
@@ -64,7 +64,7 @@ unsigned int mm_events_max(mm_events * events)
 {
 	if (events->index == 0) return 0;
 
-	if (mm_circumstance_exists(&events->sequence[MM_EVENT_MEMORY_SIZE-1])) {
+	if (mm_obj_exists(&events->sequence[MM_EVENT_MEMORY_SIZE-1])) {
 		return MM_EVENT_MEMORY_SIZE;
 	}
 
@@ -72,7 +72,7 @@ unsigned int mm_events_max(mm_events * events)
 }
 
 /* returns the event at the given time step */
-mm_circumstance * mm_events_get(mm_events * events, unsigned int timestep)
+mm_object * mm_events_get(mm_events * events, unsigned int timestep)
 {
 	unsigned int max = mm_events_max(events);
     int index;

@@ -30,26 +30,3 @@
 ****************************************************************/
 
 #include "monkeymind_narrative.h"
-
-void mm_circumstance_copy(mm_circumstance * src,
-						  mm_circumstance * dest)
-{
-	mm_obj_copy(&src->who, &dest->who);
-	mm_obj_copy(&src->what, &dest->what);
-	mm_obj_copy(&src->where, &dest->where);
-	mm_obj_copy(&src->when, &dest->when);
-	mm_obj_copy(&src->why, &dest->why);
-	mm_obj_copy(&src->way, &dest->way);
-	mm_obj_copy(&src->means, &dest->means);
-}
-
-int mm_circumstance_exists(mm_circumstance * c)
-{
-	return (mm_obj_exists(&c->who) ||
-			mm_obj_exists(&c->what) ||
-			mm_obj_exists(&c->where) ||
-			mm_obj_exists(&c->when) ||
-			mm_obj_exists(&c->why) ||
-			mm_obj_exists(&c->way) ||
-			mm_obj_exists(&c->means));
-}

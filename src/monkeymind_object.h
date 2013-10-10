@@ -74,7 +74,6 @@ enum property_types
 	MM_PROPERTY_WEIGHT,
 	MM_PROPERTY_HAIR_LENGTH,
 	MM_PROPERTY_HAIR_COLOUR,
-
 	MM_PROPERTY_FRIEND_OR_FOE,
 	MM_PROPERTY_ATTRACTION,
 
@@ -107,6 +106,7 @@ typedef struct
 } mm_object;
 
 
+void mm_obj_init(mm_object * obj);
 int mm_obj_exists(mm_object * obj);
 int mm_obj_prop_index(mm_object * obj,
 					  unsigned int property_type);

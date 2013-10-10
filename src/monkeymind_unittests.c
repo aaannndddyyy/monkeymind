@@ -289,6 +289,22 @@ static void test_communicate_social_categorisation()
 	printf("Ok\n");
 }
 
+static void test_events()
+{
+	mm_events events;
+	mm_object observation;
+
+	printf("test_events...");
+
+	mm_events_init(&events);
+	mm_obj_init(&observation);
+
+	assert(mm_events_max(&events) == 0);
+	assert(!mm_obj_exists(&observation));
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
@@ -297,6 +313,7 @@ void mm_run_tests()
 	test_social_meet();
 	test_som();
 	test_communicate_social_categorisation();
+	test_events();
 
 	printf("All tests passed\n");
 }
