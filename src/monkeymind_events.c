@@ -71,15 +71,18 @@ unsigned int mm_events_max(mm_events * events)
 	return events->index;
 }
 
-/* returns the event at the given time step */
+/* returns the event at the given time step.
+   Returns zero if the time step is greater than the maximum */
 mm_object * mm_events_get(mm_events * events, unsigned int timestep)
 {
 	unsigned int max = mm_events_max(events);
     int index;
 
-	if (max == 0) return 0;
-	if (timestep >= max) timestep = max-1;
+	if ((max == 0) || (timestep >= max)) return 0;
 	index = (int)events->index - (int)max + (int)timestep;
 	if (index < 0) index += MM_EVENT_MEMORY_SIZE;
+	if (!mm_obj_exists(&events->sequence[index])) {
+		return 0;
+	}
 	return &events->sequence[index];
 }

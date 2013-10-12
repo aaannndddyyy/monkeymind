@@ -127,5 +127,6 @@ int mm_obj_prop_set(mm_object * obj,
 void mm_obj_copy(mm_object *src, mm_object * dest);
 void mm_obj_to_vect(mm_object * obj,
 					unsigned char * vect);
+int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
 
 #endif

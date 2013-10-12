@@ -260,3 +260,23 @@ int mm_obj_exists(mm_object * obj)
 {
 	return (obj->length > 0);
 }
+
+/* compares two objects and returns 0 if they are the same, -1 otherwise */
+int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
+{
+	unsigned int i;
+
+	if (obj1->length != obj2->length) return -1;
+
+	for (i = 0; i < obj1->length; i++) {
+		if (obj1->property_type[i] !=
+			obj2->property_type[i]) {
+			return -1;
+		}
+		if (obj1->property_value[i] !=
+			obj2->property_value[i]) {
+			return -1;
+		}
+	}
+	return 0;
+}
