@@ -43,6 +43,7 @@
 #include "monkeymind_object.h"
 #include "monkeymind_narrative.h"
 
+/* the maximum number of events in the sequence */
 #define MM_EVENT_MEMORY_SIZE 128
 
 typedef struct

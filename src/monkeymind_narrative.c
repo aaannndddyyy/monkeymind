@@ -30,3 +30,56 @@
 ****************************************************************/
 
 #include "monkeymind_narrative.h"
+
+void mm_narrative_init(mm_narrative * narrative, unsigned int id)
+{
+	narrative->length = 0;
+	memset((void*)narrative->step, '\0',
+		   MM_MAX_NARRATIVE_SIZE*sizeof(mm_object));
+}
+
+/* insert a narrative step at a given index */
+int mm_narrative_insert(mm_narrative * narrative,
+						mm_object * obj, unsigned int index,
+						unsigned int act,
+						unsigned int scene,
+						unsigned int viewpoint)
+{
+	if ((index > narrative->length) ||
+		(narrative->length >= MM_MAX_NARRATIVE_SIZE)) {
+		return -1;
+	}
+	mm_obj_prop_add(obj,
+					MM_PROPERTY_NARRATIVE_ACT, act);
+	mm_obj_prop_add(obj,
+					MM_PROPERTY_NARRATIVE_SCENE, scene);
+	mm_obj_prop_add(obj,
+					MM_PROPERTY_NARRATIVE_VIEWPOINT, viewpoint);
+	mm_obj_copy(obj, &narrative->step[index]);
+	return 0;
+}
+
+/* adds a narrative step */
+int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
+					 unsigned int act,
+					 unsigned int scene,
+					 unsigned int viewpoint)
+{
+	if (narrative->length >= MM_MAX_NARRATIVE_SIZE) return -1;
+	if (mm_narrative_insert(narrative, obj, narrative->length,
+							act, scene, viewpoint) != 0) {
+		return -1;
+	}
+	narrative->length++;
+	return 0;
+}
+
+/* gets a narrative step */
+mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index)
+{
+	if ((index > narrative->length) ||
+		(narrative->length >= MM_MAX_NARRATIVE_SIZE)) {
+		return 0;
+	}
+	return &narrative->step[index];
+}

@@ -352,6 +352,64 @@ static void test_events()
 	printf("Ok\n");
 }
 
+static void test_narrative()
+{
+	int i;
+	mm_object * test1, * test2;
+	mm_narrative narrative;
+	mm_object observation1, observation2;
+	unsigned int props1[] = {
+		3,6268,
+		7,3568,
+		1,56437,
+		99,6732,
+		40,1357,
+		42,6267,
+		23,536774,
+		50,2435,
+		49,23566,
+		12,2356
+	};
+	unsigned int props2[] = {
+		3,2521,
+		7,7548,
+		1,26357,
+		99,8392,
+		40,9357,
+		42,867,
+		23,36794,
+		50,2235,
+		49,22566,
+		12,9756
+	};
+
+	printf("test_narrative...");
+
+	mm_narrative_init(&narrative,1234);
+	mm_obj_init(&observation1);
+	mm_obj_init(&observation2);
+
+	/* add properties to the observation */
+	for (i = 0; i < 10; i++) {
+		mm_obj_prop_add(&observation1,props1[i*2],props1[i*2+1]);
+		mm_obj_prop_add(&observation2,props2[i*2],props2[i*2+1]);
+	}
+	assert(mm_obj_exists(&observation1));
+	assert(mm_obj_exists(&observation2));
+
+	assert(mm_narrative_add(&narrative, &observation1, 1,2,3)==0);
+	assert(narrative.length==1);
+	assert(mm_narrative_add(&narrative, &observation2, 4,5,6)==0);
+	assert(narrative.length==2);
+
+	test1 = mm_narrative_get(&narrative, 0);
+	test2 = mm_narrative_get(&narrative, 1);
+	assert(mm_obj_cmp(&observation1, test1) == 0);
+	assert(mm_obj_cmp(&observation2, test2) == 0);
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
@@ -361,6 +419,7 @@ void mm_run_tests()
 	test_som();
 	test_communicate_social_categorisation();
 	test_events();
+	test_narrative();
 
 	printf("All tests passed\n");
 }

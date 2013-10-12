@@ -44,11 +44,26 @@ typedef struct
     /* a unique reference for the narrative */
     unsigned int id;
 
+	/* properties of the narrative */
+	mm_object properties;
+
     /* the number of steps in the narrative */
     unsigned int length;
 
     /* array storing the steps in the narrative */
     mm_object step[MM_MAX_NARRATIVE_SIZE];
 } mm_narrative;
+
+void mm_narrative_init(mm_narrative * narrative, unsigned int id);
+int mm_narrative_insert(mm_narrative * narrative,
+						mm_object * obj, unsigned int index,
+						unsigned int act,
+						unsigned int scene,
+						unsigned int viewpoint);
+int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
+					 unsigned int act,
+					 unsigned int scene,
+					 unsigned int viewpoint);
+mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index);
 
 #endif
