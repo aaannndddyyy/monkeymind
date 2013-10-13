@@ -190,13 +190,7 @@ int mm_obj_prop_add(mm_object * obj,
 /* copies one object to another */
 void mm_obj_copy(mm_object *src, mm_object * dest)
 {
-	int i;
-
-	for (i = 0; i < src->length; i++) {
-	    mm_obj_prop_add(dest,
-						src->property_type[i],
-						src->property_value[i]);
-	}
+	memcpy((void*)dest,(void*)src,sizeof(mm_object));
 }
 
 /* removes a property from an object */
