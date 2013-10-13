@@ -38,6 +38,27 @@ void mm_narrative_init(mm_narrative * narrative, unsigned int id)
 		   MM_MAX_NARRATIVE_SIZE*sizeof(mm_object));
 }
 
+/* remove a step from the narrative */
+int mm_narrative_remove(mm_narrative * narrative,
+						unsigned int index)
+{
+	unsigned int i;
+
+	if ((narrative->length == 0) ||
+		(index >= narrative->length) ||
+		(index >= MM_MAX_NARRATIVE_SIZE)) {
+		return -1;
+	}
+
+	for (i = index+1; i < narrative->length; i++) {
+		mm_obj_copy(&narrative->step[i],
+					&narrative->step[i-1]);
+	}
+	narrative->length--;
+
+	return 0;
+}
+
 /* insert a narrative step at a given index */
 int mm_narrative_insert(mm_narrative * narrative,
 						mm_object * obj, unsigned int index,

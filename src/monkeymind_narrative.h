@@ -60,6 +60,8 @@ int mm_narrative_insert(mm_narrative * narrative,
 						unsigned int act,
 						unsigned int scene,
 						unsigned int viewpoint);
+int mm_narrative_remove(mm_narrative * narrative,
+						unsigned int index);
 int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
 					 unsigned int act,
 					 unsigned int scene,

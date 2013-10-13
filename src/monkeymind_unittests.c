@@ -385,27 +385,32 @@ static void test_narrative()
 
 	printf("test_narrative...");
 
-	mm_narrative_init(&narrative,1234);
+	mm_narrative_init(&narrative, 1234);
 	mm_obj_init(&observation1);
 	mm_obj_init(&observation2);
 
 	/* add properties to the observation */
 	for (i = 0; i < 10; i++) {
-		mm_obj_prop_add(&observation1,props1[i*2],props1[i*2+1]);
-		mm_obj_prop_add(&observation2,props2[i*2],props2[i*2+1]);
+		mm_obj_prop_add(&observation1, props1[i*2], props1[i*2+1]);
+		mm_obj_prop_add(&observation2, props2[i*2], props2[i*2+1]);
 	}
 	assert(mm_obj_exists(&observation1));
 	assert(mm_obj_exists(&observation2));
 
-	assert(mm_narrative_add(&narrative, &observation1, 1,2,3)==0);
-	assert(narrative.length==1);
-	assert(mm_narrative_add(&narrative, &observation2, 4,5,6)==0);
-	assert(narrative.length==2);
+	assert(mm_narrative_add(&narrative, &observation1, 1,2,3) == 0);
+	assert(narrative.length == 1);
+	assert(mm_narrative_add(&narrative, &observation2, 4,5,6) == 0);
+	assert(narrative.length == 2);
 
 	test1 = mm_narrative_get(&narrative, 0);
 	test2 = mm_narrative_get(&narrative, 1);
 	assert(mm_obj_cmp(&observation1, test1) == 0);
 	assert(mm_obj_cmp(&observation2, test2) == 0);
+
+	assert(mm_narrative_remove(&narrative, 0) == 0);
+	assert(narrative.length == 1);
+	test1 = mm_narrative_get(&narrative, 0);
+	assert(mm_obj_cmp(&observation2, test1) == 0);
 
 	printf("Ok\n");
 }
