@@ -41,6 +41,7 @@ typedef struct
 } mm_random_seed;
 
 unsigned int mm_rand(mm_random_seed * seed);
+unsigned int mm_rand_id(mm_random_seed * seed);
 void mm_rand_copy(mm_random_seed * src, mm_random_seed * dest);
 
 #endif

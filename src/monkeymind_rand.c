@@ -62,3 +62,12 @@ void mm_rand_copy(mm_random_seed * src, mm_random_seed * dest)
 		   (void*)src->value,
 		   4*sizeof(unsigned int));
 }
+
+/* This is a special version of rand used to generate ID
+   numbers for objects or agents.
+   Potentially it could differ from the usual
+   random number generator */
+unsigned int mm_rand_id(mm_random_seed * seed)
+{
+	return mm_rand(seed);
+}
