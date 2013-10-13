@@ -81,12 +81,6 @@ enum {
 	MM_ATTENTION_SIZE
 };
 
-enum {
-	MM_CATEGORY_FOF = 0,
-	MM_CATEGORY_ATTRACTION,
-	MM_CATEGORIES
-};
-
 typedef struct
 {
 	int value[MM_SOCIAL_CATEGORIES_DIMENSION*

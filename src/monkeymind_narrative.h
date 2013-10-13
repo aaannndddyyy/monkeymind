@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "monkeymind_object.h"
+#include "monkeymind_events.h"
 
 /* the maximum number of steps within a narrative sequence */
 #define MM_MAX_NARRATIVE_SIZE  16
@@ -67,5 +68,6 @@ int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
 					 unsigned int scene,
 					 unsigned int viewpoint);
 mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index);
+int mm_narrative_from_events(mm_events * events, mm_narrative * narrative);
 
 #endif

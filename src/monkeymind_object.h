@@ -38,6 +38,12 @@
 /* the maximum number of properties of an object */
 #define MM_MAX_OBJECT_PROPERTIES  16
 
+enum {
+	MM_CATEGORY_FOF = 0,
+	MM_CATEGORY_ATTRACTION,
+	MM_CATEGORIES
+};
+
 enum relation_types
 {
 	MM_RELATION_SELF,

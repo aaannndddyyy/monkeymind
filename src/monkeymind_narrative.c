@@ -104,3 +104,10 @@ mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index)
 	}
 	return &narrative->step[index];
 }
+
+/* attempts to generate a narrative from a sequence of events */
+int mm_narrative_from_events(mm_events * events, mm_narrative * narrative)
+{
+	/* TODO */
+	return -1;
+}

@@ -86,3 +86,81 @@ mm_object * mm_events_get(mm_events * events, unsigned int timestep)
 	}
 	return &events->sequence[index];
 }
+
+/* returns a list of protagonists which appear between certain time steps in
+   the event sequence */
+int mm_events_protagonists(mm_events * events,
+						   unsigned int timestep_start,
+						   unsigned int timestep_end,
+						   mm_protagonist * protagonists,
+						   unsigned int max_protagonists)
+{
+	unsigned int c, i, j, t, agent_id, no_of_protagonists = 0;
+	mm_object * event;
+
+	/* properties which contain agent IDs */
+	const unsigned int agent_properties[] = {
+		MM_PROPERTY_MEETER,
+		MM_PROPERTY_MET
+	};
+	unsigned int no_of_agent_properties = 2;
+
+	/* validate the start and end time steps */
+	if ((timestep_end < timestep_start) ||
+		(timestep_start > MM_EVENT_MEMORY_SIZE) ||
+		(timestep_end > MM_EVENT_MEMORY_SIZE)) {
+		return -1;
+	}
+
+	/* end time step must be less than the maximum */
+	if (timestep_end > mm_events_max(events)) {
+		return -1;
+	}
+
+	/* clear the list of protagonists */
+	memset((void*)protagonists, '\0',
+		   max_protagonists*sizeof(mm_protagonist));
+
+	/* for every time step */
+	for (t = timestep_start; t < timestep_end; t++) {
+		/* get the event at this time step */
+		event = mm_events_get(events, t);
+		/* search for agent IDs within the event */
+		for (i = 0; i < no_of_agent_properties; i++) {
+			agent_id = mm_obj_prop_get(event, agent_properties[i]);
+			if (agent_id == 0) continue;
+
+			/* does this agent already exist in the protagonists list? */
+			for (j = 0; j < no_of_protagonists; j++) {
+				if (agent_id == protagonists[j].agent_id) {
+					/* already in the list.  Increment the number of hits */
+					protagonists[j].hits++;
+					/* update FOF and attraction values for this agent */
+					for (c = 0; c < MM_CATEGORIES; c++) {
+					    protagonists[j].category[c] +=
+							mm_obj_prop_get(event, MM_PROPERTY_FRIEND_OR_FOE+c);
+					}
+					break;
+				}
+			}
+			if (j == no_of_protagonists) {
+				/* agent does not already exist within the protagonists list */
+				protagonists[no_of_protagonists].agent_id = agent_id;
+				protagonists[no_of_protagonists].hits = 1;
+				/* update FOF and attraction values for this agent */
+				for (c = 0; c < MM_CATEGORIES; c++) {
+					protagonists[no_of_protagonists].category[c] =
+						mm_obj_prop_get(event, MM_PROPERTY_FRIEND_OR_FOE+c);
+				}
+				/* increment the number of protagonists */
+				no_of_protagonists++;
+				if (no_of_protagonists >= max_protagonists) {
+					return no_of_protagonists;
+				}
+			}
+
+		}
+	}
+
+	return no_of_protagonists;
+}
