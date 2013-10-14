@@ -101,10 +101,10 @@ static void set_data(mm_language_machine * m0,
 	m[address] = value;
 }
 
-static void function_add(mm_language_machine * m0,
-						 mm_language_machine * m1,
-						 n_byte * data, n_uint data_size,
-						 unsigned int index)
+static void fn_add(mm_language_machine * m0,
+				   mm_language_machine * m1,
+				   n_byte * data, n_uint data_size,
+				   unsigned int index)
 {
 	n_int i, total = 0;
 	mm_language_instruction * instruction;
@@ -118,10 +118,10 @@ static void function_add(mm_language_machine * m0,
 			 instruction->output, total);
 }
 
-static void function_subtract(mm_language_machine * m0,
-							  mm_language_machine * m1,
-							  n_byte * data, n_uint data_size,
-							  unsigned int index)
+static void fn_subtract(mm_language_machine * m0,
+						mm_language_machine * m1,
+						n_byte * data, n_uint data_size,
+						unsigned int index)
 {
 	n_int i, total = 0;
 	mm_language_instruction * instruction;
@@ -131,6 +131,25 @@ static void function_subtract(mm_language_machine * m0,
 					 instruction->argument[0]);
 	for (i = 1; i < MM_SIZE_LANGUAGE_ARGS; i++) {
 		total -= get_data(m0, m1, data, data_size,
+						  instruction->argument[i]);
+	}
+	set_data(m0, m1, data, data_size,
+			 instruction->output, total);
+}
+
+static void fn_multiply(mm_language_machine * m0,
+						mm_language_machine * m1,
+						n_byte * data, n_uint data_size,
+						unsigned int index)
+{
+	n_int i, total = 0;
+	mm_language_instruction * instruction;
+
+	instruction = &m0->instruction[index];
+	total = get_data(m0, m1, data, data_size,
+					 instruction->argument[0]);
+	for (i = 1; i < MM_SIZE_LANGUAGE_ARGS; i++) {
+		total *= get_data(m0, m1, data, data_size,
 						  instruction->argument[i]);
 	}
 	set_data(m0, m1, data, data_size,
