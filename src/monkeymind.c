@@ -69,20 +69,10 @@ void mm_remove_property(monkeymind * mind,
 /* initialise the language machine */
 static void mm_init_language(monkeymind * mind)
 {
-	n_int i, j, k;
+	n_int i;
 
-	/* initially random language machine */
 	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-		for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-			mind->language[i].instruction[j].function =
-				mm_rand(&mind->seed) & 255;
-			mind->language[i].instruction[j].flags =
-				mm_rand(&mind->seed) & 255;
-			for (k = 0; k < MM_SIZE_LANGUAGE_ARGS; k++) {
-				mind->language[i].instruction[j].argument[k] =
-					mm_rand(&mind->seed);
-			}
-		}
+		mm_language_init(&mind->language[i], &mind->seed);
 	}
 }
 

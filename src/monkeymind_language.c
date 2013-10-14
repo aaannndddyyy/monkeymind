@@ -73,6 +73,23 @@ static n_int get_data(mm_language_machine * m0,
 	return m[address];
 }
 
+
+/* initialise the language machine */
+void mm_language_init(mm_language_machine * lang,
+					  mm_random_seed * seed)
+{
+	n_int i, j;
+
+	for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
+		lang->instruction[i].function =
+			mm_rand(seed) & 255;
+		for (j = 0; j < MM_SIZE_LANGUAGE_ARGS; j++) {
+			lang->instruction[i].argument[j] =
+				(n_int)mm_rand(seed);
+		}
+	}
+}
+
 /* sets the value at the given address.
    The total address space consists of the two language machines
    and the data, which is usually the current state of the

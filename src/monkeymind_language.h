@@ -33,6 +33,7 @@
 #define MONKEYMIND_LANGUAGE_H
 
 #include "monkeymind_datatypes.h"
+#include "monkeymind_rand.h"
 
 /* The number of instructions in the language machine */
 #define MM_SIZE_LANGUAGE_INSTRUCTIONS 128
@@ -40,12 +41,6 @@
 /* The number of arguments which each language machine
    instruction takes */
 #define MM_SIZE_LANGUAGE_ARGS         4
-
-enum instruction_flags
-{
-	ARG0_REF = 1,
-	ARG1_REF = 2
-};
 
 enum language_machine_functions
 {
@@ -69,9 +64,6 @@ typedef struct
 
 	n_int argument[MM_SIZE_LANGUAGE_ARGS];
 
-	/* Flags for relative or absolute addressing */
-	n_byte flags;
-
 	n_int output;
 } mm_language_instruction;
 
@@ -82,5 +74,7 @@ typedef struct
 	mm_language_instruction instruction[MM_SIZE_LANGUAGE_INSTRUCTIONS];
 } mm_language_machine;
 
+
+void mm_language_init(mm_language_machine * lang, mm_random_seed * seed);
 
 #endif
