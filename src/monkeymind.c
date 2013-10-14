@@ -168,4 +168,13 @@ void mm_init(monkeymind * mind,
 					MM_PROPERTY_MET_NAME, name);
 
 	mm_add_property(mind, MM_PROPERTY_NAME, name);
+
+	/* no cognitive system specified */
+	mind->cognitive_system_state = 0;
+	mind->cognitive_system_state_size = 0;
+}
+
+void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
+{
+	/* TODO */
 }

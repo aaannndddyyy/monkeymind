@@ -125,6 +125,11 @@ typedef struct
 
 	/* spatial memory */
 	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
+
+	/* pointer to the state of the cognitive system */
+	n_byte * cognitive_system_state;
+	/* cognitive system state size in bytes */
+	n_uint cognitive_system_state_size;
 } monkeymind;
 
 void mm_observe(monkeymind * mind, mm_object * observation);
@@ -144,5 +149,6 @@ void mm_init(monkeymind * mind,
 			 n_byte first_name,
 			 n_byte surname,
 			 mm_random_seed * seed);
+void mm_dialogue(monkeymind * mind0, monkeymind * mind1);
 
 #endif

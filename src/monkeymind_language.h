@@ -50,8 +50,6 @@ enum language_machine_functions
 	MM_INSTRUCTION_SUBTRACT,
 	MM_INSTRUCTION_MULTIPLY,
 	MM_INSTRUCTION_DIVIDE,
-	MM_INSTRUCTION_REMOVE,
-	MM_INSTRUCTION_INSERT,
 	MM_INSTRUCTION_COPY,
 	MM_INSTRUCTIONS
 };
@@ -76,5 +74,9 @@ typedef struct
 
 
 void mm_language_init(mm_language_machine * lang, mm_random_seed * seed);
+void mm_language_dialogue(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size,
+						  unsigned int index);
 
 #endif
