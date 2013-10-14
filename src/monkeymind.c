@@ -38,30 +38,30 @@ void mm_observe(monkeymind * mind, mm_object * observation)
 
 /* adds a property to the individual */
 void mm_add_property(monkeymind * mind,
-					 unsigned int property_type,
-					 unsigned int property_value)
+					 n_uint property_type,
+					 n_uint property_value)
 {
 	mm_obj_prop_add(mind->properties, property_type, property_value);
 }
 
 /* sets a property of the individualk */
 void mm_set_property(monkeymind * mind,
-					 unsigned int property_type,
- 					 unsigned int property_value)
+					 n_uint property_type,
+ 					 n_uint property_value)
 {
 	mm_obj_prop_set(mind->properties, property_type, property_value);
 }
 
 /* gets a property of the individual */
-unsigned int mm_get_property(monkeymind * mind,
-							 unsigned int property_type)
+n_uint mm_get_property(monkeymind * mind,
+							 n_uint property_type)
 {
 	return mm_obj_prop_get(mind->properties, property_type);
 }
 
 /* remove a property type from an individual */
 void mm_remove_property(monkeymind * mind,
-						unsigned int property_type)
+						n_uint property_type)
 {
 	mm_obj_prop_remove(mind->properties, property_type);
 }
@@ -69,7 +69,7 @@ void mm_remove_property(monkeymind * mind,
 /* initialise the language machine */
 static void mm_init_language(monkeymind * mind)
 {
-	int i, j, k;
+	n_int i, j, k;
 
 	/* initially random language machine */
 	for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
@@ -89,7 +89,7 @@ static void mm_init_language(monkeymind * mind)
 /* initialise the spatial memory */
 static void mm_init_spatial(monkeymind * mind)
 {
-	int i;
+	n_int i;
 
 	for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
 		mind->spatial[i].id = i;
@@ -98,28 +98,28 @@ static void mm_init_spatial(monkeymind * mind)
 
 /* initially randomly assigned categories */
 static void random_categories(mm_random_seed * seed,
-							  int * categories)
+							  n_int * categories)
 {
-	unsigned int i;
+	n_uint i;
 
 	for (i = 0;
 		 i < MM_SOCIAL_CATEGORIES_DIMENSION*
 			 MM_SOCIAL_CATEGORIES_DIMENSION;
 		 i++) {
-		categories[i] = (int)(mm_rand(seed)%3) - 1;
+		categories[i] = (n_int)(mm_rand(seed)%3) - 1;
 	}
 }
 
 /* initialises a mind */
 void mm_init(monkeymind * mind,
-			 unsigned int id,
-			 unsigned char sex,
-			 unsigned char first_name,
-			 unsigned char surname,
+			 n_uint id,
+			 n_byte sex,
+			 n_byte first_name,
+			 n_byte surname,
 			 mm_random_seed * seed)
 {
 	mm_object * individual;
-	unsigned int name, i;
+	n_uint name, i;
 
 	mind->id = id;
 
@@ -145,7 +145,7 @@ void mm_init(monkeymind * mind,
 	memset((void*)mind->spatial, '\0',
 		   MM_SIZE_SPATIAL * MM_SIZE_SPATIAL * sizeof(mm_object));
 	memset((void*)mind->attention, '\0',
-		   MM_ATTENTION_SIZE*sizeof(unsigned int));
+		   MM_ATTENTION_SIZE*sizeof(n_uint));
 
 	for (i = 0; i < MM_CATEGORIES; i++) {
 		random_categories(&mind->seed, mind->category[i].value);

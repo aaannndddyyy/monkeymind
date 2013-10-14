@@ -33,13 +33,13 @@
 
 /* convert a set of neurotransmitter levels into a single value
    indicating the type of emotion */
-unsigned char mm_neuro_to_emotion(unsigned int serotonin,
-								  unsigned int dopamine,
-								  unsigned int noradrenaline,
-								  unsigned int neurotransmitter_max)
+n_byte mm_neuro_to_emotion(n_uint serotonin,
+						   n_uint dopamine,
+						   n_uint noradrenaline,
+						   n_uint neurotransmitter_max)
 {
-	unsigned int threshold = neurotransmitter_max>>1;
-	unsigned char emotion = 0;
+	n_uint threshold = neurotransmitter_max>>1;
+	n_byte emotion = 0;
 
 	if (noradrenaline >= threshold) emotion |= 1;
 	if (dopamine >= threshold) emotion |= 2;
@@ -48,11 +48,11 @@ unsigned char mm_neuro_to_emotion(unsigned int serotonin,
 }
 
 /* convert an emotion into a set of neurotransmitter levels */
-void mm_emotion_to_neuro(unsigned char emotion,
-						 unsigned int * serotonin,
-						 unsigned int * dopamine,
-						 unsigned int * noradrenaline,
-						 unsigned int neurotransmitter_max)
+void mm_emotion_to_neuro(n_byte emotion,
+						 n_uint * serotonin,
+						 n_uint * dopamine,
+						 n_uint * noradrenaline,
+						 n_uint neurotransmitter_max)
 {
 	*serotonin = 0;
 	*dopamine = 0;

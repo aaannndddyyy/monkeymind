@@ -33,9 +33,9 @@
 
 /* returns the social graph array index of the individual having the
    given id */
-int mm_social_index_from_id(monkeymind * mind, unsigned int met_id)
+n_int mm_social_index_from_id(monkeymind * mind, n_uint met_id)
 {
-	int i;
+	n_int i;
 
 	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
@@ -49,9 +49,9 @@ int mm_social_index_from_id(monkeymind * mind, unsigned int met_id)
 
 /* returns the social graph array index of the individual having the
    given name */
-int mm_social_index_from_name(monkeymind * mind, unsigned int met_name)
+n_int mm_social_index_from_name(monkeymind * mind, n_uint met_name)
 {
-	int i;
+	n_int i;
 
 	for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
 		if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
@@ -64,10 +64,10 @@ int mm_social_index_from_name(monkeymind * mind, unsigned int met_name)
 }
 
 /* returns the social graph array index of a forgettable individual */
-static int mm_social_forget(monkeymind * mind)
+static n_int mm_social_forget(monkeymind * mind)
 {
-	int i, index = -1;
-	unsigned int min_observations = mind->social_graph[0].observations;
+	n_int i, index = -1;
+	n_uint min_observations = mind->social_graph[0].observations;
 
 	/* pick the individual with the fewest observations */
 	for (i = 1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
@@ -85,8 +85,8 @@ static void mm_social_evaluate(monkeymind * meeter,
 							   monkeymind * met,
 							   mm_object * social_graph_entry)
 {
-	unsigned int fof = MM_NEUTRAL;
-	unsigned int attraction = MM_NEUTRAL;
+	n_uint fof = MM_NEUTRAL;
+	n_uint attraction = MM_NEUTRAL;
 
 	/* TODO: calculate or look up friend or foe value */
 
@@ -99,11 +99,11 @@ static void mm_social_evaluate(monkeymind * meeter,
 }
 
 /* get the existing categorisation at this location */
-static int mm_social_get_category(int * categories,
-								  unsigned int social_x,
-								  unsigned int social_y)
+static n_int mm_social_get_category(n_int * categories,
+									n_uint social_x,
+									n_uint social_y)
 {
-	unsigned int n = social_y*MM_SOCIAL_CATEGORIES_DIMENSION + social_x;
+	n_uint n = social_y*MM_SOCIAL_CATEGORIES_DIMENSION + social_x;
 	if (categories[n] > 0) return 1;
 	if (categories[n] < 0) return -1;
 	return 0;
@@ -113,10 +113,10 @@ static int mm_social_get_category(int * categories,
    have an average of zero.
    This helps to avoid situtaions such as liking everyone
    or hating everyone */
-static void mm_social_category_rebalance(int * categories)
+static void mm_social_category_rebalance(n_int * categories)
 {
-	unsigned int i;
-	int average = 0, hits = 0;
+	n_uint i;
+	n_int average = 0, hits = 0;
 
 	for (i = 0;
 		 i < MM_SOCIAL_CATEGORIES_DIMENSION*
@@ -141,14 +141,14 @@ static void mm_social_category_rebalance(int * categories)
 }
 
 /* update categories using the given increment */
-static void mm_social_category_update(int * categories,
-									  unsigned int social_x,
-									  unsigned int social_y,
-									  int increment)
+static void mm_social_category_update(n_int * categories,
+									  n_uint social_x,
+									  n_uint social_y,
+									  n_int increment)
 {
-	int x, y, dx, dy, max_radius, inner_radius, r, n;
-	unsigned char normalise = 0;
-	const int max_response = 256;
+	n_int x, y, dx, dy, max_radius, inner_radius, r, n;
+	n_byte normalise = 0;
+	const n_int max_response = 256;
 
 	if (increment == 0) return;
 
@@ -157,20 +157,20 @@ static void mm_social_category_update(int * categories,
 	inner_radius =
 		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS/4;
 
-	for (x = (int)social_x - MM_SOCIAL_CATEGORIES_RADIUS;
-		 x <= (int)social_x + MM_SOCIAL_CATEGORIES_RADIUS;
+	for (x = (n_int)social_x - MM_SOCIAL_CATEGORIES_RADIUS;
+		 x <= (n_int)social_x + MM_SOCIAL_CATEGORIES_RADIUS;
 		 x++) {
 		if ((x < 0) || (x >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
 			continue;
 		}
-		dx = x - (int)social_x;
-		for (y = (int)social_y - MM_SOCIAL_CATEGORIES_RADIUS;
-			 y <= (int)social_y + MM_SOCIAL_CATEGORIES_RADIUS;
+		dx = x - (n_int)social_x;
+		for (y = (n_int)social_y - MM_SOCIAL_CATEGORIES_RADIUS;
+			 y <= (n_int)social_y + MM_SOCIAL_CATEGORIES_RADIUS;
 			 y++) {
 			if ((y < 0) || (y >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
 				continue;
 			}
-			dy = y - (int)social_y;
+			dy = y - (n_int)social_y;
 			r = dx*dx + dy*dy;
 			if (r > max_radius) continue;
 
@@ -206,12 +206,12 @@ static void mm_social_category_update(int * categories,
 
 /* align the som categories of another agent with those of the current agent */
 static void mm_align_categories(monkeymind * mind,
-								unsigned int social_x,
-								unsigned int social_y,
+								n_uint social_x,
+								n_uint social_y,
 								monkeymind * other)
 {
-	int max_radius, inner_radius, i, x, y;
-	int r, n, dx, dy, dcat;
+	n_int max_radius, inner_radius, i, x, y;
+	n_int r, n, dx, dy, dcat;
 
 	max_radius =
 		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS;
@@ -219,20 +219,20 @@ static void mm_align_categories(monkeymind * mind,
 		MM_SOCIAL_CATEGORIES_RADIUS*MM_SOCIAL_CATEGORIES_RADIUS/4;
 
 	for (i = 0; i < MM_CATEGORIES; i++) {
-		for (x = (int)social_x - MM_SOCIAL_CATEGORIES_RADIUS;
-			 x <= (int)social_x + MM_SOCIAL_CATEGORIES_RADIUS;
+		for (x = (n_int)social_x - MM_SOCIAL_CATEGORIES_RADIUS;
+			 x <= (n_int)social_x + MM_SOCIAL_CATEGORIES_RADIUS;
 			 x++) {
 			if ((x < 0) || (x >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
 				continue;
 			}
-			dx = x - (int)social_x;
-			for (y = (int)social_y - MM_SOCIAL_CATEGORIES_RADIUS;
-				 y <= (int)social_y + MM_SOCIAL_CATEGORIES_RADIUS;
+			dx = x - (n_int)social_x;
+			for (y = (n_int)social_y - MM_SOCIAL_CATEGORIES_RADIUS;
+				 y <= (n_int)social_y + MM_SOCIAL_CATEGORIES_RADIUS;
 				 y++) {
 				if ((y < 0) || (y >= MM_SOCIAL_CATEGORIES_DIMENSION)) {
 					continue;
 				}
-				dy = y - (int)social_y;
+				dy = y - (n_int)social_y;
 				r = dx*dx + dy*dy;
 				if (r > max_radius) continue;
 
@@ -268,12 +268,12 @@ static void mm_align_categories(monkeymind * mind,
 /* communicates the social categorisation of a given social
    graph entry to another individual */
 void mm_communicate_social_categorisation(monkeymind * mind,
-										  int index,
+										  n_int index,
 										  monkeymind * other)
 {
 	mm_object * individual;
-	unsigned int social_x, social_y;
-	unsigned char normalised_properties[MM_PROPERTIES];
+	n_uint social_x, social_y;
+	n_byte normalised_properties[MM_PROPERTIES];
 
 	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
 	individual = &mind->social_graph[index];
@@ -296,12 +296,12 @@ void mm_communicate_social_categorisation(monkeymind * mind,
 
 /* categorise an entry within the social graph */
 static void mm_social_categorisation(monkeymind * mind,
-									 int index)
+									 n_int index)
 {
 	mm_object * individual;
-	int fof_increment = 0, attraction_increment = 0;
-	unsigned char normalised_properties[MM_PROPERTIES];
-	unsigned int fof, attraction, social_x=0, social_y=0;
+	n_int fof_increment = 0, attraction_increment = 0;
+	n_byte normalised_properties[MM_PROPERTIES];
+	n_uint fof, attraction, social_x=0, social_y=0;
 
 	if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
 	individual = &mind->social_graph[index];
@@ -346,7 +346,7 @@ static void mm_social_categorisation(monkeymind * mind,
 	   classification */
 	mm_obj_prop_set(individual, MM_PROPERTY_FRIEND_OR_FOE,
 					mm_social_get_category(mind->category[MM_CATEGORY_FOF].value,
-														  social_x, social_y));
+										   social_x, social_y));
 
 	/* alter the friend or foe values within the classifier */
 	mm_social_category_update(mind->category[MM_CATEGORY_FOF].value,
@@ -356,7 +356,7 @@ static void mm_social_categorisation(monkeymind * mind,
 	   classification */
 	mm_obj_prop_set(individual, MM_PROPERTY_ATTRACTION,
 					mm_social_get_category(mind->category[MM_CATEGORY_ATTRACTION].value,
-														  social_x, social_y));
+										   social_x, social_y));
 
 	/* alter the attraction values within the classifier */
 	mm_social_category_update(mind->category[MM_CATEGORY_ATTRACTION].value,
@@ -365,9 +365,9 @@ static void mm_social_categorisation(monkeymind * mind,
 
 /* adds a social graph enry at the given index */
 static void mm_social_add(monkeymind * meeter, monkeymind * met,
-						  int index, unsigned char familiar)
+						  n_int index, n_byte familiar)
 {
-	int i;
+	n_int i;
 	mm_object * individual;
 
     individual = &meeter->social_graph[index];
@@ -415,8 +415,8 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 /* two individuals meet */
 void mm_social_meet(monkeymind * meeter, monkeymind * met)
 {
-	unsigned char familiar = 0;
-	int index = mm_social_index_from_id(meeter, met->id);
+	n_byte familiar = 0;
+	n_int index = mm_social_index_from_id(meeter, met->id);
 
 	if (index == -1) {
 		/* are all array entries occupied? */

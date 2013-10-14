@@ -32,9 +32,9 @@
 #include "monkeymind_rand.h"
 
 /* Xorshift */
-unsigned int mm_rand(mm_random_seed * seed)
+n_uint mm_rand(mm_random_seed * seed)
 {
-	unsigned int t;
+	n_uint t;
 
 	/* avoid singularity */
 	if (seed->value[0]+seed->value[1]+
@@ -60,14 +60,14 @@ void mm_rand_copy(mm_random_seed * src, mm_random_seed * dest)
 {
 	memcpy((void*)dest->value,
 		   (void*)src->value,
-		   4*sizeof(unsigned int));
+		   4*sizeof(n_uint));
 }
 
 /* This is a special version of rand used to generate ID
    numbers for objects or agents.
    Potentially it could differ from the usual
    random number generator */
-unsigned int mm_rand_id(mm_random_seed * seed)
+n_uint mm_rand_id(mm_random_seed * seed)
 {
 	return mm_rand(seed);
 }

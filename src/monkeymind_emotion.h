@@ -32,6 +32,8 @@
 #ifndef MONKEYMIND_EMOTION_H
 #define MONKEYMIND_EMOTION_H
 
+#include "monkeymind_datatypes.h"
+
 /* emotions binary coded according to the Lövheim Cube
    Lövheim H. A new three-dimensional model for emotions and
    monoamine neurotransmitters. (2012). Med Hypotheses,
@@ -45,14 +47,14 @@
 #define MM_EMOTION_JOY        6
 #define MM_EMOTION_EXCITEMENT 7
 
-unsigned char mm_neuro_to_emotion(unsigned int serotonin,
-								  unsigned int dopamine,
-								  unsigned int noradrenaline,
-								  unsigned int neurotransmitter_max);
-void mm_emotion_to_neuro(unsigned char emotion,
-						 unsigned int * serotonin,
-						 unsigned int * dopamine,
-						 unsigned int * noradrenaline,
-						 unsigned int neurotransmitter_max);
+n_byte mm_neuro_to_emotion(n_uint serotonin,
+						   n_uint dopamine,
+						   n_uint noradrenaline,
+						   n_uint neurotransmitter_max);
+void mm_emotion_to_neuro(n_byte emotion,
+						 n_uint * serotonin,
+						 n_uint * dopamine,
+						 n_uint * noradrenaline,
+						 n_uint neurotransmitter_max);
 
 #endif

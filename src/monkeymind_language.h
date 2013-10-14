@@ -32,16 +32,19 @@
 #ifndef MONKEYMIND_LANGUAGE_H
 #define MONKEYMIND_LANGUAGE_H
 
-/* the number of instructions in the language machine */
+#include "monkeymind_datatypes.h"
+
+/* The number of instructions in the language machine */
 #define MM_SIZE_LANGUAGE_INSTRUCTIONS 128
 
-/* te number of arguments which each language machine
+/* The number of arguments which each language machine
    instruction takes */
-#define MM_SIZE_LANGUAGE_ARGS    2
+#define MM_SIZE_LANGUAGE_ARGS         4
 
 enum language_machine_functions
 {
-    MM_INSTRUCTION_NONE = 0,
+	MM_INSTRUCTION_NONE = 0,
+	MM_INSTRUCTION_DATA,
 	MM_INSTRUCTION_ADD,
 	MM_INSTRUCTION_REMOVE,
 	MM_INSTRUCTION_INSERT,
@@ -49,16 +52,19 @@ enum language_machine_functions
 	MM_INSTRUCTIONS
 };
 
-/* representation of a language machine instruction */
+/* Representation of a language machine instruction */
 typedef struct
 {
-	unsigned char function;
-	unsigned int argument[MM_SIZE_LANGUAGE_ARGS];
-	/* flags for relative or absolute addressing */
-	unsigned char flags;
+	/* The type of function */
+	n_byte function;
+
+	n_uint argument[MM_SIZE_LANGUAGE_ARGS];
+
+	/* Flags for relative or absolute addressing */
+	n_byte flags;
 } mm_language_instruction;
 
-/* the language machine is just a program containing a series
+/* The language machine is just a program containing a series
    of instructions */
 typedef struct
 {

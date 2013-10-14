@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "monkeymind_datatypes.h"
 
 /* the maximum number of properties of an object */
 #define MM_MAX_OBJECT_PROPERTIES  16
@@ -103,40 +104,40 @@ enum property_types
 
 typedef struct
 {
-    unsigned int id;
+    n_uint id;
 
     /* a number of properties of the object */
-    unsigned int length;
-    unsigned int property_type[MM_MAX_OBJECT_PROPERTIES];
-    unsigned int property_value[MM_MAX_OBJECT_PROPERTIES];
+    n_uint length;
+    n_uint property_type[MM_MAX_OBJECT_PROPERTIES];
+    n_uint property_value[MM_MAX_OBJECT_PROPERTIES];
 
     /* how often has this feature been observed or known */
-    unsigned int property_frequency[MM_MAX_OBJECT_PROPERTIES];
-    unsigned int observations;
+    n_uint property_frequency[MM_MAX_OBJECT_PROPERTIES];
+    n_uint observations;
 } mm_object;
 
 
 void mm_obj_init(mm_object * obj);
-int mm_obj_exists(mm_object * obj);
-int mm_obj_prop_index(mm_object * obj,
-					  unsigned int property_type);
-int mm_obj_prop_range(unsigned int property_type,
-					  unsigned int * min, unsigned int * max);
-int mm_obj_prop_add(mm_object * obj,
-					unsigned int property_type,
-					unsigned int property_value);
-int mm_obj_prop_remove(mm_object * obj,
-					   unsigned int property_type);
-unsigned int mm_obj_prop_get(mm_object * obj,
-							 unsigned int property_type);
-unsigned int mm_obj_prop_get_index(mm_object * obj,
-								   int index);
-int mm_obj_prop_set(mm_object * obj,
-					unsigned int property_type,
-					unsigned int property_value);
+n_int mm_obj_exists(mm_object * obj);
+n_int mm_obj_prop_index(mm_object * obj,
+						n_uint property_type);
+n_int mm_obj_prop_range(n_uint property_type,
+						n_uint * min, n_uint * max);
+n_int mm_obj_prop_add(mm_object * obj,
+					  n_uint property_type,
+					  n_uint property_value);
+n_int mm_obj_prop_remove(mm_object * obj,
+						 n_uint property_type);
+n_uint mm_obj_prop_get(mm_object * obj,
+					   n_uint property_type);
+n_uint mm_obj_prop_get_index(mm_object * obj,
+							 n_int index);
+n_int mm_obj_prop_set(mm_object * obj,
+					  n_uint property_type,
+					  n_uint property_value);
 void mm_obj_copy(mm_object *src, mm_object * dest);
 void mm_obj_to_vect(mm_object * obj,
-					unsigned char * vect);
-int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
+					n_byte * vect);
+n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
 
 #endif

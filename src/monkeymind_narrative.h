@@ -43,31 +43,31 @@
 typedef struct
 {
     /* a unique reference for the narrative */
-    unsigned int id;
+    n_uint id;
 
 	/* properties of the narrative */
 	mm_object properties;
 
     /* the number of steps in the narrative */
-    unsigned int length;
+    n_uint length;
 
     /* array storing the steps in the narrative */
     mm_object step[MM_MAX_NARRATIVE_SIZE];
 } mm_narrative;
 
-void mm_narrative_init(mm_narrative * narrative, unsigned int id);
-int mm_narrative_insert(mm_narrative * narrative,
-						mm_object * obj, unsigned int index,
-						unsigned int act,
-						unsigned int scene,
-						unsigned int viewpoint);
-int mm_narrative_remove(mm_narrative * narrative,
-						unsigned int index);
-int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
-					 unsigned int act,
-					 unsigned int scene,
-					 unsigned int viewpoint);
-mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index);
-int mm_narrative_from_events(mm_events * events, mm_narrative * narrative);
+void mm_narrative_init(mm_narrative * narrative, n_uint id);
+n_int mm_narrative_insert(mm_narrative * narrative,
+						  mm_object * obj, n_uint index,
+						  n_uint act,
+						  n_uint scene,
+						  n_uint viewpoint);
+n_int mm_narrative_remove(mm_narrative * narrative,
+						  n_uint index);
+n_int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
+					   n_uint act,
+					   n_uint scene,
+					   n_uint viewpoint);
+mm_object * mm_narrative_get(mm_narrative * narrative, n_uint index);
+n_int mm_narrative_from_events(mm_events * events, mm_narrative * narrative);
 
 #endif

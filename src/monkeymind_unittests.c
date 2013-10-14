@@ -45,8 +45,8 @@ static void test_init()
 static void test_object_add_remove_properties()
 {
 	mm_object obj;
-	unsigned int i, prop_value;
-	unsigned int props[] = {
+	n_uint i, prop_value;
+	n_uint props[] = {
 		3,6268,
 		7,3568,
 		1,56437,
@@ -107,11 +107,11 @@ static void test_object_add_remove_properties()
 
 static void test_name()
 {
-	unsigned int first_name = 10;
-	unsigned int sex = MM_SEX_FEMALE;
-	unsigned int surname = 125;
-	unsigned int name;
-	unsigned int extract_first_name, extract_surname, extract_sex;
+	n_uint first_name = 10;
+	n_uint sex = MM_SEX_FEMALE;
+	n_uint surname = 125;
+	n_uint name;
+	n_uint extract_first_name, extract_surname, extract_sex;
 
 	printf("test_name...");
 
@@ -132,8 +132,8 @@ static void test_name()
 static void test_social_meet()
 {
 	monkeymind m0, m1, m2;
-	int i;
-	unsigned int name;
+	n_int i;
+	n_uint name;
 	mm_object * g;
 
 	printf("test_social_meet...");
@@ -211,12 +211,12 @@ static void test_som()
 {
 	mm_som som;
 	mm_random_seed seed;
-	int i,j;
-	unsigned int dimension = 32;
-	unsigned int vector_length = 16;
-	unsigned int learning_radius = 4;
-	unsigned char vector[16];
-	unsigned int x, y;
+	n_int i,j;
+	n_uint dimension = 32;
+	n_uint vector_length = 16;
+	n_uint learning_radius = 4;
+	n_byte vector[16];
+	n_uint x, y;
 
 	printf("test_som...");
 
@@ -245,7 +245,7 @@ static void test_som()
 static void test_communicate_social_categorisation()
 {
 	monkeymind m0, m1;
-	int c, i, ctr;
+	n_int c, i, ctr;
 
 	printf("test_communicate_social_categorisation...");
 
@@ -329,12 +329,12 @@ static void test_communicate_social_categorisation()
 
 static void test_events()
 {
-	int i;
+	n_int i;
 	mm_object * test1, * test2;
 	mm_events events;
 	mm_object observation1, observation2;
 	/* Some properties of the first event */
-	unsigned int props1[] = {
+	n_uint props1[] = {
 		3,6268,
 		7,3568,
 		1,56437,
@@ -347,7 +347,7 @@ static void test_events()
 		12,2356
 	};
 	/* Some properties of the first event */
-	unsigned int props2[] = {
+	n_uint props2[] = {
 		3,2521,
 		7,7548,
 		1,26357,
@@ -407,12 +407,12 @@ static void test_events()
 
 static void test_narrative()
 {
-	int i;
+	n_int i;
 	mm_object * test1, * test2;
 	mm_narrative narrative;
 	mm_object observation1, observation2;
 	/* Some properties of the first observation */
-	unsigned int props1[] = {
+	n_uint props1[] = {
 		3,6268,
 		7,3568,
 		1,56437,
@@ -425,7 +425,7 @@ static void test_narrative()
 		12,2356
 	};
 	/* Some properties of the second observation */
-	unsigned int props2[] = {
+	n_uint props2[] = {
 		3,2521,
 		7,7548,
 		1,26357,

@@ -39,10 +39,10 @@ void mm_obj_init(mm_object * obj)
 }
 
 /* returns the range of a given object property type */
-int mm_obj_prop_range(unsigned int property_type,
-					  unsigned int * min, unsigned int * max)
+n_int mm_obj_prop_range(n_uint property_type,
+						n_uint * min, n_uint * max)
 {
-    const unsigned int property_range[] = {
+    const n_uint property_range[] = {
 	    MM_PROPERTY_NONE, 0,0,
 
 		/* who */
@@ -98,10 +98,10 @@ int mm_obj_prop_range(unsigned int property_type,
 
 /* returns the array index of a given property type
    or -1 if not found */
-int mm_obj_prop_index(mm_object * obj,
-					  unsigned int property_type)
+n_int mm_obj_prop_index(mm_object * obj,
+						n_uint property_type)
 {
-	int index = -1, start_index, end_index, curr_index;
+	n_int index = -1, start_index, end_index, curr_index;
 
 	if (obj->length == 1) {
 		if (obj->property_type[0] == property_type) {
@@ -148,11 +148,11 @@ int mm_obj_prop_index(mm_object * obj,
 }
 
 /* adds a property to an object and returns its array index */
-int mm_obj_prop_add(mm_object * obj,
-					unsigned int property_type,
-					unsigned int property_value)
+n_int mm_obj_prop_add(mm_object * obj,
+					  n_uint property_type,
+					  n_uint property_value)
 {
-	int i, index = 0;
+	n_int i, index = 0;
 
 	if (obj->length >= MM_MAX_OBJECT_PROPERTIES) return -1;
 
@@ -194,10 +194,10 @@ void mm_obj_copy(mm_object *src, mm_object * dest)
 }
 
 /* removes a property from an object */
-int mm_obj_prop_remove(mm_object * obj,
-					   unsigned int property_type)
+n_int mm_obj_prop_remove(mm_object * obj,
+						 n_uint property_type)
 {
-	int i, index;
+	n_int i, index;
 
 	if (obj->length == 0) return -1;
 
@@ -213,20 +213,20 @@ int mm_obj_prop_remove(mm_object * obj,
 }
 
 /* returns the value of the given object property */
-unsigned int mm_obj_prop_get(mm_object * obj,
-							 unsigned int property_type)
+n_uint mm_obj_prop_get(mm_object * obj,
+					   n_uint property_type)
 {
-	int index = mm_obj_prop_index(obj, property_type);
+	n_int index = mm_obj_prop_index(obj, property_type);
 	if (index > -1) return obj->property_value[index];
 	return 0;
 }
 
 /* sets an object property value */
-int mm_obj_prop_set(mm_object * obj,
-					unsigned int property_type,
-					unsigned int property_value)
+n_int mm_obj_prop_set(mm_object * obj,
+					  n_uint property_type,
+					  n_uint property_value)
 {
-	int index = mm_obj_prop_index(obj, property_type);
+	n_int index = mm_obj_prop_index(obj, property_type);
 	if (index > -1) {
 		obj->property_value[index] = property_value;
 		return 0;
@@ -236,12 +236,12 @@ int mm_obj_prop_set(mm_object * obj,
 
 /* normalise property values into a single byte range */
 void mm_obj_to_vect(mm_object * obj,
-					unsigned char * vect)
+					n_byte * vect)
 {
-	unsigned int i, p, min, max, v;
+	n_uint i, p, min, max, v;
 
 	memset((void*)vect, '\0',
-		   MM_PROPERTIES*sizeof(unsigned char));
+		   MM_PROPERTIES*sizeof(n_byte));
 	for (i = 0; i < obj->length; i++) {
 		p = obj->property_type[i];
 		min = max = 0;
@@ -249,21 +249,21 @@ void mm_obj_to_vect(mm_object * obj,
 			if (min + max > 0) {
 				v = obj->property_value[i];
 				vect[p] =
-					(unsigned char)((v - min) * 255 / max);
+					(n_byte)((v - min) * 255 / max);
 			}
 		}
 	}
 }
 
-int mm_obj_exists(mm_object * obj)
+n_int mm_obj_exists(mm_object * obj)
 {
 	return (obj->length > 0);
 }
 
 /* compares two objects and returns 0 if they are the same, -1 otherwise */
-int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
+n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
 {
-	unsigned int i;
+	n_uint i;
 
 	if (obj1->length != obj2->length) return -1;
 

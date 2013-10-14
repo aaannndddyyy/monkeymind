@@ -34,14 +34,15 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "monkeymind_datatypes.h"
 
 typedef struct
 {
-	unsigned int value[4];
+	n_uint value[4];
 } mm_random_seed;
 
-unsigned int mm_rand(mm_random_seed * seed);
-unsigned int mm_rand_id(mm_random_seed * seed);
+n_uint mm_rand(mm_random_seed * seed);
+n_uint mm_rand_id(mm_random_seed * seed);
 void mm_rand_copy(mm_random_seed * src, mm_random_seed * dest);
 
 #endif

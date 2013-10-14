@@ -69,7 +69,7 @@
 
 /* name is stored as a single 32bit number,
    and contains sex, first name and last name */
-#define MM_NAME(sex, first_name, surname) \
+#define MM_NAME(sex, first_name, surname)						\
 	( ((((sex)&255)<<8)|((first_name)&255)) | ((surname)<<16) )
 #define MM_SEX(name)             (((name)>>8)&255)
 #define MM_FIRST_NAME(name)      ((name)&255)
@@ -83,13 +83,13 @@ enum {
 
 typedef struct
 {
-	int value[MM_SOCIAL_CATEGORIES_DIMENSION*
-			  MM_SOCIAL_CATEGORIES_DIMENSION];
+	n_int value[MM_SOCIAL_CATEGORIES_DIMENSION*
+				MM_SOCIAL_CATEGORIES_DIMENSION];
 } mm_som_categories;
 
 typedef struct
 {
-    unsigned int id;
+    n_uint id;
 
 	mm_random_seed seed;
 
@@ -115,7 +115,7 @@ typedef struct
     mm_object social_graph[MM_SIZE_SOCIAL_GRAPH];
 
 	/* different types of attention */
-	unsigned int attention[MM_ATTENTION_SIZE];
+	n_uint attention[MM_ATTENTION_SIZE];
 
 	/* abstracted individuals */
     mm_object social_stereotype[MM_SIZE_SOCIAL_STEREOTYPES];
@@ -129,20 +129,20 @@ typedef struct
 
 void mm_observe(monkeymind * mind, mm_object * observation);
 void mm_add_property(monkeymind * mind,
-					 unsigned int property_type,
-					 unsigned int property_value);
+					 n_uint property_type,
+					 n_uint property_value);
 void mm_set_property(monkeymind * mind,
-					 unsigned int property_type,
-					 unsigned int property_value);
-unsigned int mm_get_property(monkeymind * mind,
-							 unsigned int property_type);
+					 n_uint property_type,
+					 n_uint property_value);
+n_uint mm_get_property(monkeymind * mind,
+					   n_uint property_type);
 void mm_remove_property(monkeymind * mind,
-						unsigned int property_type);
+						n_uint property_type);
 void mm_init(monkeymind * mind,
-			 unsigned int id,
-			 unsigned char sex,
-			 unsigned char first_name,
-			 unsigned char surname,
+			 n_uint id,
+			 n_byte sex,
+			 n_byte first_name,
+			 n_byte surname,
 			 mm_random_seed * seed);
 
 #endif

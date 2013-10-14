@@ -38,6 +38,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "monkeymind_datatypes.h"
 #include "monkeymind_rand.h"
 #include "monkeymind_time.h"
 #include "monkeymind_object.h"
@@ -51,25 +52,25 @@ typedef struct
 	mm_object sequence[MM_EVENT_MEMORY_SIZE];
 
 	/* current index within the series */
-	unsigned int index;
+	n_uint index;
 } mm_events;
 
 typedef struct {
-	unsigned int agent_id;
-	unsigned int hits;
-	unsigned int category[MM_CATEGORIES];
+	n_uint agent_id;
+	n_uint hits;
+	n_uint category[MM_CATEGORIES];
 } mm_protagonist;
 
 void mm_events_init(mm_events * events);
 void mm_events_add(mm_events * events,
 				   mm_object * observation);
-unsigned int mm_events_max(mm_events * events);
-mm_object * mm_events_get(mm_events * events, unsigned int timestep);
+n_uint mm_events_max(mm_events * events);
+mm_object * mm_events_get(mm_events * events, n_uint timestep);
 
-int mm_events_protagonists(mm_events * events,
-						   unsigned int timestep_start,
-						   unsigned int timestep_end,
-						   mm_protagonist * protagonists,
-						   unsigned int max_protagonists);
+n_int mm_events_protagonists(mm_events * events,
+							 n_uint timestep_start,
+							 n_uint timestep_end,
+							 mm_protagonist * protagonists,
+							 n_uint max_protagonists);
 
 #endif

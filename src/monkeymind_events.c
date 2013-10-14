@@ -60,7 +60,7 @@ void mm_events_add(mm_events * events,
 }
 
 /* returns the number of events in the sequence */
-unsigned int mm_events_max(mm_events * events)
+n_uint mm_events_max(mm_events * events)
 {
 	if (events->index == 0) return 0;
 
@@ -73,13 +73,13 @@ unsigned int mm_events_max(mm_events * events)
 
 /* returns the event at the given time step.
    Returns zero if the time step is greater than the maximum */
-mm_object * mm_events_get(mm_events * events, unsigned int timestep)
+mm_object * mm_events_get(mm_events * events, n_uint timestep)
 {
-	unsigned int max = mm_events_max(events);
-    int index;
+	n_uint max = mm_events_max(events);
+    n_int index;
 
 	if ((max == 0) || (timestep >= max)) return 0;
-	index = (int)events->index - (int)max + (int)timestep;
+	index = (n_int)events->index - (n_int)max + (n_int)timestep;
 	if (index < 0) index += MM_EVENT_MEMORY_SIZE;
 	if (!mm_obj_exists(&events->sequence[index])) {
 		return 0;
@@ -89,21 +89,21 @@ mm_object * mm_events_get(mm_events * events, unsigned int timestep)
 
 /* returns a list of protagonists which appear between certain time steps in
    the event sequence */
-int mm_events_protagonists(mm_events * events,
-						   unsigned int timestep_start,
-						   unsigned int timestep_end,
-						   mm_protagonist * protagonists,
-						   unsigned int max_protagonists)
+n_int mm_events_protagonists(mm_events * events,
+							 n_uint timestep_start,
+							 n_uint timestep_end,
+							 mm_protagonist * protagonists,
+							 n_uint max_protagonists)
 {
-	unsigned int c, i, j, t, agent_id, no_of_protagonists = 0;
+	n_uint c, i, j, t, agent_id, no_of_protagonists = 0;
 	mm_object * event;
 
 	/* properties which contain agent IDs */
-	const unsigned int agent_properties[] = {
+	const n_uint agent_properties[] = {
 		MM_PROPERTY_MEETER,
 		MM_PROPERTY_MET
 	};
-	unsigned int no_of_agent_properties = 2;
+	n_uint no_of_agent_properties = 2;
 
 	/* validate the start and end time steps */
 	if ((timestep_end < timestep_start) ||
@@ -138,7 +138,8 @@ int mm_events_protagonists(mm_events * events,
 					/* update FOF and attraction values for this agent */
 					for (c = 0; c < MM_CATEGORIES; c++) {
 					    protagonists[j].category[c] +=
-							mm_obj_prop_get(event, MM_PROPERTY_FRIEND_OR_FOE+c);
+							mm_obj_prop_get(event,
+											MM_PROPERTY_FRIEND_OR_FOE+c);
 					}
 					break;
 				}

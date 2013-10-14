@@ -31,7 +31,7 @@
 
 #include "monkeymind_narrative.h"
 
-void mm_narrative_init(mm_narrative * narrative, unsigned int id)
+void mm_narrative_init(mm_narrative * narrative, n_uint id)
 {
 	narrative->length = 0;
 	memset((void*)narrative->step, '\0',
@@ -39,10 +39,10 @@ void mm_narrative_init(mm_narrative * narrative, unsigned int id)
 }
 
 /* remove a step from the narrative */
-int mm_narrative_remove(mm_narrative * narrative,
-						unsigned int index)
+n_int mm_narrative_remove(mm_narrative * narrative,
+						  n_uint index)
 {
-	unsigned int i;
+	n_uint i;
 
 	if ((narrative->length == 0) ||
 		(index >= narrative->length) ||
@@ -60,11 +60,11 @@ int mm_narrative_remove(mm_narrative * narrative,
 }
 
 /* insert a narrative step at a given index */
-int mm_narrative_insert(mm_narrative * narrative,
-						mm_object * obj, unsigned int index,
-						unsigned int act,
-						unsigned int scene,
-						unsigned int viewpoint)
+n_int mm_narrative_insert(mm_narrative * narrative,
+						  mm_object * obj, n_uint index,
+						  n_uint act,
+						  n_uint scene,
+						  n_uint viewpoint)
 {
 	if ((index > narrative->length) ||
 		(narrative->length >= MM_MAX_NARRATIVE_SIZE)) {
@@ -81,10 +81,10 @@ int mm_narrative_insert(mm_narrative * narrative,
 }
 
 /* adds a narrative step */
-int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
-					 unsigned int act,
-					 unsigned int scene,
-					 unsigned int viewpoint)
+n_int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
+					   n_uint act,
+					   n_uint scene,
+					   n_uint viewpoint)
 {
 	if (narrative->length >= MM_MAX_NARRATIVE_SIZE) return -1;
 	if (mm_narrative_insert(narrative, obj, narrative->length,
@@ -96,7 +96,7 @@ int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
 }
 
 /* gets a narrative step */
-mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index)
+mm_object * mm_narrative_get(mm_narrative * narrative, n_uint index)
 {
 	if ((index > narrative->length) ||
 		(narrative->length >= MM_MAX_NARRATIVE_SIZE)) {
@@ -106,7 +106,7 @@ mm_object * mm_narrative_get(mm_narrative * narrative, unsigned int index)
 }
 
 /* attempts to generate a narrative from a sequence of events */
-int mm_narrative_from_events(mm_events * events, mm_narrative * narrative)
+n_int mm_narrative_from_events(mm_events * events, mm_narrative * narrative)
 {
 	/* TODO */
 	return -1;
