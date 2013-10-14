@@ -214,13 +214,13 @@ static void fn_copy(mm_language_machine * m0,
    These would typically be the inner and outer systems */
 void mm_language_dialogue(mm_language_machine * m0,
 						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size,
-						  unsigned int index)
+						  n_byte * data, n_uint data_size)
 {
-	n_uint i;
+	n_uint index;
 
-	for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
-		switch(m0->instruction[i].function) {
+	for (index = 0;
+		 index < MM_SIZE_LANGUAGE_INSTRUCTIONS; index++) {
+		switch(m0->instruction[index].function) {
 		case MM_INSTRUCTION_ADD: {
 			fn_add(m0, m1, data, data_size, index);
 			break;

@@ -174,7 +174,28 @@ void mm_init(monkeymind * mind,
 	mind->cognitive_system_state_size = 0;
 }
 
+/* external dialogue between two agents */
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 {
-	/* TODO */
+	n_uint attention0 = mind0->attention[MM_ATTENTION_SOCIAL_GRAPH];
+	n_uint attention1 = mind1->attention[MM_ATTENTION_SOCIAL_GRAPH];
+	mm_language_machine * m0 = &mind0->language[attention0];
+	mm_language_machine * m1 = &mind0->language[attention1];
+
+	mm_language_dialogue(m0, m1,
+						 mind0->cognitive_system_state,
+						 mind0->cognitive_system_state_size);
+}
+
+/* internal dialogue within an agent */
+void mm_dialogue_internal(monkeymind * mind)
+{
+	n_uint attention = mind->attention[MM_ATTENTION_SOCIAL_GRAPH];
+
+	mm_language_machine * m0 = &mind->language[MM_SELF];
+	mm_language_machine * m1 = &mind->language[attention];
+
+	mm_language_dialogue(m0, m1,
+						 mind->cognitive_system_state,
+						 mind->cognitive_system_state_size);
 }

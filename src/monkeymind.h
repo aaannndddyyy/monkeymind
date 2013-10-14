@@ -150,5 +150,6 @@ void mm_init(monkeymind * mind,
 			 n_byte surname,
 			 mm_random_seed * seed);
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1);
+void mm_dialogue_internal(monkeymind * mind);
 
 #endif
