@@ -41,11 +41,20 @@
    instruction takes */
 #define MM_SIZE_LANGUAGE_ARGS         4
 
+enum instruction_flags
+{
+	ARG0_REF = 1,
+	ARG1_REF = 2
+};
+
 enum language_machine_functions
 {
 	MM_INSTRUCTION_NONE = 0,
 	MM_INSTRUCTION_DATA,
 	MM_INSTRUCTION_ADD,
+	MM_INSTRUCTION_SUBTRACT,
+	MM_INSTRUCTION_MULTIPLY,
+	MM_INSTRUCTION_DIVIDE,
 	MM_INSTRUCTION_REMOVE,
 	MM_INSTRUCTION_INSERT,
 	MM_INSTRUCTION_COPY,
@@ -58,10 +67,12 @@ typedef struct
 	/* The type of function */
 	n_byte function;
 
-	n_uint argument[MM_SIZE_LANGUAGE_ARGS];
+	n_int argument[MM_SIZE_LANGUAGE_ARGS];
 
 	/* Flags for relative or absolute addressing */
 	n_byte flags;
+
+	n_int output;
 } mm_language_instruction;
 
 /* The language machine is just a program containing a series
@@ -69,7 +80,7 @@ typedef struct
 typedef struct
 {
 	mm_language_instruction instruction[MM_SIZE_LANGUAGE_INSTRUCTIONS];
-} mm_language;
+} mm_language_machine;
 
 
 #endif

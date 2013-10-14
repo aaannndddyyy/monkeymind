@@ -30,3 +30,91 @@
 ****************************************************************/
 
 #include "monkeymind_language.h"
+
+const n_uint values_per_machine =
+	(n_uint)(sizeof(mm_language_machine)/sizeof(n_int));
+
+static n_int get_address(n_int address,
+						 n_uint data_size)
+{
+	/* ensure that the address is within range */
+	if (address < 0) address = -address;
+    address = address%((values_per_machine*2) +
+					   (data_size/sizeof(n_int)));
+	return address;
+}
+
+/* Returns the data at the given address for the given two
+   language machines and data store.
+   The data store would typically be the current state
+   of the cognitive system, and this means that
+   brain probes are not needed. */
+static n_int get_data(mm_language_machine * m0,
+					  mm_language_machine * m1,
+					  n_byte * data, n_uint data_size,
+					  n_int address)
+{
+	n_int * m;
+
+	address = get_address(address, data_size);
+
+	if (address < values_per_machine) {
+		m = (n_int*)m0;
+	}
+	else if (address < values_per_machine*2) {
+		address -= values_per_machine;
+		m = (n_int*)m1;
+	}
+	else {
+		address -= (values_per_machine*2);
+		m = (n_int*)data;
+	}
+
+	return m[address];
+}
+
+/* sets the value at the given address.
+   The total address space consists of the two language machines
+   and the data, which is usually the current state of the
+   cognitive system */
+static void set_data(mm_language_machine * m0,
+					 mm_language_machine * m1,
+					 n_byte * data, n_uint data_size,
+					 n_int address, n_int value)
+{
+	n_int * m;
+
+	address = get_address(address, data_size);
+
+	if (address < values_per_machine) {
+		m = (n_int*)m0;
+	}
+	else if (address < values_per_machine*2) {
+		address -= values_per_machine;
+		m = (n_int*)m1;
+	}
+	else {
+		address -= (values_per_machine*2);
+		m = (n_int*)data;
+	}
+
+	m[address] = value;
+}
+
+/* addition instruction */
+static void function_add(mm_language_machine * m0,
+						 mm_language_machine * m1,
+						 n_byte * data, n_uint data_size,
+						 unsigned int index)
+{
+	n_int i, total = 0;
+	mm_language_instruction * instruction;
+
+	instruction = &m0->instruction[index];
+	for (i = 0; i < MM_SIZE_LANGUAGE_ARGS; i++) {
+		total += get_data(m0, m1, data, data_size,
+						  instruction->argument[i]);
+	}
+	set_data(m0, m1, data, data_size,
+			 instruction->output, total);
+}

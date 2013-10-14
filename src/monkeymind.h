@@ -121,7 +121,7 @@ typedef struct
     mm_object social_stereotype[MM_SIZE_SOCIAL_STEREOTYPES];
 
 	/* language machinery associated with each social graph entry */
-	mm_language language[MM_SIZE_SOCIAL_GRAPH];
+	mm_language_machine language[MM_SIZE_SOCIAL_GRAPH];
 
 	/* spatial memory */
 	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
