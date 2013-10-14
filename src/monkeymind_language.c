@@ -155,3 +155,23 @@ static void fn_multiply(mm_language_machine * m0,
 	set_data(m0, m1, data, data_size,
 			 instruction->output, total);
 }
+
+static void fn_divide(mm_language_machine * m0,
+					  mm_language_machine * m1,
+					  n_byte * data, n_uint data_size,
+					  unsigned int index)
+{
+	n_int i, num, denom, total = 0;
+	mm_language_instruction * instruction;
+
+	instruction = &m0->instruction[index];
+	num = get_data(m0, m1, data, data_size,
+				   instruction->argument[0]);
+	for (i = 1; i < MM_SIZE_LANGUAGE_ARGS; i++) {
+		denom = get_data(m0, m1, data, data_size,
+						 instruction->argument[i])&15;
+		total += (num >> denom);
+	}
+	set_data(m0, m1, data, data_size,
+			 instruction->output, total);
+}
