@@ -42,7 +42,7 @@
    instruction takes */
 #define MM_SIZE_LANGUAGE_ARGS         4
 
-enum language_machine_functions
+enum mm_language_machine_functions
 {
 	MM_INSTRUCTION_NONE = 0,
 	MM_INSTRUCTION_DATA,
@@ -51,7 +51,17 @@ enum language_machine_functions
 	MM_INSTRUCTION_MULTIPLY,
 	MM_INSTRUCTION_DIVIDE,
 	MM_INSTRUCTION_COPY,
+	MM_INSTRUCTION_JUMP,
 	MM_INSTRUCTIONS
+};
+
+enum mm_language_conditions
+{
+	MM_CONDITION_LESS_THAN = 0,
+	MM_CONDITION_EQUALS,
+	MM_CONDITION_NOT_EQUALS,
+	MM_CONDITION_GREATER_THAN,
+	MM_CONDITIONS
 };
 
 /* Representation of a language machine instruction */
@@ -94,5 +104,9 @@ void mm_language_copy(mm_language_machine * m0,
 					  mm_language_machine * m1,
 					  n_byte * data, n_uint data_size,
 					  unsigned int index);
+n_int mm_language_jump(mm_language_machine * m0,
+					   mm_language_machine * m1,
+					   n_byte * data, n_uint data_size,
+					   unsigned int index);
 
 #endif

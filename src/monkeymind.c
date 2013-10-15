@@ -176,35 +176,47 @@ void mm_init(monkeymind * mind,
 
 /* A dialogue between two language machines.
    These would typically be the inner and outer systems */
-void mm_language_dialogue(mm_language_machine * m0,
-						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size)
+static void mm_language_dialogue(mm_language_machine * m0,
+								 mm_language_machine * m1,
+								 n_byte * data, n_uint data_size,
+								 mm_events * e0,
+								 mm_events * e1)
 {
 	n_uint index;
+	n_int ctr=0;
+	const n_uint instructions_per_update =
+		MM_SIZE_LANGUAGE_INSTRUCTIONS;
 
 	for (index = 0;
-		 index < MM_SIZE_LANGUAGE_INSTRUCTIONS; index++) {
-		switch(m0->instruction[index].function) {
+		 index < instructions_per_update; index++, ctr++) {
+		switch(m0->instruction[ctr].function) {
 		case MM_INSTRUCTION_ADD: {
-			mm_language_add(m0, m1, data, data_size, index);
+			mm_language_add(m0, m1, data, data_size, ctr);
 			break;
 		}
 		case MM_INSTRUCTION_SUBTRACT: {
-			mm_language_subtract(m0, m1, data, data_size, index);
+			mm_language_subtract(m0, m1, data, data_size, ctr);
 			break;
 		}
 		case MM_INSTRUCTION_MULTIPLY: {
-			mm_language_multiply(m0, m1, data, data_size, index);
+			mm_language_multiply(m0, m1, data, data_size, ctr);
 			break;
 		}
 		case MM_INSTRUCTION_DIVIDE: {
-			mm_language_divide(m0, m1, data, data_size, index);
+			mm_language_divide(m0, m1, data, data_size, ctr);
 			break;
 		}
 		case MM_INSTRUCTION_COPY: {
-			mm_language_copy(m0, m1, data, data_size, index);
+			mm_language_copy(m0, m1, data, data_size, ctr);
 			break;
 		}
+		case MM_INSTRUCTION_JUMP: {
+			ctr = mm_language_jump(m0, m1, data, data_size, ctr);
+			break;
+		}
+		}
+		if (ctr >= MM_SIZE_LANGUAGE_INSTRUCTIONS) {
+			ctr -= MM_SIZE_LANGUAGE_INSTRUCTIONS;
 		}
 	}
 }
@@ -219,7 +231,8 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 
 	mm_language_dialogue(m0, m1,
 						 mind0->cognitive_system_state,
-						 mind0->cognitive_system_state_size);
+						 mind0->cognitive_system_state_size,
+						 &mind0->events, &mind1->events);
 }
 
 /* internal dialogue within an agent */
@@ -232,5 +245,6 @@ void mm_dialogue_internal(monkeymind * mind)
 
 	mm_language_dialogue(m0, m1,
 						 mind->cognitive_system_state,
-						 mind->cognitive_system_state_size);
+						 mind->cognitive_system_state_size,
+						 &mind->events, &mind->events);
 }
