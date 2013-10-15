@@ -211,7 +211,7 @@ static void mm_language_dialogue(mm_language_machine * m0,
 			break;
 		}
 		case MM_INSTRUCTION_JUMP: {
-			ctr = mm_language_jump(m0, m1, data, data_size, ctr);
+			ctr = mm_language_jump(m0, m1, data, data_size, ctr) - 1;
 			break;
 		}
 		}
