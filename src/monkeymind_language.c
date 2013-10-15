@@ -34,6 +34,22 @@
 const n_uint addresses_per_machine =
 	(n_uint)(sizeof(mm_language_machine)/sizeof(n_int));
 
+/* initialise the language machine */
+void mm_language_init(mm_language_machine * lang,
+					  mm_random_seed * seed)
+{
+	n_int i, j;
+
+	for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
+		lang->instruction[i].function =
+			mm_rand(seed) & 255;
+		for (j = 0; j < MM_SIZE_LANGUAGE_ARGS; j++) {
+			lang->instruction[i].argument[j] =
+				(n_int)mm_rand(seed);
+		}
+	}
+}
+
 /* ensure that a given address is within range of the
    address space of the language machine */
 static n_int get_address(n_int address,
@@ -73,23 +89,6 @@ static n_int get_data(mm_language_machine * m0,
 	}
 
 	return m[address];
-}
-
-
-/* initialise the language machine */
-void mm_language_init(mm_language_machine * lang,
-					  mm_random_seed * seed)
-{
-	n_int i, j;
-
-	for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
-		lang->instruction[i].function =
-			mm_rand(seed) & 255;
-		for (j = 0; j < MM_SIZE_LANGUAGE_ARGS; j++) {
-			lang->instruction[i].argument[j] =
-				(n_int)mm_rand(seed);
-		}
-	}
 }
 
 /* sets the value at the given address.

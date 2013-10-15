@@ -480,6 +480,60 @@ static void test_narrative()
 	printf("Ok\n");
 }
 
+static void test_language_machine()
+{
+	monkeymind m0, m1;
+	n_uint t, i, test_x, test_y, x, y, w, n, l;
+	const n_uint test_dimension = 10;
+	mm_random_seed seed;
+	const n_uint subimage_width = 100;
+	const n_uint image_width = test_dimension*subimage_width;
+	n_byte img[image_width*image_width*3];
+	n_uint attention0, ctr=0;
+	mm_language_machine * lang0;
+	char filename[256];
+
+	printf("test_language_machine...");
+
+	memset((void*)img,'\0',image_width*image_width*3);
+
+	for (test_y = 0; test_y < test_dimension; test_y++) {
+		for (test_x = 0; test_x < test_dimension; test_x++, ctr++) {
+
+			for (i = 0; i < 4; i++) {
+				seed.value[i] = ctr*4+i;
+			}
+
+			/* Create two agents */
+			mm_init(&m0, 1000, MM_SEX_MALE, 10,20, &seed);
+			mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31, &seed);
+
+			for (t = 2; t < subimage_width; t++) {
+				mm_dialogue(&m0, &m1);
+				attention0 = m0.attention[MM_ATTENTION_SOCIAL_GRAPH];
+				lang0 = &m0.language[attention0];
+				y = test_y*subimage_width + t;
+				for (w = 2; w < subimage_width; w++) {
+					x = test_x*subimage_width + w;
+					n = (y*image_width + x)*3;
+					l = w*MM_SIZE_LANGUAGE_INSTRUCTIONS/subimage_width;
+
+					img[n] = ((n_byte*)lang0->instruction)[l*3];
+					img[n+1] = ((n_byte*)lang0->instruction)[l*3+1];
+					img[n+2] = ((n_byte*)lang0->instruction)[l*3+2];
+				}
+			}
+
+		}
+	}
+
+	sprintf(filename,"%s","/tmp/monkeymind_language_machines.png");
+
+	write_png_file((char*)filename, (int)image_width, (int)image_width,
+				   (unsigned char*)img);
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
@@ -490,6 +544,7 @@ void mm_run_tests()
 	test_communicate_social_categorisation();
 	test_events();
 	test_narrative();
+	test_language_machine();
 
 	printf("All tests passed\n");
 }

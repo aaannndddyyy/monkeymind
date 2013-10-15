@@ -189,7 +189,7 @@ static void mm_language_dialogue(mm_language_machine * m0,
 
 	for (index = 0;
 		 index < instructions_per_update; index++, ctr++) {
-		switch(m0->instruction[ctr].function) {
+		switch(m0->instruction[ctr].function%MM_INSTRUCTIONS) {
 		case MM_INSTRUCTION_ADD: {
 			mm_language_add(m0, m1, data, data_size, ctr);
 			break;
