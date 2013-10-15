@@ -149,6 +149,9 @@ void mm_init(monkeymind * mind,
 			 n_byte first_name,
 			 n_byte surname,
 			 mm_random_seed * seed);
+void mm_language_dialogue(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size);
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1);
 void mm_dialogue_internal(monkeymind * mind);
 

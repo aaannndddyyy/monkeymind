@@ -174,6 +174,41 @@ void mm_init(monkeymind * mind,
 	mind->cognitive_system_state_size = 0;
 }
 
+/* A dialogue between two language machines.
+   These would typically be the inner and outer systems */
+void mm_language_dialogue(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size)
+{
+	n_uint index;
+
+	for (index = 0;
+		 index < MM_SIZE_LANGUAGE_INSTRUCTIONS; index++) {
+		switch(m0->instruction[index].function) {
+		case MM_INSTRUCTION_ADD: {
+			mm_language_add(m0, m1, data, data_size, index);
+			break;
+		}
+		case MM_INSTRUCTION_SUBTRACT: {
+			mm_language_subtract(m0, m1, data, data_size, index);
+			break;
+		}
+		case MM_INSTRUCTION_MULTIPLY: {
+			mm_language_multiply(m0, m1, data, data_size, index);
+			break;
+		}
+		case MM_INSTRUCTION_DIVIDE: {
+			mm_language_divide(m0, m1, data, data_size, index);
+			break;
+		}
+		case MM_INSTRUCTION_COPY: {
+			mm_language_copy(m0, m1, data, data_size, index);
+			break;
+		}
+		}
+	}
+}
+
 /* external dialogue between two agents */
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 {

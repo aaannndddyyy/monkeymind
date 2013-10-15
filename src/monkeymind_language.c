@@ -120,10 +120,10 @@ static void set_data(mm_language_machine * m0,
 	m[address] = value;
 }
 
-static void fn_add(mm_language_machine * m0,
-				   mm_language_machine * m1,
-				   n_byte * data, n_uint data_size,
-				   unsigned int index)
+void mm_language_add(mm_language_machine * m0,
+					 mm_language_machine * m1,
+					 n_byte * data, n_uint data_size,
+					 unsigned int index)
 {
 	n_int i, total = 0;
 	mm_language_instruction * instruction;
@@ -137,10 +137,10 @@ static void fn_add(mm_language_machine * m0,
 			 instruction->output, total);
 }
 
-static void fn_subtract(mm_language_machine * m0,
-						mm_language_machine * m1,
-						n_byte * data, n_uint data_size,
-						unsigned int index)
+void mm_language_subtract(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size,
+						  unsigned int index)
 {
 	n_int i, total = 0;
 	mm_language_instruction * instruction;
@@ -156,10 +156,10 @@ static void fn_subtract(mm_language_machine * m0,
 			 instruction->output, total);
 }
 
-static void fn_multiply(mm_language_machine * m0,
-						mm_language_machine * m1,
-						n_byte * data, n_uint data_size,
-						unsigned int index)
+void mm_language_multiply(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size,
+						  unsigned int index)
 {
 	n_int i, total = 0;
 	mm_language_instruction * instruction;
@@ -175,10 +175,10 @@ static void fn_multiply(mm_language_machine * m0,
 			 instruction->output, total);
 }
 
-static void fn_divide(mm_language_machine * m0,
-					  mm_language_machine * m1,
-					  n_byte * data, n_uint data_size,
-					  unsigned int index)
+void mm_language_divide(mm_language_machine * m0,
+						mm_language_machine * m1,
+						n_byte * data, n_uint data_size,
+						unsigned int index)
 {
 	n_int i, num, denom, total = 0;
 	mm_language_instruction * instruction;
@@ -195,10 +195,10 @@ static void fn_divide(mm_language_machine * m0,
 			 instruction->output, total);
 }
 
-static void fn_copy(mm_language_machine * m0,
-					mm_language_machine * m1,
-					n_byte * data, n_uint data_size,
-					unsigned int index)
+void mm_language_copy(mm_language_machine * m0,
+					  mm_language_machine * m1,
+					  n_byte * data, n_uint data_size,
+					  unsigned int index)
 {
 	n_int value;
 	mm_language_instruction * instruction;
@@ -208,39 +208,4 @@ static void fn_copy(mm_language_machine * m0,
 					 instruction->argument[0]);
 	set_data(m0, m1, data, data_size,
 			 instruction->output, value);
-}
-
-/* A dialogue between two language machines.
-   These would typically be the inner and outer systems */
-void mm_language_dialogue(mm_language_machine * m0,
-						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size)
-{
-	n_uint index;
-
-	for (index = 0;
-		 index < MM_SIZE_LANGUAGE_INSTRUCTIONS; index++) {
-		switch(m0->instruction[index].function) {
-		case MM_INSTRUCTION_ADD: {
-			fn_add(m0, m1, data, data_size, index);
-			break;
-		}
-		case MM_INSTRUCTION_SUBTRACT: {
-			fn_subtract(m0, m1, data, data_size, index);
-			break;
-		}
-		case MM_INSTRUCTION_MULTIPLY: {
-			fn_multiply(m0, m1, data, data_size, index);
-			break;
-		}
-		case MM_INSTRUCTION_DIVIDE: {
-			fn_divide(m0, m1, data, data_size, index);
-			break;
-		}
-		case MM_INSTRUCTION_COPY: {
-			fn_copy(m0, m1, data, data_size, index);
-			break;
-		}
-		}
-	}
 }
