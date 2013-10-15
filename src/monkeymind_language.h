@@ -87,26 +87,26 @@ void mm_language_init(mm_language_machine * lang, mm_random_seed * seed);
 void mm_language_add(mm_language_machine * m0,
 					 mm_language_machine * m1,
 					 n_byte * data, n_uint data_size,
-					 unsigned int index);
+					 n_uint index);
 void mm_language_subtract(mm_language_machine * m0,
 						  mm_language_machine * m1,
 						  n_byte * data, n_uint data_size,
-						  unsigned int index);
+						  n_uint index);
 void mm_language_multiply(mm_language_machine * m0,
 						  mm_language_machine * m1,
 						  n_byte * data, n_uint data_size,
-						  unsigned int index);
+						  n_uint index);
 void mm_language_divide(mm_language_machine * m0,
 						mm_language_machine * m1,
 						n_byte * data, n_uint data_size,
-						unsigned int index);
+						n_uint index);
 void mm_language_copy(mm_language_machine * m0,
 					  mm_language_machine * m1,
 					  n_byte * data, n_uint data_size,
-					  unsigned int index);
+					  n_uint index);
 n_int mm_language_jump(mm_language_machine * m0,
 					   mm_language_machine * m1,
 					   n_byte * data, n_uint data_size,
-					   unsigned int index);
+					   n_int index);
 
 #endif

@@ -183,7 +183,7 @@ static void mm_language_dialogue(mm_language_machine * m0,
 								 mm_events * e1)
 {
 	n_uint index;
-	n_int ctr=0;
+	n_int ctr = 0;
 	const n_uint instructions_per_update =
 		MM_SIZE_LANGUAGE_INSTRUCTIONS;
 

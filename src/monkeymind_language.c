@@ -123,89 +123,100 @@ static void set_data(mm_language_machine * m0,
 void mm_language_add(mm_language_machine * m0,
 					 mm_language_machine * m1,
 					 n_byte * data, n_uint data_size,
-					 unsigned int index)
+					 n_uint index)
 {
-	n_int i, total = 0;
+	n_int result;
 	mm_language_instruction * instruction;
 
 	instruction = &m0->instruction[index];
-	for (i = 0; i < MM_SIZE_LANGUAGE_ARGS; i++) {
-		total += get_data(m0, m1, data, data_size,
-						  instruction->argument[i]);
-	}
+
+	/* add two numbers */
+	result =
+		get_data(m0, m1, data, data_size,
+				 instruction->argument[0]) +
+		get_data(m0, m1, data, data_size,
+				 instruction->argument[1]);
+	/* store the result */
 	set_data(m0, m1, data, data_size,
-			 instruction->output, total);
+			 instruction->output, result);
 }
 
 void mm_language_subtract(mm_language_machine * m0,
 						  mm_language_machine * m1,
 						  n_byte * data, n_uint data_size,
-						  unsigned int index)
+						  n_uint index)
 {
-	n_int i, total = 0;
+	n_int result;
 	mm_language_instruction * instruction;
 
 	instruction = &m0->instruction[index];
-	total = get_data(m0, m1, data, data_size,
-					 instruction->argument[0]);
-	for (i = 1; i < MM_SIZE_LANGUAGE_ARGS; i++) {
-		total -= get_data(m0, m1, data, data_size,
-						  instruction->argument[i]);
-	}
+
+	/* subtract two numbers */
+	result =
+		get_data(m0, m1, data, data_size,
+				 instruction->argument[0]) -
+		get_data(m0, m1, data, data_size,
+				 instruction->argument[1]);
+	/* store the result */
 	set_data(m0, m1, data, data_size,
-			 instruction->output, total);
+			 instruction->output, result);
 }
 
 void mm_language_multiply(mm_language_machine * m0,
 						  mm_language_machine * m1,
 						  n_byte * data, n_uint data_size,
-						  unsigned int index)
+						  n_uint index)
 {
-	n_int i, total = 0;
+	n_int result;
 	mm_language_instruction * instruction;
 
 	instruction = &m0->instruction[index];
-	total = get_data(m0, m1, data, data_size,
-					 instruction->argument[0]);
-	for (i = 1; i < MM_SIZE_LANGUAGE_ARGS; i++) {
-		total *= get_data(m0, m1, data, data_size,
-						  instruction->argument[i]);
-	}
+
+	/* multiply two numbers */
+	result =
+		get_data(m0, m1, data, data_size,
+				 instruction->argument[0]) *
+		get_data(m0, m1, data, data_size,
+				 instruction->argument[1]);
+	/* store the result */
 	set_data(m0, m1, data, data_size,
-			 instruction->output, total);
+			 instruction->output, result);
 }
 
 void mm_language_divide(mm_language_machine * m0,
 						mm_language_machine * m1,
 						n_byte * data, n_uint data_size,
-						unsigned int index)
+						n_uint index)
 {
-	n_int i, num, denom, total = 0;
+	n_int num, denom;
 	mm_language_instruction * instruction;
 
 	instruction = &m0->instruction[index];
+    /* get the numerator */
 	num = get_data(m0, m1, data, data_size,
 				   instruction->argument[0]);
-	for (i = 1; i < MM_SIZE_LANGUAGE_ARGS; i++) {
-		denom = get_data(m0, m1, data, data_size,
-						 instruction->argument[i])&15;
-		total += (num >> denom);
-	}
+	/* get the denominator */
+	denom = get_data(m0, m1, data, data_size,
+					 instruction->argument[1])&15;
+	/* store the result */
 	set_data(m0, m1, data, data_size,
-			 instruction->output, total);
+			 instruction->output, (num >> denom));
 }
 
 void mm_language_copy(mm_language_machine * m0,
 					  mm_language_machine * m1,
 					  n_byte * data, n_uint data_size,
-					  unsigned int index)
+					  n_uint index)
 {
 	n_int value;
 	mm_language_instruction * instruction;
 
 	instruction = &m0->instruction[index];
+
+    /* value to be coppied */
 	value = get_data(m0, m1, data, data_size,
 					 instruction->argument[0]);
+	/* copy to destination */
 	set_data(m0, m1, data, data_size,
 			 instruction->output, value);
 }
@@ -213,7 +224,7 @@ void mm_language_copy(mm_language_machine * m0,
 n_int mm_language_jump(mm_language_machine * m0,
 					   mm_language_machine * m1,
 					   n_byte * data, n_uint data_size,
-					   unsigned int index)
+					   n_int index)
 {
 	n_int value[2], i, result = 0;
 	mm_language_instruction * instruction;
