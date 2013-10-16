@@ -119,87 +119,47 @@ static void set_data(mm_language_machine * m0,
 	m[address] = value;
 }
 
-void mm_language_add(mm_language_machine * m0,
-					 mm_language_machine * m1,
-					 n_byte * data, n_uint data_size,
-					 n_uint index)
+void mm_language_maths(mm_language_machine * m0,
+					   mm_language_machine * m1,
+					   n_byte * data, n_uint data_size,
+					   n_uint index)
 {
-	n_int result;
+	n_int result, value[2];
+	n_byte function;
 	mm_language_instruction * instruction;
 
 	instruction = &m0->instruction[index];
 
-	/* add two numbers */
-	result =
-		get_data(m0, m1, data, data_size,
-				 instruction->argument[0]) +
-		get_data(m0, m1, data, data_size,
-				 instruction->argument[1]);
+	function = get_data(m0, m1, data, data_size,
+						instruction->argument[0]);
+
+	value[0] = get_data(m0, m1, data, data_size,
+						instruction->argument[1]);
+	value[1] = get_data(m0, m1, data, data_size,
+						instruction->argument[2]);
+
+	switch(function%MM_MATHS_FUNCTIONS) {
+	case MM_MATHS_ADD: {
+		result = value[0] + value[1];
+		break;
+	}
+	case MM_MATHS_SUBTRACT: {
+		result = value[0] - value[1];
+		break;
+	}
+	case MM_MATHS_MULTIPLY: {
+		result = value[0] * value[1];
+		break;
+	}
+	case MM_MATHS_DIVIDE: {
+		result = value[0] >> (value[1]&15);
+		break;
+	}
+	}
+
 	/* store the result */
 	set_data(m0, m1, data, data_size,
 			 instruction->output, result);
-}
-
-void mm_language_subtract(mm_language_machine * m0,
-						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size,
-						  n_uint index)
-{
-	n_int result;
-	mm_language_instruction * instruction;
-
-	instruction = &m0->instruction[index];
-
-	/* subtract two numbers */
-	result =
-		get_data(m0, m1, data, data_size,
-				 instruction->argument[0]) -
-		get_data(m0, m1, data, data_size,
-				 instruction->argument[1]);
-	/* store the result */
-	set_data(m0, m1, data, data_size,
-			 instruction->output, result);
-}
-
-void mm_language_multiply(mm_language_machine * m0,
-						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size,
-						  n_uint index)
-{
-	n_int result;
-	mm_language_instruction * instruction;
-
-	instruction = &m0->instruction[index];
-
-	/* multiply two numbers */
-	result =
-		get_data(m0, m1, data, data_size,
-				 instruction->argument[0]) *
-		get_data(m0, m1, data, data_size,
-				 instruction->argument[1]);
-	/* store the result */
-	set_data(m0, m1, data, data_size,
-			 instruction->output, result);
-}
-
-void mm_language_divide(mm_language_machine * m0,
-						mm_language_machine * m1,
-						n_byte * data, n_uint data_size,
-						n_uint index)
-{
-	n_int num, denom;
-	mm_language_instruction * instruction;
-
-	instruction = &m0->instruction[index];
-    /* get the numerator */
-	num = get_data(m0, m1, data, data_size,
-				   instruction->argument[0]);
-	/* get the denominator */
-	denom = get_data(m0, m1, data, data_size,
-					 instruction->argument[1])&15;
-	/* store the result */
-	set_data(m0, m1, data, data_size,
-			 instruction->output, (num >> denom));
 }
 
 void mm_language_copy(mm_language_machine * m0,

@@ -190,20 +190,8 @@ static void mm_language_dialogue(mm_language_machine * m0,
 	for (index = 0;
 		 index < instructions_per_update; index++, ctr++) {
 		switch(m0->instruction[ctr].function%MM_INSTRUCTIONS) {
-		case MM_INSTRUCTION_ADD: {
-			mm_language_add(m0, m1, data, data_size, ctr);
-			break;
-		}
-		case MM_INSTRUCTION_SUBTRACT: {
-			mm_language_subtract(m0, m1, data, data_size, ctr);
-			break;
-		}
-		case MM_INSTRUCTION_MULTIPLY: {
-			mm_language_multiply(m0, m1, data, data_size, ctr);
-			break;
-		}
-		case MM_INSTRUCTION_DIVIDE: {
-			mm_language_divide(m0, m1, data, data_size, ctr);
+		case MM_INSTRUCTION_MATHS: {
+			mm_language_maths(m0, m1, data, data_size, ctr);
 			break;
 		}
 		case MM_INSTRUCTION_COPY: {

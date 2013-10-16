@@ -46,10 +46,7 @@ enum mm_language_machine_functions
 {
 	MM_INSTRUCTION_NONE = 0,
 	MM_INSTRUCTION_DATA,
-	MM_INSTRUCTION_ADD,
-	MM_INSTRUCTION_SUBTRACT,
-	MM_INSTRUCTION_MULTIPLY,
-	MM_INSTRUCTION_DIVIDE,
+	MM_INSTRUCTION_MATHS,
 	MM_INSTRUCTION_COPY,
 	MM_INSTRUCTION_JUMP,
 	MM_INSTRUCTIONS
@@ -62,6 +59,15 @@ enum mm_language_conditions
 	MM_CONDITION_NOT_EQUALS,
 	MM_CONDITION_GREATER_THAN,
 	MM_CONDITIONS
+};
+
+enum mm_language_maths
+{
+	MM_MATHS_ADD = 0,
+	MM_MATHS_SUBTRACT,
+	MM_MATHS_MULTIPLY,
+	MM_MATHS_DIVIDE,
+	MM_MATHS_FUNCTIONS
 };
 
 /* Representation of a language machine instruction */
@@ -84,22 +90,10 @@ typedef struct
 
 
 void mm_language_init(mm_language_machine * lang, mm_random_seed * seed);
-void mm_language_add(mm_language_machine * m0,
-					 mm_language_machine * m1,
-					 n_byte * data, n_uint data_size,
-					 n_uint index);
-void mm_language_subtract(mm_language_machine * m0,
-						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size,
-						  n_uint index);
-void mm_language_multiply(mm_language_machine * m0,
-						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size,
-						  n_uint index);
-void mm_language_divide(mm_language_machine * m0,
-						mm_language_machine * m1,
-						n_byte * data, n_uint data_size,
-						n_uint index);
+void mm_language_maths(mm_language_machine * m0,
+					   mm_language_machine * m1,
+					   n_byte * data, n_uint data_size,
+					   n_uint index);
 void mm_language_copy(mm_language_machine * m0,
 					  mm_language_machine * m1,
 					  n_byte * data, n_uint data_size,
