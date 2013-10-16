@@ -42,10 +42,13 @@
    instruction takes */
 #define MM_SIZE_LANGUAGE_ARGS         4
 
+/* result of a function */
+#define MM_INSTRUCTION_RESULT(instr) \
+	((instr)->argument[MM_SIZE_LANGUAGE_ARGS-1])
+
 enum mm_language_machine_functions
 {
 	MM_INSTRUCTION_NONE = 0,
-	MM_INSTRUCTION_DATA,
 	MM_INSTRUCTION_MATHS,
 	MM_INSTRUCTION_COPY,
 	MM_INSTRUCTION_JUMP,
@@ -77,8 +80,6 @@ typedef struct
 	n_byte function;
 
 	n_int argument[MM_SIZE_LANGUAGE_ARGS];
-
-	n_int output;
 } mm_language_instruction;
 
 /* The language machine is just a program containing a series
@@ -102,5 +103,16 @@ n_int mm_language_jump(mm_language_machine * m0,
 					   mm_language_machine * m1,
 					   n_byte * data, n_uint data_size,
 					   n_int index);
+n_int mm_language_get_address(n_int address,
+							  n_uint data_size);
+n_int mm_language_get_data(mm_language_machine * m0,
+						   mm_language_machine * m1,
+						   n_byte * data, n_uint data_size,
+						   n_int address);
+void mm_language_set_data(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size,
+						  n_int address, n_int value);
+n_uint addresses_per_machine();
 
 #endif

@@ -31,8 +31,10 @@
 
 #include "monkeymind_language.h"
 
-const n_uint addresses_per_machine =
-	(n_uint)(sizeof(mm_language_machine)/sizeof(n_int));
+n_uint addresses_per_machine()
+{
+	return (n_uint)(sizeof(mm_language_machine)/sizeof(n_int));
+}
 
 /* initialise the language machine */
 void mm_language_init(mm_language_machine * lang,
@@ -42,7 +44,7 @@ void mm_language_init(mm_language_machine * lang,
 
 	for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
 		lang->instruction[i].function =
-			mm_rand(seed) & 255;
+			(n_byte)mm_rand(seed);
 		for (j = 0; j < MM_SIZE_LANGUAGE_ARGS; j++) {
 			lang->instruction[i].argument[j] =
 				(n_int)mm_rand(seed);
@@ -52,12 +54,12 @@ void mm_language_init(mm_language_machine * lang,
 
 /* ensure that a given address is within range of the
    address space of the language machine */
-static n_int get_address(n_int address,
-						 n_uint data_size)
+n_int mm_language_get_address(n_int address,
+							  n_uint data_size)
 {
 	/* ensure that the address is within range */
 	if (address < 0) address = -address;
-    address = address%((addresses_per_machine*2) +
+    address = address%((addresses_per_machine()*2) +
 					   (data_size/sizeof(n_int)));
 	return address;
 }
@@ -67,24 +69,24 @@ static n_int get_address(n_int address,
    The data store would typically be the current state
    of the cognitive system, and this means that
    brain probes are not needed. */
-static n_int get_data(mm_language_machine * m0,
-					  mm_language_machine * m1,
-					  n_byte * data, n_uint data_size,
-					  n_int address)
+n_int mm_language_get_data(mm_language_machine * m0,
+						   mm_language_machine * m1,
+						   n_byte * data, n_uint data_size,
+						   n_int address)
 {
 	n_int * m;
 
-	address = get_address(address, data_size);
+	address = mm_language_get_address(address, data_size);
 
-	if (address < addresses_per_machine) {
+	if (address < addresses_per_machine()) {
 		m = (n_int*)m0;
 	}
-	else if (address < addresses_per_machine*2) {
-		address -= addresses_per_machine;
+	else if (address < addresses_per_machine()*2) {
+		address -= addresses_per_machine();
 		m = (n_int*)m1;
 	}
 	else {
-		address -= (addresses_per_machine*2);
+		address -= (addresses_per_machine()*2);
 		m = (n_int*)data;
 	}
 
@@ -95,24 +97,24 @@ static n_int get_data(mm_language_machine * m0,
    The total address space consists of the two language machines
    and the data, which is usually the current state of the
    cognitive system */
-static void set_data(mm_language_machine * m0,
-					 mm_language_machine * m1,
-					 n_byte * data, n_uint data_size,
-					 n_int address, n_int value)
+void mm_language_set_data(mm_language_machine * m0,
+						  mm_language_machine * m1,
+						  n_byte * data, n_uint data_size,
+						  n_int address, n_int value)
 {
 	n_int * m;
 
-	address = get_address(address, data_size);
+	address = mm_language_get_address(address, data_size);
 
-	if (address < addresses_per_machine) {
+	if (address < addresses_per_machine()) {
 		m = (n_int*)m0;
 	}
-	else if (address < addresses_per_machine*2) {
-		address -= addresses_per_machine;
+	else if (address < addresses_per_machine()*2) {
+		address -= addresses_per_machine();
 		m = (n_int*)m1;
 	}
 	else {
-		address -= (addresses_per_machine*2);
+		address -= (addresses_per_machine()*2);
 		m = (n_int*)data;
 	}
 
@@ -130,13 +132,13 @@ void mm_language_maths(mm_language_machine * m0,
 
 	instruction = &m0->instruction[index];
 
-	function = get_data(m0, m1, data, data_size,
-						instruction->argument[0]);
+	function = mm_language_get_data(m0, m1, data, data_size,
+									instruction->argument[0]);
 
-	value[0] = get_data(m0, m1, data, data_size,
-						instruction->argument[1]);
-	value[1] = get_data(m0, m1, data, data_size,
-						instruction->argument[2]);
+	value[0] = mm_language_get_data(m0, m1, data, data_size,
+									instruction->argument[1]);
+	value[1] = mm_language_get_data(m0, m1, data, data_size,
+									instruction->argument[2]);
 
 	switch(function%MM_MATHS_FUNCTIONS) {
 	case MM_MATHS_ADD: {
@@ -158,8 +160,8 @@ void mm_language_maths(mm_language_machine * m0,
 	}
 
 	/* store the result */
-	set_data(m0, m1, data, data_size,
-			 instruction->output, result);
+	mm_language_set_data(m0, m1, data, data_size,
+						 MM_INSTRUCTION_RESULT(instruction), result);
 }
 
 void mm_language_copy(mm_language_machine * m0,
@@ -172,12 +174,12 @@ void mm_language_copy(mm_language_machine * m0,
 
 	instruction = &m0->instruction[index];
 
-    /* value to be coppied */
-	value = get_data(m0, m1, data, data_size,
-					 instruction->argument[0]);
+    /* value to be copied */
+	value = mm_language_get_data(m0, m1, data, data_size,
+								 instruction->argument[0]);
 	/* copy to destination */
-	set_data(m0, m1, data, data_size,
-			 instruction->output, value);
+	mm_language_set_data(m0, m1, data, data_size,
+						 MM_INSTRUCTION_RESULT(instruction), value);
 }
 
 n_int mm_language_jump(mm_language_machine * m0,
@@ -192,40 +194,40 @@ n_int mm_language_jump(mm_language_machine * m0,
 	instruction = &m0->instruction[index];
 
 	/* get the type of condition to be tested */
-	condition = get_data(m0, m1, data, data_size,
-						 instruction->argument[0]);
+	condition = mm_language_get_data(m0, m1, data, data_size,
+									 instruction->argument[0]);
 	if (condition < 0) condition = -condition;
 	condition = condition % MM_CONDITIONS;
 
 	/* get two input values */
 	for (i = 0; i < 2; i++) {
-		value[i]= get_data(m0, m1, data, data_size,
-						   instruction->argument[i+1]);
+		value[i] = mm_language_get_data(m0, m1, data, data_size,
+										instruction->argument[i+1]);
 	}
 
 	/* is the condition satisfied? */
 	switch(condition) {
 	case MM_CONDITION_LESS_THAN: {
 		if (value[0] < value[1]) {
-			result = instruction->output;
+			result = MM_INSTRUCTION_RESULT(instruction);
 		}
 		break;
 	}
 	case MM_CONDITION_EQUALS: {
 		if (value[0] == value[1]) {
-			result = instruction->output;
+			result = MM_INSTRUCTION_RESULT(instruction);
 		}
 		break;
 	}
 	case MM_CONDITION_NOT_EQUALS: {
 		if (value[0] != value[1]) {
-			result = instruction->output;
+			result = MM_INSTRUCTION_RESULT(instruction);
 		}
 		break;
 	}
 	case MM_CONDITION_GREATER_THAN: {
 		if (value[0] > value[1]) {
-			result = instruction->output;
+			result = MM_INSTRUCTION_RESULT(instruction);
 		}
 		break;
 	}
@@ -233,11 +235,6 @@ n_int mm_language_jump(mm_language_machine * m0,
 
 	if (result == 0) return index;
 
-	/* ensure that the result is in the
-	   range 0 -> MM_SIZE_LANGUAGE_INSTRUCTIONS */
-	result = result % MM_SIZE_LANGUAGE_INSTRUCTIONS;
-	if (result < 0) result += MM_SIZE_LANGUAGE_INSTRUCTIONS;
-
 	/* return the new index to jump to */
-	return result;
+	return result&255;
 }

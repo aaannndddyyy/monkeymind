@@ -199,7 +199,10 @@ static void mm_language_dialogue(mm_language_machine * m0,
 			break;
 		}
 		case MM_INSTRUCTION_JUMP: {
-			ctr = mm_language_jump(m0, m1, data, data_size, ctr) - 1;
+			ctr =
+				(ctr + mm_language_jump(m0, m1, data, data_size, ctr)) %
+				MM_SIZE_LANGUAGE_INSTRUCTIONS;
+			if (ctr < 0) ctr += MM_SIZE_LANGUAGE_INSTRUCTIONS;
 			break;
 		}
 		}
@@ -221,6 +224,11 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 						 mind0->cognitive_system_state,
 						 mind0->cognitive_system_state_size,
 						 &mind0->events, &mind1->events);
+
+	mm_language_dialogue(m1, m0,
+						 mind1->cognitive_system_state,
+						 mind1->cognitive_system_state_size,
+						 &mind1->events, &mind0->events);
 }
 
 /* internal dialogue within an agent */

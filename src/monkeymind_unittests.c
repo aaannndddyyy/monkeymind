@@ -484,10 +484,10 @@ static void test_language_machine()
 {
 	monkeymind m0, m1;
 	n_int diff, tot_diff = 0, changed_time_steps, multi_step_changes = 0;
-	n_uint t, i, j, test_x, test_y, x, y, w, n, l;
-	const n_uint test_dimension = 10;
+	n_uint t, i, test_x, test_y, x, y, w, n, instr, arg;
+	const n_uint test_dimension = 30;
 	mm_random_seed seed;
-	const n_uint subimage_width = 100;
+	const n_uint subimage_width = 25;
 	const n_uint image_width = test_dimension*subimage_width;
 	n_byte img[image_width*image_width*3];
 	n_uint attention0, ctr=0;
@@ -496,63 +496,68 @@ static void test_language_machine()
 
 	printf("test_language_machine...");
 
-	memset((void*)img,'\0',image_width*image_width*3);
+	for (i = 0; i < image_width*image_width*3; i++) {
+		img[i] = 255;
+	}
 
 	for (test_y = 0; test_y < test_dimension; test_y++) {
 		for (test_x = 0; test_x < test_dimension; test_x++, ctr++) {
 
 			for (i = 0; i < 4; i++) {
-				seed.value[i] = ctr*4+i;
+				seed.value[i] = ctr*8+i;
 			}
 
 			/* Create two agents */
 			mm_init(&m0, 1000, MM_SEX_MALE, 10,20, &seed);
+
+			for (i = 0; i < 4; i++) {
+				seed.value[i] = ctr*8+4+i;
+			}
+
 			mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31, &seed);
 
 			/* agents engage in dialogue for a number of time steps */
 			changed_time_steps = 0;
-			for (t = 2; t < subimage_width; t++) {
+			for (t = 0; t < subimage_width; t++) {
 				mm_dialogue(&m0, &m1);
 				attention0 = m0.attention[MM_ATTENTION_SOCIAL_GRAPH];
 				lang0 = &m0.language[attention0];
 
 				/* draw the time series of language machine states */
+				diff = 0;
 				y = test_y*subimage_width + t;
-				for (w = 2; w < subimage_width; w++) {
-					x = test_x*subimage_width + w;
-					n = (y*image_width + x)*3;
-					l = w*MM_SIZE_LANGUAGE_INSTRUCTIONS/subimage_width;
 
-					if (((n_byte*)lang0)[l*3] != ((n_byte*)&prev_lang0)[l*3]) {
-						img[n] = 255;
-					}
-					if (((n_byte*)lang0)[l*3+1] != ((n_byte*)&prev_lang0)[l*3+1]) {
-						img[n+1] = 255;
-					}
-					if (((n_byte*)lang0)[l*3+2] != ((n_byte*)&prev_lang0)[l*3+2]) {
-						img[n+2] = 255;
-					}
-				}
+				w = 0;
+				for (instr = 0; instr < MM_SIZE_LANGUAGE_INSTRUCTIONS; instr++) {
+					for (arg = 0; arg < MM_SIZE_LANGUAGE_ARGS; arg++, w++) {
+						x = test_x*subimage_width +
+							(w*subimage_width/
+							 (MM_SIZE_LANGUAGE_INSTRUCTIONS*MM_SIZE_LANGUAGE_ARGS));
+						n = (y*image_width + x)*3;
 
-				if (t > 2) {
-					/* count the number of differences */
-					diff = 0;
-					for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
-						if (prev_lang0.instruction[i].function !=
-							lang0->instruction[i].function) tot_diff++;
-						if (prev_lang0.instruction[i].output !=
-							lang0->instruction[i].output) tot_diff++;
-						for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
-							if (prev_lang0.instruction[i].argument[j] !=
-								lang0->instruction[i].argument[j]) {
+						if ((t > 2) && (instr > 2)) {
+							if (lang0->instruction[instr].argument[arg] !=
+								prev_lang0.instruction[instr].argument[arg]) {
+
+								img[n] = 50;
+								img[n+1] = 50;
+								img[n+2] = 50;
 								diff++;
 							}
 						}
+						else {
+							img[n] = 0;
+							img[n+1] = 0;
+							img[n+2] = 0;
+						}
 					}
+				}
+
+				if (t > 1) {
 					tot_diff += diff;
 					if (diff > 0) changed_time_steps++;
 				}
-				memcpy((void*)&prev_lang0, lang0,
+				memcpy((void*)&prev_lang0, (void*)lang0,
 					   sizeof(mm_language_machine));
 			}
 			if (changed_time_steps > 1) multi_step_changes++;
@@ -573,6 +578,100 @@ static void test_language_machine()
 	printf("Ok\n");
 }
 
+static void test_language_get_address()
+{
+	printf("test_language_get_address...");
+
+	n_uint max = addresses_per_machine();
+
+	assert(mm_language_get_address(max, 0) == max);
+	assert(mm_language_get_address(max/2, 0) == max/2);
+	assert(mm_language_get_address(max*2+3, 0) == 3);
+	assert(mm_language_get_address(max*2-1, 0) == max*2-1);
+	assert(mm_language_get_address(-9, 0) == 9);
+	assert(mm_language_get_address(0, 0) == 0);
+
+	printf("Ok\n");
+}
+
+static void test_language_get_data()
+{
+	printf("test_language_get_data...");
+
+	n_uint max = addresses_per_machine();
+	mm_language_machine m0, m1;
+	mm_random_seed seed0, seed1;
+	n_uint i;
+	n_int value, * mm0, * mm1;
+
+	for (i = 0; i < 4; i++) {
+		seed0.value[i] = i;
+		seed1.value[i] = i+4;
+	}
+
+	mm_language_init(&m0, &seed0);
+	mm_language_init(&m1, &seed1);
+
+	mm0 = (n_int*)&m0;
+	mm1 = (n_int*)&m1;
+
+	for (i = 0; i < max*3; i++) {
+		value = mm_language_get_data(&m0, &m1, NULL, 0, i);
+		if (i < max) {
+			assert(value == mm0[i]);
+		}
+		else {
+			if (i < max*2) {
+				assert(value == mm1[i-max]);
+			}
+			else {
+				assert(value == mm0[i-(max*2)]);
+			}
+		}
+	}
+
+	printf("Ok\n");
+}
+
+static void test_language_set_data()
+{
+	printf("test_language_set_data...");
+
+	n_uint max = addresses_per_machine();
+	mm_language_machine m0, m1;
+	mm_random_seed seed0, seed1;
+	n_uint i;
+	n_int * mm0, * mm1;
+
+	for (i = 0; i < 4; i++) {
+		seed0.value[i] = i;
+		seed1.value[i] = i+4;
+	}
+
+	mm_language_init(&m0, &seed0);
+	mm_language_init(&m1, &seed1);
+
+	mm0 = (n_int*)&m0;
+	mm1 = (n_int*)&m1;
+
+	for (i = 0; i < max*3; i++) {
+		mm_language_set_data(&m0, &m1, NULL, 0, i, i);
+		if (i < max) {
+			assert(mm0[i] == i);
+		}
+		else {
+			if (i < max*2) {
+				assert(mm1[i-max] == i);
+			}
+			else {
+				assert(mm0[i-(max*2)] == i);
+			}
+		}
+	}
+
+	printf("Ok\n");
+}
+
 void mm_run_tests()
 {
 	test_init();
@@ -583,6 +682,9 @@ void mm_run_tests()
 	test_communicate_social_categorisation();
 	test_events();
 	test_narrative();
+	test_language_get_address();
+	test_language_get_data();
+	test_language_set_data();
 	test_language_machine();
 
 	printf("All tests passed\n");
