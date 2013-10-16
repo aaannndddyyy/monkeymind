@@ -148,11 +148,39 @@ void mm_language_maths(mm_language_machine * m0,
 							 instruction->argument[1], value[0] - value[1]);
 		break;
 	}
+	case MM_MATHS_ADD_B: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] + value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] * value[1]);
+		break;
+	}
+	case MM_MATHS_ADD_C: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] + value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] >> (value[1]&15));
+		break;
+	}
 	case MM_MATHS_SUBTRACT: {
 		mm_language_set_data(m0, m1, data, data_size,
 							 instruction->argument[0], value[0] - value[1]);
 		mm_language_set_data(m0, m1, data, data_size,
 							 instruction->argument[1], value[0] + value[1]);
+		break;
+	}
+	case MM_MATHS_SUBTRACT_B: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] - value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] * value[1]);
+		break;
+	}
+	case MM_MATHS_SUBTRACT_C: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] - value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] >> (value[1]&15));
 		break;
 	}
 	case MM_MATHS_MULTIPLY: {
@@ -162,11 +190,46 @@ void mm_language_maths(mm_language_machine * m0,
 							 instruction->argument[1], value[0] + value[1]);
 		break;
 	}
+	case MM_MATHS_MULTIPLY_B: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] * value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] - value[1]);
+		break;
+	}
+	case MM_MATHS_MULTIPLY_C: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] * value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] >> (value[1]&15));
+		break;
+	}
 	case MM_MATHS_DIVIDE: {
 		mm_language_set_data(m0, m1, data, data_size,
 							 instruction->argument[0], value[0] >> (value[1]&15));
 		mm_language_set_data(m0, m1, data, data_size,
 							 instruction->argument[1], value[1] >> (value[0]&15));
+		break;
+	}
+	case MM_MATHS_DIVIDE_B: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] >> (value[1]&15));
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] + value[1]);
+		break;
+	}
+	case MM_MATHS_DIVIDE_C: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] >> (value[1]&15));
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] - value[1]);
+		break;
+	}
+	case MM_MATHS_DIVIDE_D: {
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] >> (value[1]&15));
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] * value[1]);
 		break;
 	}
 	}
