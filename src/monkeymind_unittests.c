@@ -485,12 +485,12 @@ static void test_language_machine()
 	monkeymind m0, m1;
 	n_int diff, tot_diff = 0, changed_time_steps, multi_step_changes = 0;
 	n_uint t, i, test_x, test_y, x, y, w, n, instr, arg;
-	const n_uint test_dimension = 30;
+	const n_uint test_dimension = 16;
 	mm_random_seed seed;
-	const n_uint subimage_width = 25;
-	const n_uint image_width = test_dimension*subimage_width;
+	const n_uint subimage_width = 64;
+	const n_uint image_width = test_dimension * subimage_width;
 	n_byte img[image_width*image_width*3];
-	n_uint attention0, ctr=0;
+	n_uint attention0, ctr = 0;
 	mm_language_machine * lang0, prev_lang0;
 	char filename[256];
 
