@@ -483,14 +483,15 @@ static void test_narrative()
 static void test_language_machine()
 {
 	monkeymind m0, m1;
-	n_uint t, i, test_x, test_y, x, y, w, n, l;
+	n_int tot_diff = 0;
+	n_uint t, i, j, test_x, test_y, x, y, w, n, l;
 	const n_uint test_dimension = 10;
 	mm_random_seed seed;
 	const n_uint subimage_width = 100;
 	const n_uint image_width = test_dimension*subimage_width;
 	n_byte img[image_width*image_width*3];
 	n_uint attention0, ctr=0;
-	mm_language_machine * lang0;
+	mm_language_machine * lang0, prev_lang0;
 	char filename[256];
 
 	printf("test_language_machine...");
@@ -522,8 +523,25 @@ static void test_language_machine()
 					img[n+1] = ((n_byte*)lang0->instruction)[l*3+1];
 					img[n+2] = ((n_byte*)lang0->instruction)[l*3+2];
 				}
-			}
 
+				if (t > 2) {
+					/* count the number of differences */
+					for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
+						if (prev_lang0.instruction[i].function !=
+							lang0->instruction[i].function) tot_diff++;
+						if (prev_lang0.instruction[i].output !=
+							lang0->instruction[i].output) tot_diff++;
+						for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
+							if (prev_lang0.instruction[i].argument[j] !=
+								lang0->instruction[i].argument[j]) {
+								tot_diff++;
+							}
+						}
+					}
+				}
+				memcpy((void*)&prev_lang0, lang0,
+					   sizeof(mm_language_machine));
+			}
 		}
 	}
 
@@ -531,6 +549,10 @@ static void test_language_machine()
 
 	write_png_file((char*)filename, (int)image_width, (int)image_width,
 				   (unsigned char*)img);
+
+	/* some changes should have occurred */
+	assert(tot_diff > 0);
+
 	printf("Ok\n");
 }
 
