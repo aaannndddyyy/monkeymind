@@ -509,19 +509,28 @@ static void test_language_machine()
 			mm_init(&m0, 1000, MM_SEX_MALE, 10,20, &seed);
 			mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31, &seed);
 
+			/* agents engage in dialogue for a number of time steps */
 			for (t = 2; t < subimage_width; t++) {
 				mm_dialogue(&m0, &m1);
 				attention0 = m0.attention[MM_ATTENTION_SOCIAL_GRAPH];
 				lang0 = &m0.language[attention0];
+
+				/* draw the time series of language machine states */
 				y = test_y*subimage_width + t;
 				for (w = 2; w < subimage_width; w++) {
 					x = test_x*subimage_width + w;
 					n = (y*image_width + x)*3;
 					l = w*MM_SIZE_LANGUAGE_INSTRUCTIONS/subimage_width;
 
-					img[n] = ((n_byte*)lang0->instruction)[l*3];
-					img[n+1] = ((n_byte*)lang0->instruction)[l*3+1];
-					img[n+2] = ((n_byte*)lang0->instruction)[l*3+2];
+					if (((n_byte*)lang0)[l*3] != ((n_byte*)&prev_lang0)[l*3]) {
+						img[n] = 255;
+					}
+					if (((n_byte*)lang0)[l*3+1] != ((n_byte*)&prev_lang0)[l*3+1]) {
+						img[n+1] = 255;
+					}
+					if (((n_byte*)lang0)[l*3+2] != ((n_byte*)&prev_lang0)[l*3+2]) {
+						img[n+2] = 255;
+					}
 				}
 
 				if (t > 2) {
