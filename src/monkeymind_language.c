@@ -126,7 +126,7 @@ void mm_language_maths(mm_language_machine * m0,
 					   n_byte * data, n_uint data_size,
 					   n_uint index)
 {
-	n_int result, value[2];
+	n_int value[2];
 	n_byte function;
 	mm_language_instruction * instruction;
 
@@ -142,26 +142,34 @@ void mm_language_maths(mm_language_machine * m0,
 
 	switch(function%MM_MATHS_FUNCTIONS) {
 	case MM_MATHS_ADD: {
-		result = value[0] + value[1];
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] + value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] - value[1]);
 		break;
 	}
 	case MM_MATHS_SUBTRACT: {
-		result = value[0] - value[1];
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] - value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] + value[1]);
 		break;
 	}
 	case MM_MATHS_MULTIPLY: {
-		result = value[0] * value[1];
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] * value[1]);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[0] + value[1]);
 		break;
 	}
 	case MM_MATHS_DIVIDE: {
-		result = value[0] >> (value[1]&15);
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[0], value[0] >> (value[1]&15));
+		mm_language_set_data(m0, m1, data, data_size,
+							 instruction->argument[1], value[1] >> (value[0]&15));
 		break;
 	}
 	}
-
-	/* store the result */
-	mm_language_set_data(m0, m1, data, data_size,
-						 MM_INSTRUCTION_RESULT(instruction), result);
 }
 
 void mm_language_copy(mm_language_machine * m0,
@@ -179,7 +187,7 @@ void mm_language_copy(mm_language_machine * m0,
 								 instruction->argument[0]);
 	/* copy to destination */
 	mm_language_set_data(m0, m1, data, data_size,
-						 MM_INSTRUCTION_RESULT(instruction), value);
+						 instruction->argument[0], value);
 }
 
 n_int mm_language_jump(mm_language_machine * m0,
