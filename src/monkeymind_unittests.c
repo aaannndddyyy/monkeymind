@@ -483,7 +483,7 @@ static void test_narrative()
 static void test_language_machine()
 {
 	monkeymind m0, m1;
-	n_int tot_diff = 0;
+	n_int diff, tot_diff = 0, changed_time_steps, multi_step_changes = 0;
 	n_uint t, i, j, test_x, test_y, x, y, w, n, l;
 	const n_uint test_dimension = 10;
 	mm_random_seed seed;
@@ -510,6 +510,7 @@ static void test_language_machine()
 			mm_init(&m1, 2000, MM_SEX_FEMALE, 11,31, &seed);
 
 			/* agents engage in dialogue for a number of time steps */
+			changed_time_steps = 0;
 			for (t = 2; t < subimage_width; t++) {
 				mm_dialogue(&m0, &m1);
 				attention0 = m0.attention[MM_ATTENTION_SOCIAL_GRAPH];
@@ -535,6 +536,7 @@ static void test_language_machine()
 
 				if (t > 2) {
 					/* count the number of differences */
+					diff = 0;
 					for (i = 0; i < MM_SIZE_LANGUAGE_INSTRUCTIONS; i++) {
 						if (prev_lang0.instruction[i].function !=
 							lang0->instruction[i].function) tot_diff++;
@@ -543,14 +545,17 @@ static void test_language_machine()
 						for (j = 0; j < MM_SIZE_LANGUAGE_INSTRUCTIONS; j++) {
 							if (prev_lang0.instruction[i].argument[j] !=
 								lang0->instruction[i].argument[j]) {
-								tot_diff++;
+								diff++;
 							}
 						}
 					}
+					tot_diff += diff;
+					if (diff > 0) changed_time_steps++;
 				}
 				memcpy((void*)&prev_lang0, lang0,
 					   sizeof(mm_language_machine));
 			}
+			if (changed_time_steps > 1) multi_step_changes++;
 		}
 	}
 
@@ -561,6 +566,9 @@ static void test_language_machine()
 
 	/* some changes should have occurred */
 	assert(tot_diff > 0);
+
+	/* some runs have changes on multiple time steps */
+	assert(multi_step_changes > 0);
 
 	printf("Ok\n");
 }
