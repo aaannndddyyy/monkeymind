@@ -220,11 +220,13 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 	mm_language_machine * m0 = &mind0->language[attention0];
 	mm_language_machine * m1 = &mind0->language[attention1];
 
+	/* A talks to B */
 	mm_language_dialogue(m0, m1,
 						 mind0->cognitive_system_state,
 						 mind0->cognitive_system_state_size,
 						 &mind0->events, &mind1->events);
 
+	/* B replies to A */
 	mm_language_dialogue(m1, m0,
 						 mind1->cognitive_system_state,
 						 mind1->cognitive_system_state_size,

@@ -165,3 +165,17 @@ n_int mm_events_protagonists(mm_events * events,
 
 	return no_of_protagonists;
 }
+
+/* returns a non-zero value if the given event exists within an events list */
+n_byte mm_event_exists(mm_events * events_list, mm_object * event)
+{
+	n_uint max = mm_events_max(events_list);
+	n_uint i;
+
+	for (i = 0; i < max; i++) {
+		if (mm_obj_cmp(mm_events_get(events_list, i), event) == 0) {
+			return 1;
+		}
+	}
+	return 0;
+}

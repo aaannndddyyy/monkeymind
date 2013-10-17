@@ -72,5 +72,6 @@ n_int mm_events_protagonists(mm_events * events,
 							 n_uint timestep_end,
 							 mm_protagonist * protagonists,
 							 n_uint max_protagonists);
+n_byte mm_event_exists(mm_events * events_list, mm_object * event);
 
 #endif
