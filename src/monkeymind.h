@@ -41,7 +41,7 @@
 #include "monkeymind_som.h"
 #include "monkeymind_narrative.h"
 #include "monkeymind_language.h"
-#include "monkeymind_events.h"
+#include "monkeymind_episodic.h"
 
 /* social graph array index of the self */
 #define MM_SELF                    0
@@ -102,9 +102,8 @@ typedef struct
 	/* friend or foe categories */
 	mm_som_categories category[MM_CATEGORIES];
 
-	/* Memory of recent sequences of events.
-	   This is similar to a hippocampus */
-	mm_events events;
+	/* Memory of recent sequences of events */
+	mm_episodic episodic_buffer;
 
 	/* memory which may contain a number of narratives
 	   which have been created from the sequence of

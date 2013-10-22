@@ -2,9 +2,9 @@
 
  Monkeymind - an experimental cogitive architecture
 
- The event memory is similar to a hippocampus, recording
- the stream of perceived circumstances, then filtering
- out (or compressing) the relevant from the forgettable
+ The episodic buffer records the stream of perceived
+ circumstances, then filtering out (or compressing) the
+ relevant from the forgettable
 
  =============================================================
 
@@ -51,9 +51,9 @@ typedef struct
 	/* the sequence of observed events */
 	mm_object sequence[MM_EVENT_MEMORY_SIZE];
 
-	/* current index within the series */
+	/* current index within the buffer */
 	n_uint index;
-} mm_events;
+} mm_episodic;
 
 typedef struct {
 	n_uint agent_id;
@@ -61,17 +61,17 @@ typedef struct {
 	n_uint category[MM_CATEGORIES];
 } mm_protagonist;
 
-void mm_events_init(mm_events * events);
-void mm_events_add(mm_events * events,
-				   mm_object * observation);
-n_uint mm_events_max(mm_events * events);
-mm_object * mm_events_get(mm_events * events, n_uint timestep);
+void mm_episodic_init(mm_episodic * events);
+void mm_episodic_add(mm_episodic * events,
+					 mm_object * observation);
+n_uint mm_episodic_max(mm_episodic * events);
+mm_object * mm_episodic_get(mm_episodic * events, n_uint timestep);
 
-n_int mm_events_protagonists(mm_events * events,
-							 n_uint timestep_start,
-							 n_uint timestep_end,
-							 mm_protagonist * protagonists,
-							 n_uint max_protagonists);
-n_byte mm_event_exists(mm_events * events_list, mm_object * event);
+n_int mm_episodic_protagonists(mm_episodic * events,
+							   n_uint timestep_start,
+							   n_uint timestep_end,
+							   mm_protagonist * protagonists,
+							   n_uint max_protagonists);
+n_byte mm_event_exists(mm_episodic * events_list, mm_object * event);
 
 #endif

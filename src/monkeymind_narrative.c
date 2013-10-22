@@ -106,7 +106,7 @@ mm_object * mm_narrative_get(mm_narrative * narrative, n_uint index)
 }
 
 /* attempts to generate a narrative from a sequence of events */
-n_int mm_narrative_from_events(mm_events * events, mm_narrative * narrative)
+n_int mm_narrative_from_events(mm_episodic * events, mm_narrative * narrative)
 {
 	/* TODO */
 	return -1;

@@ -33,7 +33,7 @@
 /* make an observation */
 void mm_observe(monkeymind * mind, mm_object * observation)
 {
-	mm_events_add(&mind->events, observation);
+	mm_episodic_add(&mind->episodic_buffer, observation);
 }
 
 /* adds a property to the individual */
@@ -141,7 +141,7 @@ void mm_init(monkeymind * mind,
 		random_categories(&mind->seed, mind->category[i].value);
 	}
 
-	mm_events_init(&mind->events);
+	mm_episodic_init(&mind->episodic_buffer);
 	mm_init_language(mind);
 	mm_init_spatial(mind);
 	mm_som_init(&mind->social_categories,
@@ -179,8 +179,8 @@ void mm_init(monkeymind * mind,
 static void mm_language_dialogue(mm_language_machine * m0,
 								 mm_language_machine * m1,
 								 n_byte * data, n_uint data_size,
-								 mm_events * e0,
-								 mm_events * e1)
+								 mm_episodic * e0,
+								 mm_episodic * e1)
 {
 	n_uint index;
 	n_int ctr = 0;
@@ -224,13 +224,15 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 	mm_language_dialogue(m0, m1,
 						 mind0->cognitive_system_state,
 						 mind0->cognitive_system_state_size,
-						 &mind0->events, &mind1->events);
+						 &mind0->episodic_buffer,
+						 &mind1->episodic_buffer);
 
 	/* B replies to A */
 	mm_language_dialogue(m1, m0,
 						 mind1->cognitive_system_state,
 						 mind1->cognitive_system_state_size,
-						 &mind1->events, &mind0->events);
+						 &mind1->episodic_buffer,
+						 &mind0->episodic_buffer);
 }
 
 /* internal dialogue within an agent */
@@ -244,5 +246,6 @@ void mm_dialogue_internal(monkeymind * mind)
 	mm_language_dialogue(m0, m1,
 						 mind->cognitive_system_state,
 						 mind->cognitive_system_state_size,
-						 &mind->events, &mind->events);
+						 &mind->episodic_buffer,
+						 &mind->episodic_buffer);
 }

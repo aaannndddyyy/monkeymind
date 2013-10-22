@@ -327,11 +327,11 @@ static void test_communicate_social_categorisation()
 	printf("Ok\n");
 }
 
-static void test_events()
+static void test_episodic()
 {
 	n_int i;
 	mm_object * test1, * test2;
-	mm_events events;
+	mm_episodic events;
 	mm_object observation1, observation2;
 	/* Some properties of the first event */
 	n_uint props1[] = {
@@ -360,16 +360,16 @@ static void test_events()
 		12,9756
 	};
 
-	printf("test_events...");
+	printf("test_episodic...");
 
 	/* Create an event sequence and some observation events
 	   to be inserted into it */
-	mm_events_init(&events);
+	mm_episodic_init(&events);
 	mm_obj_init(&observation1);
 	mm_obj_init(&observation2);
 
 	/* Check that there are no events in the sequence */
-	assert(mm_events_max(&events) == 0);
+	assert(mm_episodic_max(&events) == 0);
 	/* Check that the observation events are empty */
 	assert(!mm_obj_exists(&observation1));
 	assert(!mm_obj_exists(&observation2));
@@ -384,19 +384,19 @@ static void test_events()
 	assert(mm_obj_exists(&observation2));
 
 	/* Add the first event to the sequence */
-	mm_events_add(&events,&observation1);
+	mm_episodic_add(&events,&observation1);
 	/* Check that the sequence length increases */
-	assert(mm_events_max(&events) == 1);
+	assert(mm_episodic_max(&events) == 1);
 	/* Add the second event to the sequence */
-	mm_events_add(&events,&observation2);
+	mm_episodic_add(&events,&observation2);
 	/* Check that the sequence length increases */
-	assert(mm_events_max(&events) == 2);
+	assert(mm_episodic_max(&events) == 2);
 
 	/* Get the first and second events from the sequence */
-	test1 = mm_events_get(&events, 0);
-	test2 = mm_events_get(&events, 1);
+	test1 = mm_episodic_get(&events, 0);
+	test2 = mm_episodic_get(&events, 1);
 	/* Check that there is no third event */
-	assert(mm_events_get(&events, 2)==0);
+	assert(mm_episodic_get(&events, 2)==0);
 
 	/* Check that the returned events are the same as the original observations */
 	assert(mm_obj_cmp(&observation1, test1) == 0);
@@ -680,7 +680,7 @@ void mm_run_tests()
 	test_social_meet();
 	test_som();
 	test_communicate_social_categorisation();
-	test_events();
+	test_episodic();
 	test_narrative();
 	test_language_get_address();
 	test_language_get_data();

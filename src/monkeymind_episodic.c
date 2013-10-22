@@ -33,9 +33,9 @@
 
 ****************************************************************/
 
-#include "monkeymind_events.h"
+#include "monkeymind_episodic.h"
 
-void mm_events_init(mm_events * events)
+void mm_episodic_init(mm_episodic * events)
 {
 	events->index = 0;
 
@@ -44,8 +44,8 @@ void mm_events_init(mm_events * events)
 }
 
 /* add an event to the sequence */
-void mm_events_add(mm_events * events,
-				   mm_object * observation)
+void mm_episodic_add(mm_episodic * events,
+					 mm_object * observation)
 {
 	if (!mm_obj_exists(observation)) return;
 
@@ -60,7 +60,7 @@ void mm_events_add(mm_events * events,
 }
 
 /* returns the number of events in the sequence */
-n_uint mm_events_max(mm_events * events)
+n_uint mm_episodic_max(mm_episodic * events)
 {
 	if (events->index == 0) return 0;
 
@@ -73,9 +73,9 @@ n_uint mm_events_max(mm_events * events)
 
 /* returns the event at the given time step.
    Returns zero if the time step is greater than the maximum */
-mm_object * mm_events_get(mm_events * events, n_uint timestep)
+mm_object * mm_episodic_get(mm_episodic * events, n_uint timestep)
 {
-	n_uint max = mm_events_max(events);
+	n_uint max = mm_episodic_max(events);
     n_int index;
 
 	if ((max == 0) || (timestep >= max)) return 0;
@@ -89,11 +89,11 @@ mm_object * mm_events_get(mm_events * events, n_uint timestep)
 
 /* returns a list of protagonists which appear between certain time steps in
    the event sequence */
-n_int mm_events_protagonists(mm_events * events,
-							 n_uint timestep_start,
-							 n_uint timestep_end,
-							 mm_protagonist * protagonists,
-							 n_uint max_protagonists)
+n_int mm_episodic_protagonists(mm_episodic * events,
+							   n_uint timestep_start,
+							   n_uint timestep_end,
+							   mm_protagonist * protagonists,
+							   n_uint max_protagonists)
 {
 	n_uint c, i, j, t, agent_id, no_of_protagonists = 0;
 	mm_object * event;
@@ -113,7 +113,7 @@ n_int mm_events_protagonists(mm_events * events,
 	}
 
 	/* end time step must be less than the maximum */
-	if (timestep_end > mm_events_max(events)) {
+	if (timestep_end > mm_episodic_max(events)) {
 		return -1;
 	}
 
@@ -124,7 +124,7 @@ n_int mm_events_protagonists(mm_events * events,
 	/* for every time step */
 	for (t = timestep_start; t < timestep_end; t++) {
 		/* get the event at this time step */
-		event = mm_events_get(events, t);
+		event = mm_episodic_get(events, t);
 		/* search for agent IDs within the event */
 		for (i = 0; i < no_of_agent_properties; i++) {
 			agent_id = mm_obj_prop_get(event, agent_properties[i]);
@@ -167,13 +167,13 @@ n_int mm_events_protagonists(mm_events * events,
 }
 
 /* returns a non-zero value if the given event exists within an events list */
-n_byte mm_event_exists(mm_events * events_list, mm_object * event)
+n_byte mm_event_exists(mm_episodic * events_list, mm_object * event)
 {
-	n_uint max = mm_events_max(events_list);
+	n_uint max = mm_episodic_max(events_list);
 	n_uint i;
 
 	for (i = 0; i < max; i++) {
-		if (mm_obj_cmp(mm_events_get(events_list, i), event) == 0) {
+		if (mm_obj_cmp(mm_episodic_get(events_list, i), event) == 0) {
 			return 1;
 		}
 	}
