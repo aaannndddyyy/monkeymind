@@ -217,8 +217,18 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 {
 	n_uint attention0 = mind0->attention[MM_ATTENTION_SOCIAL_GRAPH];
 	n_uint attention1 = mind1->attention[MM_ATTENTION_SOCIAL_GRAPH];
-	mm_language_machine * m0 = &mind0->language[attention0];
-	mm_language_machine * m1 = &mind0->language[attention1];
+	mm_language_machine * m0, * m1;
+
+	if (mind0 == mind1) {
+		/* dialogue with the self */
+		m0 = &mind0->language[MM_SELF];
+	}
+	else {
+		/* dialogue with another */
+		m0 = &mind0->language[attention0];
+	}
+
+    m1 = &mind0->language[attention1];
 
 	/* A talks to B */
 	mm_language_dialogue(m0, m1,
@@ -238,14 +248,5 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 /* internal dialogue within an agent */
 void mm_dialogue_internal(monkeymind * mind)
 {
-	n_uint attention = mind->attention[MM_ATTENTION_SOCIAL_GRAPH];
-
-	mm_language_machine * m0 = &mind->language[MM_SELF];
-	mm_language_machine * m1 = &mind->language[attention];
-
-	mm_language_dialogue(m0, m1,
-						 mind->cognitive_system_state,
-						 mind->cognitive_system_state_size,
-						 &mind->episodic_buffer,
-						 &mind->episodic_buffer);
+	mm_dialogue(mind, mind);
 }

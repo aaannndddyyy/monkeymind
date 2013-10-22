@@ -520,6 +520,7 @@ static void test_language_machine()
 			changed_time_steps = 0;
 			for (t = 0; t < subimage_width; t++) {
 				mm_dialogue(&m0, &m1);
+				mm_dialogue_internal(&m0);
 				attention0 = m0.attention[MM_ATTENTION_SOCIAL_GRAPH];
 				lang0 = &m0.language[attention0];
 
