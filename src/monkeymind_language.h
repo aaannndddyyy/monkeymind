@@ -102,25 +102,25 @@ typedef struct
 void mm_language_init(mm_language_machine * lang, mm_random_seed * seed);
 void mm_language_maths(mm_language_machine * m0,
 					   mm_language_machine * m1,
-					   n_byte * data, n_uint data_size,
+					   n_byte * buffer, n_uint buffer_size,
 					   n_uint index);
 void mm_language_copy(mm_language_machine * m0,
 					  mm_language_machine * m1,
-					  n_byte * data, n_uint data_size,
+					  n_byte * buffer, n_uint buffer_size,
 					  n_uint index);
 n_int mm_language_jump(mm_language_machine * m0,
 					   mm_language_machine * m1,
-					   n_byte * data, n_uint data_size,
+					   n_byte * buffer, n_uint buffer_size,
 					   n_int index);
 n_int mm_language_get_address(n_int address,
 							  n_uint data_size);
 n_int mm_language_get_data(mm_language_machine * m0,
 						   mm_language_machine * m1,
-						   n_byte * data, n_uint data_size,
+						   n_byte * buffer, n_uint buffer_size,
 						   n_int address);
 void mm_language_set_data(mm_language_machine * m0,
 						  mm_language_machine * m1,
-						  n_byte * data, n_uint data_size,
+						  n_byte * buffer, n_uint buffer_size,
 						  n_int address, n_int value);
 n_uint addresses_per_machine();
 
