@@ -42,6 +42,7 @@
 #include "monkeymind_narrative.h"
 #include "monkeymind_language.h"
 #include "monkeymind_episodic.h"
+#include "monkeymind_motives.h"
 
 /* social graph array index of the self */
 #define MM_SELF                    0
