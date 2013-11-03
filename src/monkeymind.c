@@ -275,11 +275,18 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 		return 0;
 	}
 
-	listener_narrative_index =
-		mm_narratives_least_heard(&listener->narratives);
-
-	mm_narratives_insert(&listener->narratives,
-						 listener_narrative_index, tale[0]);
+	if (listener->narratives.length < MM_SIZE_NARRATIVES) {
+		/* narrative memory is not yet full */
+		listener_narrative_index = listener->narratives.length;
+		mm_narratives_add(&listener->narratives, tale[0]);
+	}
+	else {
+		/* narrative memory is full - choose the most forgettable */
+		listener_narrative_index =
+			mm_narratives_least_heard(&listener->narratives);
+		mm_narratives_insert(&listener->narratives,
+							 listener_narrative_index, tale[0]);
+	}
 
 	/* listener's attention is on the current narrative */
 	listener->attention[MM_ATTENTION_NARRATIVE] =
