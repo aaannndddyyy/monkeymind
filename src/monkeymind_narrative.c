@@ -181,3 +181,19 @@ n_int mm_narratives_get(mm_narratives * narratives, n_uint id)
 	}
 	return -1;
 }
+
+/* returns the array index of the least heard tale */
+n_int mm_narratives_least_heard(mm_narratives * narratives)
+{
+	n_int i, index = 0;
+	n_uint min_heard = 0;
+
+	for (i = 0; i <narratives->length; i++) {
+		if ((i == 0) ||
+			(narratives->tale[i].times_heard < min_heard)) {
+			min_heard = narratives->tale[i].times_heard;
+			index = i;
+		}
+	}
+	return index;
+}

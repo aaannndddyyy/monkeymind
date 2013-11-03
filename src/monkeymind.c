@@ -253,7 +253,34 @@ void mm_dialogue_internal(monkeymind * mind)
 
 /* transmits a narrative to the destination array of narratives.
    The index is the current narrative focus of attention of the source */
-n_int mm_dialogue_narrative(monkeymind * src, monkeymind * dest)
+n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 {
+	n_uint speaker_attention = speaker->attention[MM_ATTENTION_NARRATIVE];
+	mm_tale * tale[2];
+	n_int listener_narrative_index;
+
+	if (speaker->narratives.length == 0) return -1;
+
+	/* get the tale which is the speaker's current focus of attention */
+	tale[0] = &speaker->narratives.tale[speaker_attention %
+							  speaker->narratives.length];
+
+	tale[0]->times_told++;
+
+	listener_narrative_index =
+		mm_narratives_get(&listener->narratives, tale[0]->id);
+	if (listener_narrative_index > -1) {
+		/* the tale was already heard */
+		tale[1] = &listener->narratives.tale[listener_narrative_index];
+		tale[1]->times_heard++;
+		return 0;
+	}
+
+	listener_narrative_index =
+		mm_narratives_least_heard(&listener->narratives);
+
+	mm_narratives_insert(&listener->narratives,
+						 listener_narrative_index, tale[0]);
+
 	return 0;
 }

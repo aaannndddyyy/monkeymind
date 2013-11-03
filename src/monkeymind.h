@@ -76,7 +76,7 @@
 /* different types of attention */
 enum {
 	MM_ATTENTION_SOCIAL_GRAPH = 0,
-	MM_ATENTION_NARRATIVE,
+	MM_ATTENTION_NARRATIVE,
 	MM_ATTENTION_SIZE
 };
 
@@ -149,6 +149,6 @@ void mm_init(monkeymind * mind,
 			 mm_random_seed * seed);
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1);
 void mm_dialogue_internal(monkeymind * mind);
-n_int mm_dialogue_narrative(monkeymind * src, monkeymind * dest);
+n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener);
 
 #endif

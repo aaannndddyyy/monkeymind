@@ -57,8 +57,9 @@ typedef struct
     /* array storing the steps in the narrative */
     mm_object step[MM_MAX_TALE_SIZE];
 
-	/* the number of times */
+	/* the number of times told or heard */
 	n_uint times_told;
+	n_uint times_heard;
 } mm_tale;
 
 void mm_tale_init(mm_tale * tale, n_uint id);
@@ -96,5 +97,6 @@ n_int mm_narratives_remove(mm_narratives * narratives,
 n_int mm_narratives_add(mm_narratives * narratives,
 						mm_tale * tale);
 n_int mm_narratives_get(mm_narratives * narratives, n_uint id);
+n_int mm_narratives_least_heard(mm_narratives * narratives);
 
 #endif
