@@ -251,8 +251,7 @@ void mm_dialogue_internal(monkeymind * mind)
 	mm_dialogue(mind, mind);
 }
 
-/* transmits a narrative to the destination array of narratives.
-   The index is the current narrative focus of attention of the source */
+/* transmits a narrative from a speaker to a listener */
 n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 {
 	n_uint speaker_attention = speaker->attention[MM_ATTENTION_NARRATIVE];
@@ -282,5 +281,8 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 	mm_narratives_insert(&listener->narratives,
 						 listener_narrative_index, tale[0]);
 
+	/* listener's attention is on the current narrative */
+	listener->attention[MM_ATTENTION_NARRATIVE] =
+		(n_uint)listener_narrative_index;
 	return 0;
 }
