@@ -147,3 +147,37 @@ n_int mm_narratives_insert(mm_narratives * narratives,
 
 	return 0;
 }
+
+/* remove a tale at the given array index */
+n_int mm_narratives_remove(mm_narratives * narratives,
+						   n_uint index)
+{
+	n_uint i;
+
+	if (index >= narratives->length) return -1;
+
+	for (i = index+1; i < narratives->length; i++) {
+		mm_narratives_copy(narratives, i-1,
+						   &narratives->tale[i]);
+	}
+	narratives->length--;
+	return 0;
+}
+
+/* adds a tale to the array */
+n_int mm_narratives_add(mm_narratives * narratives,
+						mm_tale * tale)
+{
+	return mm_narratives_insert(narratives, narratives->length, tale);
+}
+
+/* returns the array index of the narrative with the given id */
+n_int mm_narratives_get(mm_narratives * narratives, n_uint id)
+{
+	n_uint i;
+
+	for (i = 0; i < narratives->length; i++) {
+		if (narratives->tale[i].id == id) return i;
+	}
+	return -1;
+}

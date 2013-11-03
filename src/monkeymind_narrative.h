@@ -91,5 +91,10 @@ void mm_narratives_copy(mm_narratives * narratives,
 n_int mm_narratives_insert(mm_narratives * narratives,
 						   n_uint index,
 						   mm_tale * tale);
+n_int mm_narratives_remove(mm_narratives * narratives,
+						   n_uint index);
+n_int mm_narratives_add(mm_narratives * narratives,
+						mm_tale * tale);
+n_int mm_narratives_get(mm_narratives * narratives, n_uint id);
 
 #endif

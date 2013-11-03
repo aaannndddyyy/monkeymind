@@ -480,6 +480,33 @@ static void test_tale()
 	printf("Ok\n");
 }
 
+static void test_narratives()
+{
+	n_int i;
+	mm_tale tale;
+	mm_narratives narratives;
+
+	printf("test_narratives...");
+
+	mm_narratives_init(&narratives);
+
+	for (i = 0; i < 10; i++) {
+		mm_tale_init(&tale, i);
+		assert(mm_narratives_add(&narratives, &tale) == 0);
+		assert(narratives.length == i+1);
+	}
+
+	assert(mm_narratives_get(&narratives, 2) == 2);
+	assert(mm_narratives_get(&narratives, 9) == 9);
+
+	assert(mm_narratives_remove(&narratives, 3) == 0);
+	assert(narratives.length == 9);
+	assert(mm_narratives_get(&narratives, 2) == 2);
+	assert(mm_narratives_get(&narratives, 4) == 3);
+
+	printf("Ok\n");
+}
+
 static void test_language_machine()
 {
 	monkeymind m0, m1;
@@ -683,6 +710,7 @@ void mm_run_tests()
 	test_communicate_social_categorisation();
 	test_episodic();
 	test_tale();
+	test_narratives();
 	test_language_get_address();
 	test_language_get_data();
 	test_language_set_data();
