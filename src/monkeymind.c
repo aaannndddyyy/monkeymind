@@ -288,6 +288,9 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 							 listener_narrative_index, tale[0]);
 	}
 
+	/* increment the number of times heard */
+	listener->narratives.tale[listener_narrative_index].times_heard++;
+
 	/* listener's attention is on the current narrative */
 	listener->attention[MM_ATTENTION_NARRATIVE] =
 		(n_uint)listener_narrative_index;
