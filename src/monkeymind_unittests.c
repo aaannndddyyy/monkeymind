@@ -405,11 +405,11 @@ static void test_episodic()
 	printf("Ok\n");
 }
 
-static void test_narrative()
+static void test_tale()
 {
 	n_int i;
 	mm_object * test1, * test2;
-	mm_narrative narrative;
+	mm_tale tale;
 	mm_object observation1, observation2;
 	/* Some properties of the first observation */
 	n_uint props1[] = {
@@ -438,10 +438,10 @@ static void test_narrative()
 		12,9756
 	};
 
-	printf("test_narrative...");
+	printf("test_tale...");
 
-	/* Create a narrative and some observation steps to insert into it */
-	mm_narrative_init(&narrative, 1234);
+	/* Create a tale and some observation steps to insert into it */
+	mm_tale_init(&tale, 1234);
 	mm_obj_init(&observation1);
 	mm_obj_init(&observation2);
 
@@ -454,26 +454,26 @@ static void test_narrative()
 	assert(mm_obj_exists(&observation1));
 	assert(mm_obj_exists(&observation2));
 
-	/* Add a first step to the narrative */
-	assert(mm_narrative_add(&narrative, &observation1, 1,2,3) == 0);
-	assert(narrative.length == 1);
-	/* Add a second step to the narrative */
-	assert(mm_narrative_add(&narrative, &observation2, 4,5,6) == 0);
-	assert(narrative.length == 2);
+	/* Add a first step to the tale */
+	assert(mm_tale_add(&tale, &observation1, 1,2,3) == 0);
+	assert(tale.length == 1);
+	/* Add a second step to the tale */
+	assert(mm_tale_add(&tale, &observation2, 4,5,6) == 0);
+	assert(tale.length == 2);
 
-	/* Retrieve the first and second steps from the narrative */
-	test1 = mm_narrative_get(&narrative, 0);
-	test2 = mm_narrative_get(&narrative, 1);
+	/* Retrieve the first and second steps from the tale */
+	test1 = mm_tale_get(&tale, 0);
+	test2 = mm_tale_get(&tale, 1);
 	/* Check that they're the same as the original observations */
 	assert(mm_obj_cmp(&observation1, test1) == 0);
 	assert(mm_obj_cmp(&observation2, test2) == 0);
 
-	/* Remove the first step from the narrative */
-	assert(mm_narrative_remove(&narrative, 0) == 0);
+	/* Remove the first step from the tale */
+	assert(mm_tale_remove(&tale, 0) == 0);
 	/* Check that the length is reduced */
-	assert(narrative.length == 1);
-	/* Get the first step in the narrative */
-	test1 = mm_narrative_get(&narrative, 0);
+	assert(tale.length == 1);
+	/* Get the first step in the tale */
+	test1 = mm_tale_get(&tale, 0);
 	/* Check that it corresponds to the second original observation */
 	assert(mm_obj_cmp(&observation2, test1) == 0);
 
@@ -682,7 +682,7 @@ void mm_run_tests()
 	test_som();
 	test_communicate_social_categorisation();
 	test_episodic();
-	test_narrative();
+	test_tale();
 	test_language_get_address();
 	test_language_get_data();
 	test_language_set_data();

@@ -38,7 +38,10 @@
 #include "monkeymind_episodic.h"
 
 /* the maximum number of steps within a narrative sequence */
-#define MM_MAX_NARRATIVE_SIZE  16
+#define MM_MAX_TALE_SIZE       16
+
+/* size of narrative memory */
+#define MM_SIZE_NARRATIVES     32
 
 typedef struct
 {
@@ -52,24 +55,41 @@ typedef struct
     n_uint length;
 
     /* array storing the steps in the narrative */
-    mm_object step[MM_MAX_NARRATIVE_SIZE];
-} mm_narrative;
+    mm_object step[MM_MAX_TALE_SIZE];
 
+	/* the number of times */
+	n_uint times_told;
+} mm_tale;
 
+void mm_tale_init(mm_tale * tale, n_uint id);
+n_int mm_tale_insert(mm_tale * tale,
+					 mm_object * obj, n_uint index,
+					 n_uint act,
+					 n_uint scene,
+					 n_uint viewpoint);
+n_int mm_tale_remove(mm_tale * tale,
+					 n_uint index);
+n_int mm_tale_add(mm_tale * tale, mm_object * obj,
+				  n_uint act,
+				  n_uint scene,
+				  n_uint viewpoint);
+mm_object * mm_tale_get(mm_tale * tale, n_uint index);
+n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale);
 
-void mm_narrative_init(mm_narrative * narrative, n_uint id);
-n_int mm_narrative_insert(mm_narrative * narrative,
-						  mm_object * obj, n_uint index,
-						  n_uint act,
-						  n_uint scene,
-						  n_uint viewpoint);
-n_int mm_narrative_remove(mm_narrative * narrative,
-						  n_uint index);
-n_int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
-					   n_uint act,
-					   n_uint scene,
-					   n_uint viewpoint);
-mm_object * mm_narrative_get(mm_narrative * narrative, n_uint index);
-n_int mm_narrative_from_events(mm_episodic * events, mm_narrative * narrative);
+/* ===================================================================== */
+
+typedef struct
+{
+	n_uint length;
+	mm_tale tale[MM_SIZE_NARRATIVES];
+} mm_narratives;
+
+void mm_narratives_init(mm_narratives * narratives);
+void mm_narratives_copy(mm_narratives * narratives,
+						n_uint index,
+						mm_tale * tale);
+n_int mm_narratives_insert(mm_narratives * narratives,
+						   n_uint index,
+						   mm_tale * tale);
 
 #endif

@@ -31,43 +31,45 @@
 
 #include "monkeymind_narrative.h"
 
-void mm_narrative_init(mm_narrative * narrative, n_uint id)
+void mm_tale_init(mm_tale * tale, n_uint id)
 {
-	narrative->length = 0;
-	memset((void*)narrative->step, '\0',
-		   MM_MAX_NARRATIVE_SIZE*sizeof(mm_object));
+	tale->id = id;
+	tale->length = 0;
+	tale->times_told = 0;
+	memset((void*)tale->step, '\0',
+		   MM_MAX_TALE_SIZE*sizeof(mm_object));
 }
 
 /* remove a step from the narrative */
-n_int mm_narrative_remove(mm_narrative * narrative,
-						  n_uint index)
+n_int mm_tale_remove(mm_tale * tale,
+					 n_uint index)
 {
 	n_uint i;
 
-	if ((narrative->length == 0) ||
-		(index >= narrative->length) ||
-		(index >= MM_MAX_NARRATIVE_SIZE)) {
+	if ((tale->length == 0) ||
+		(index >= tale->length) ||
+		(index >= MM_MAX_TALE_SIZE)) {
 		return -1;
 	}
 
-	for (i = index+1; i < narrative->length; i++) {
-		mm_obj_copy(&narrative->step[i],
-					&narrative->step[i-1]);
+	for (i = index+1; i < tale->length; i++) {
+		mm_obj_copy(&tale->step[i],
+					&tale->step[i-1]);
 	}
-	narrative->length--;
+	tale->length--;
 
 	return 0;
 }
 
 /* insert a narrative step at a given index */
-n_int mm_narrative_insert(mm_narrative * narrative,
-						  mm_object * obj, n_uint index,
-						  n_uint act,
-						  n_uint scene,
-						  n_uint viewpoint)
+n_int mm_tale_insert(mm_tale * tale,
+					 mm_object * obj, n_uint index,
+					 n_uint act,
+					 n_uint scene,
+					 n_uint viewpoint)
 {
-	if ((index > narrative->length) ||
-		(narrative->length >= MM_MAX_NARRATIVE_SIZE)) {
+	if ((index > tale->length) ||
+		(tale->length >= MM_MAX_TALE_SIZE)) {
 		return -1;
 	}
 	mm_obj_prop_add(obj,
@@ -76,38 +78,72 @@ n_int mm_narrative_insert(mm_narrative * narrative,
 					MM_PROPERTY_NARRATIVE_SCENE, scene);
 	mm_obj_prop_add(obj,
 					MM_PROPERTY_NARRATIVE_VIEWPOINT, viewpoint);
-	mm_obj_copy(obj, &narrative->step[index]);
+	mm_obj_copy(obj, &tale->step[index]);
 	return 0;
 }
 
 /* adds a narrative step */
-n_int mm_narrative_add(mm_narrative * narrative, mm_object * obj,
-					   n_uint act,
-					   n_uint scene,
-					   n_uint viewpoint)
+n_int mm_tale_add(mm_tale * tale, mm_object * obj,
+				  n_uint act,
+				  n_uint scene,
+				  n_uint viewpoint)
 {
-	if (narrative->length >= MM_MAX_NARRATIVE_SIZE) return -1;
-	if (mm_narrative_insert(narrative, obj, narrative->length,
-							act, scene, viewpoint) != 0) {
+	if (tale->length >= MM_MAX_TALE_SIZE) return -1;
+	if (mm_tale_insert(tale, obj, tale->length,
+					   act, scene, viewpoint) != 0) {
 		return -1;
 	}
-	narrative->length++;
+	tale->length++;
 	return 0;
 }
 
 /* gets a narrative step */
-mm_object * mm_narrative_get(mm_narrative * narrative, n_uint index)
+mm_object * mm_tale_get(mm_tale * tale, n_uint index)
 {
-	if ((index > narrative->length) ||
-		(narrative->length >= MM_MAX_NARRATIVE_SIZE)) {
+	if ((index > tale->length) ||
+		(tale->length >= MM_MAX_TALE_SIZE)) {
 		return 0;
 	}
-	return &narrative->step[index];
+	return &tale->step[index];
 }
 
 /* attempts to generate a narrative from a sequence of events */
-n_int mm_narrative_from_events(mm_episodic * events, mm_narrative * narrative)
+n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale)
 {
 	/* TODO */
 	return -1;
+}
+
+/* ======================================================================== */
+
+void mm_narratives_init(mm_narratives * narratives)
+{
+	narratives->length = 0;
+}
+
+void mm_narratives_copy(mm_narratives * narratives,
+						n_uint index,
+						mm_tale * tale)
+{
+	memcpy((void*)&narratives->tale[index],
+		   (void*)tale,
+		   sizeof(mm_tale));
+}
+
+/* inserts a narrative into the array of narratives at the given
+   array index */
+n_int mm_narratives_insert(mm_narratives * narratives,
+						   n_uint index,
+						   mm_tale * tale)
+{
+	if (index >= MM_SIZE_NARRATIVES) return -1;
+	if (index > narratives->length) return -2;
+
+	mm_narratives_copy(narratives, index, tale);
+
+	if (index == narratives->length) {
+		narratives->length++;
+	}
+
+	return 0;
 }

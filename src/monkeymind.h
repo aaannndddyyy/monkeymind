@@ -47,9 +47,6 @@
 /* social graph array index of the self */
 #define MM_SELF                    0
 
-/* size of narrative memory */
-#define MM_SIZE_NARRATIVES         32
-
 /* maximum size of the social graph */
 #define MM_SIZE_SOCIAL_GRAPH       32
 
@@ -79,6 +76,7 @@
 /* different types of attention */
 enum {
 	MM_ATTENTION_SOCIAL_GRAPH = 0,
+	MM_ATENTION_NARRATIVE,
 	MM_ATTENTION_SIZE
 };
 
@@ -109,7 +107,7 @@ typedef struct
 	/* memory which may contain a number of narratives
 	   which have been created from the sequence of
 	   events */
-	mm_narrative narrative[MM_SIZE_NARRATIVES];
+	mm_narratives narratives;
 
 	/* details of each known agent */
     mm_object social_graph[MM_SIZE_SOCIAL_GRAPH];
@@ -151,5 +149,6 @@ void mm_init(monkeymind * mind,
 			 mm_random_seed * seed);
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1);
 void mm_dialogue_internal(monkeymind * mind);
+n_int mm_dialogue_narrative(monkeymind * src, monkeymind * dest);
 
 #endif

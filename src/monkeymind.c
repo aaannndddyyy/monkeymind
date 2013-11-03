@@ -125,8 +125,8 @@ void mm_init(monkeymind * mind,
 
 	name = MM_NAME(sex,first_name,surname);
 
-	memset((void*)mind->narrative, '\0',
-		   MM_SIZE_NARRATIVES * sizeof(mm_narrative));
+	memset((void*)&mind->narratives, '\0',
+		   sizeof(mm_narratives));
 	memset((void*)mind->social_graph, '\0',
 		   MM_SIZE_SOCIAL_GRAPH * sizeof(mm_object));
 	memset((void*)mind->social_stereotype, '\0',
@@ -249,4 +249,11 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 void mm_dialogue_internal(monkeymind * mind)
 {
 	mm_dialogue(mind, mind);
+}
+
+/* transmits a narrative to the destination array of narratives.
+   The index is the current narrative focus of attention of the source */
+n_int mm_dialogue_narrative(monkeymind * src, monkeymind * dest)
+{
+	return 0;
 }
