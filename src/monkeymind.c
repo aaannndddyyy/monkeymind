@@ -172,24 +172,29 @@ void mm_init(monkeymind * mind,
 	/* no cognitive system specified */
 	mind->cognitive_system_state = 0;
 	mind->cognitive_system_state_size = 0;
+
+	/* during dialog where to start in the language program
+	   and how many steps to continue for */
+	mind->language_ptr = 0;
 }
 
 /* A dialogue between two language machines.
    These would typically be the inner and outer systems */
-static void mm_language_dialogue(mm_language_machine * m0,
+static void mm_language_dialogue(monkeymind * mind,
+								 mm_language_machine * m0,
 								 mm_language_machine * m1,
 								 n_byte * data, n_uint data_size,
 								 mm_episodic * e0,
 								 mm_episodic * e1)
 {
-	n_uint index;
-	n_int ctr = 0;
-	const n_uint instructions_per_update =
-		MM_SIZE_LANGUAGE_INSTRUCTIONS;
+	n_uint index = 0;
+	n_int ctr = (n_int)mind->language_ptr; /* program counter */
+	n_int instruction_type;
 
-	for (index = 0;
-		 index < instructions_per_update; index++, ctr++) {
-		switch(m0->instruction[ctr].function%MM_INSTRUCTIONS) {
+	/* for each step in the language program */
+	while (index < MM_SIZE_LANGUAGE_INSTRUCTIONS) {
+		instruction_type = m0->instruction[ctr].function%MM_INSTRUCTIONS;
+		switch(instruction_type) {
 		case MM_INSTRUCTION_MATHS: {
 			mm_language_maths(m0, m1, data, data_size, ctr);
 			break;
@@ -206,10 +211,23 @@ static void mm_language_dialogue(mm_language_machine * m0,
 			break;
 		}
 		}
+
+		index++;
+		ctr++;
+
+		/* keep the program counter within range */
 		if (ctr >= MM_SIZE_LANGUAGE_INSTRUCTIONS) {
 			ctr -= MM_SIZE_LANGUAGE_INSTRUCTIONS;
 		}
+
+		/* the program stops here */
+		if (instruction_type == MM_INSTRUCTION_HALT) {
+			break;
+		}
 	}
+
+	/* record the program counter position */
+    mind->language_ptr = (n_uint)ctr;
 }
 
 /* external dialogue between two agents */
@@ -231,14 +249,14 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
     m1 = &mind0->language[attention1];
 
 	/* A talks to B */
-	mm_language_dialogue(m0, m1,
+	mm_language_dialogue(mind0, m0, m1,
 						 mind0->cognitive_system_state,
 						 mind0->cognitive_system_state_size,
 						 &mind0->episodic_buffer,
 						 &mind1->episodic_buffer);
 
 	/* B replies to A */
-	mm_language_dialogue(m1, m0,
+	mm_language_dialogue(mind1, m1, m0,
 						 mind1->cognitive_system_state,
 						 mind1->cognitive_system_state_size,
 						 &mind1->episodic_buffer,
@@ -261,11 +279,13 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 	if (speaker->narratives.length == 0) return -1;
 
 	/* get the tale which is the speaker's current focus of attention */
-	tale[0] = &speaker->narratives.tale[speaker_attention %
-							  speaker->narratives.length];
+	tale[0] =
+		&speaker->narratives.tale[speaker_attention %
+								  speaker->narratives.length];
 
 	tale[0]->times_told++;
 
+	/* does the listener already have the same narrative? */
 	listener_narrative_index =
 		mm_narratives_get(&listener->narratives, tale[0]->id);
 	if (listener_narrative_index > -1) {
@@ -275,6 +295,7 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 		return 0;
 	}
 
+	/* listener has not heard the tale */
 	if (listener->narratives.length < MM_SIZE_NARRATIVES) {
 		/* narrative memory is not yet full */
 		listener_narrative_index = listener->narratives.length;
