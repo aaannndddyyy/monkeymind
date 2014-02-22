@@ -42,6 +42,22 @@ static void test_init()
     printf("Ok\n");
 }
 
+static void test_spatial()
+{
+    monkeymind mind;
+    n_int i;
+
+    printf("test_spatial...");
+
+    mm_init(&mind, 1000, MM_SEX_FEMALE,3,6,NULL);
+
+    for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL; i++) {
+        assert(mind.spatial[i].id == i);
+    }
+
+    printf("Ok\n");
+}
+
 static void test_object_add_remove_properties()
 {
     mm_object obj;
@@ -703,6 +719,7 @@ static void test_language_set_data()
 void mm_run_tests()
 {
     test_init();
+    test_spatial();
     test_object_add_remove_properties();
     test_name();
     test_social_meet();

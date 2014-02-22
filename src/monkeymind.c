@@ -81,7 +81,7 @@ static void mm_init_spatial(monkeymind * mind)
 {
     n_int i;
 
-    for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL;i++) {
+    for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL; i++) {
         mind->spatial[i].id = i;
     }
 }
