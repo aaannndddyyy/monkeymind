@@ -111,8 +111,10 @@ typedef struct
     n_uint property_type[MM_MAX_OBJECT_PROPERTIES];
     n_uint property_value[MM_MAX_OBJECT_PROPERTIES];
 
-    /* how often has this feature been observed or known */
+    /* how often has this property been observed or known */
     n_uint property_frequency[MM_MAX_OBJECT_PROPERTIES];
+
+    /* the number of observations of this object */
     n_uint observations;
 } mm_object;
 
