@@ -37,24 +37,21 @@
 #include "monkeymind_object.h"
 #include "monkeymind_episodic.h"
 
-/* the maximum number of steps within a narrative sequence */
+/* the maximum number of steps within a tale sequence */
 #define MM_MAX_TALE_SIZE       16
-
-/* size of narrative memory */
-#define MM_SIZE_NARRATIVES     32
 
 typedef struct
 {
-    /* a unique reference for the narrative */
+    /* a unique reference for the tale */
     n_uint id;
 
-    /* properties of the narrative */
+    /* properties of the tale */
     mm_object properties;
 
-    /* the number of steps in the narrative */
+    /* the number of steps in the tale */
     n_uint length;
 
-    /* array storing the steps in the narrative */
+    /* array storing the steps in the tale */
     mm_object step[MM_MAX_TALE_SIZE];
 
     /* the number of times told or heard */

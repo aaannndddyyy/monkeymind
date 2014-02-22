@@ -40,7 +40,7 @@ void mm_tale_init(mm_tale * tale, n_uint id)
            MM_MAX_TALE_SIZE*sizeof(mm_object));
 }
 
-/* remove a step from the narrative */
+/* remove a step from the tale */
 n_int mm_tale_remove(mm_tale * tale,
                      n_uint index)
 {
@@ -61,7 +61,7 @@ n_int mm_tale_remove(mm_tale * tale,
     return 0;
 }
 
-/* insert a narrative step at a given index */
+/* insert a tale step at a given index */
 n_int mm_tale_insert(mm_tale * tale,
                      mm_object * obj, n_uint index,
                      n_uint act,
@@ -82,7 +82,7 @@ n_int mm_tale_insert(mm_tale * tale,
     return 0;
 }
 
-/* adds a narrative step */
+/* adds a tale step */
 n_int mm_tale_add(mm_tale * tale, mm_object * obj,
                   n_uint act,
                   n_uint scene,
@@ -97,7 +97,7 @@ n_int mm_tale_add(mm_tale * tale, mm_object * obj,
     return 0;
 }
 
-/* gets a narrative step */
+/* gets a tale step */
 mm_object * mm_tale_get(mm_tale * tale, n_uint index)
 {
     if ((index > tale->length) ||
@@ -107,7 +107,7 @@ mm_object * mm_tale_get(mm_tale * tale, n_uint index)
     return &tale->step[index];
 }
 
-/* attempts to generate a narrative from a sequence of events */
+/* attempts to generate a tale from a sequence of events */
 n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale)
 {
     /* TODO */

@@ -38,6 +38,9 @@
 #include "monkeymind_episodic.h"
 #include "monkeymind_tale.h"
 
+/* size of narrative memory */
+#define MM_SIZE_NARRATIVES     32
+
 typedef struct
 {
     n_uint length;
