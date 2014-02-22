@@ -29,7 +29,7 @@
 
 ****************************************************************/
 
-#include "monkeymind_narrative.h"
+#include "monkeymind_tale.h"
 
 void mm_tale_init(mm_tale * tale, n_uint id)
 {
@@ -112,88 +112,4 @@ n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale)
 {
     /* TODO */
     return -1;
-}
-
-/* ======================================================================== */
-
-void mm_narratives_init(mm_narratives * narratives)
-{
-    narratives->length = 0;
-}
-
-void mm_narratives_copy(mm_narratives * narratives,
-                        n_uint index,
-                        mm_tale * tale)
-{
-    memcpy((void*)&narratives->tale[index],
-           (void*)tale,
-           sizeof(mm_tale));
-}
-
-/* inserts a narrative into the array of narratives at the given
-   array index */
-n_int mm_narratives_insert(mm_narratives * narratives,
-                           n_uint index,
-                           mm_tale * tale)
-{
-    if (index >= MM_SIZE_NARRATIVES) return -1;
-    if (index > narratives->length) return -2;
-
-    mm_narratives_copy(narratives, index, tale);
-
-    if (index == narratives->length) {
-        narratives->length++;
-    }
-
-    return 0;
-}
-
-/* remove a tale at the given array index */
-n_int mm_narratives_remove(mm_narratives * narratives,
-                           n_uint index)
-{
-    n_uint i;
-
-    if (index >= narratives->length) return -1;
-
-    for (i = index+1; i < narratives->length; i++) {
-        mm_narratives_copy(narratives, i-1,
-                           &narratives->tale[i]);
-    }
-    narratives->length--;
-    return 0;
-}
-
-/* adds a tale to the array */
-n_int mm_narratives_add(mm_narratives * narratives,
-                        mm_tale * tale)
-{
-    return mm_narratives_insert(narratives, narratives->length, tale);
-}
-
-/* returns the array index of the narrative with the given id */
-n_int mm_narratives_get(mm_narratives * narratives, n_uint id)
-{
-    n_uint i;
-
-    for (i = 0; i < narratives->length; i++) {
-        if (narratives->tale[i].id == id) return i;
-    }
-    return -1;
-}
-
-/* returns the array index of the least heard tale */
-n_int mm_narratives_least_heard(mm_narratives * narratives)
-{
-    n_int i, index = 0;
-    n_uint min_heard = 0;
-
-    for (i = 0; i <narratives->length; i++) {
-        if ((i == 0) ||
-            (narratives->tale[i].times_heard < min_heard)) {
-            min_heard = narratives->tale[i].times_heard;
-            index = i;
-        }
-    }
-    return index;
 }

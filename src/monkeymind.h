@@ -39,7 +39,7 @@
 #include "monkeymind_emotion.h"
 #include "monkeymind_object.h"
 #include "monkeymind_som.h"
-#include "monkeymind_narrative.h"
+#include "monkeymind_narratives.h"
 #include "monkeymind_language.h"
 #include "monkeymind_episodic.h"
 #include "monkeymind_motives.h"
