@@ -57,7 +57,7 @@ n_int mm_obj_prop_range(n_uint property_type,
 
         /* what */
         MM_PROPERTY_OBJECT, 0,0,
-        MM_PROPERTY_NARRATIVE, 0,0,
+        MM_PROPERTY_TALE, 0,0,
         MM_PROPERTY_EMOTION, 0,0,
         MM_PROPERTY_HEIGHT, 0,0,
         MM_PROPERTY_WEIGHT, 0,0,
@@ -66,10 +66,10 @@ n_int mm_obj_prop_range(n_uint property_type,
 
         MM_PROPERTY_FRIEND_OR_FOE, 0,0,
         MM_PROPERTY_ATTRACTION, 0,0,
-        MM_PROPERTY_NARRATIVE_PLOT, 0,0,
-        MM_PROPERTY_NARRATIVE_ACT, 0,0,
-        MM_PROPERTY_NARRATIVE_SCENE, 0,0,
-        MM_PROPERTY_NARRATIVE_VIEWPOINT, 0,0,
+        MM_PROPERTY_TALE_PLOT, 0,0,
+        MM_PROPERTY_TALE_ACT, 0,0,
+        MM_PROPERTY_TALE_SCENE, 0,0,
+        MM_PROPERTY_TALE_VIEWPOINT, 0,0,
 
         /* where */
         MM_PROPERTY_PLACE_X, 0,0,

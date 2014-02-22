@@ -73,11 +73,11 @@ n_int mm_tale_insert(mm_tale * tale,
         return -1;
     }
     mm_obj_prop_add(obj,
-                    MM_PROPERTY_NARRATIVE_ACT, act);
+                    MM_PROPERTY_TALE_ACT, act);
     mm_obj_prop_add(obj,
-                    MM_PROPERTY_NARRATIVE_SCENE, scene);
+                    MM_PROPERTY_TALE_SCENE, scene);
     mm_obj_prop_add(obj,
-                    MM_PROPERTY_NARRATIVE_VIEWPOINT, viewpoint);
+                    MM_PROPERTY_TALE_VIEWPOINT, viewpoint);
     mm_obj_copy(obj, &tale->step[index]);
     return 0;
 }
