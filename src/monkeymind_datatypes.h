@@ -40,17 +40,17 @@ typedef const char *        n_constant_string;
 
 typedef char                n_string_block[STRING_BLOCK_SIZE];
 
-typedef	unsigned char	    n_byte;
-typedef	unsigned short	    n_byte2;
-typedef	unsigned int	    n_c_uint;
-typedef	int				    n_c_int;
+typedef unsigned char       n_byte;
+typedef unsigned short      n_byte2;
+typedef unsigned int        n_c_uint;
+typedef int                 n_c_int;
 
 #ifndef _WIN64
-typedef	unsigned long       n_uint;
-typedef	long			    n_int;
+typedef unsigned long       n_uint;
+typedef long                n_int;
 #else
-typedef	unsigned long long	n_uint;
-typedef	long long			n_int;
+typedef unsigned long long  n_uint;
+typedef long long           n_int;
 #endif
 
 #endif

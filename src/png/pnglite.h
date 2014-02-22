@@ -12,7 +12,7 @@
     1. The origin of this software must not be misrepresented; you must not
     claim that you wrote the original software. If you use this software
     in a product, an acknowledgment in the product documentation would be
-    appreciated but is not required.  
+    appreciated but is not required.
 
     2. Altered source versions must be plainly marked as such, and must not be
     misrepresented as being the original software.
@@ -33,24 +33,24 @@ extern "C"{
 #endif
 
 /*
-	Enumerations for pnglite.
-	Negative numbers are error codes and 0 and up are okay responses.
+    Enumerations for pnglite.
+    Negative numbers are error codes and 0 and up are okay responses.
 */
 
   enum
     {
-      PNG_DONE				= 1,
-      PNG_NO_ERROR			= 0,
-      PNG_FILE_ERROR			= -1,
-      PNG_HEADER_ERROR		= -2,
-      PNG_IO_ERROR			= -3,
-      PNG_EOF_ERROR			= -4,
-      PNG_CRC_ERROR			= -5,
-      PNG_MEMORY_ERROR		= -6,
-      PNG_ZLIB_ERROR			= -7,
-      PNG_UNKNOWN_FILTER		= -8,
-      PNG_NOT_SUPPORTED		= -9,
-      PNG_WRONG_ARGUMENTS		= -10
+      PNG_DONE              = 1,
+      PNG_NO_ERROR          = 0,
+      PNG_FILE_ERROR            = -1,
+      PNG_HEADER_ERROR      = -2,
+      PNG_IO_ERROR          = -3,
+      PNG_EOF_ERROR         = -4,
+      PNG_CRC_ERROR         = -5,
+      PNG_MEMORY_ERROR      = -6,
+      PNG_ZLIB_ERROR            = -7,
+      PNG_UNKNOWN_FILTER        = -8,
+      PNG_NOT_SUPPORTED     = -9,
+      PNG_WRONG_ARGUMENTS       = -10
     };
 
   /*
@@ -59,11 +59,11 @@ extern "C"{
 
   enum
     {
-      PNG_GREYSCALE			= 0,
-      PNG_TRUECOLOR			= 2,
-      PNG_INDEXED				= 3,
-      PNG_GREYSCALE_ALPHA		= 4,
-      PNG_TRUECOLOR_ALPHA		= 6
+      PNG_GREYSCALE         = 0,
+      PNG_TRUECOLOR         = 2,
+      PNG_INDEXED               = 3,
+      PNG_GREYSCALE_ALPHA       = 4,
+      PNG_TRUECOLOR_ALPHA       = 6
     };
 
   /*
@@ -77,22 +77,22 @@ extern "C"{
 
   typedef struct
   {
-    void*					zs;				/* pointer to z_stream */
-    png_read_callback_t		read_fun;
-    png_write_callback_t	write_fun;
-    void*					user_pointer;
+    void*                   zs;             /* pointer to z_stream */
+    png_read_callback_t     read_fun;
+    png_write_callback_t    write_fun;
+    void*                   user_pointer;
 
-    unsigned char*			png_data;
-    unsigned				png_datalen;
+    unsigned char*          png_data;
+    unsigned                png_datalen;
 
-    unsigned				width;
-    unsigned				height;
-    unsigned char			depth;
-    unsigned char			color_type;
-    unsigned char			compression_method;
-    unsigned char			filter_method;
-    unsigned char			interlace_method;
-    unsigned char			bpp;
+    unsigned                width;
+    unsigned                height;
+    unsigned char           depth;
+    unsigned char           color_type;
+    unsigned char           compression_method;
+    unsigned char           filter_method;
+    unsigned char           interlace_method;
+    unsigned char           bpp;
   }png_t;
 
   /*
@@ -145,9 +145,9 @@ extern "C"{
     The callback will be called like fwrite.
 
     Reading:
-    The callback will be called each time pnglite needs more data. The callback should read as much data as requested, 
-    or return 0. This should always be possible if the PNG is sane.	If the output-buffer is a null-pointer the callback 
-    should only skip ahead the specified number of elements. If the callback is a null-pointer the user_pointer will be 
+    The callback will be called each time pnglite needs more data. The callback should read as much data as requested,
+    or return 0. This should always be possible if the PNG is sane. If the output-buffer is a null-pointer the callback
+    should only skip ahead the specified number of elements. If the callback is a null-pointer the user_pointer will be
     treated as a file pointer (use png_open_file instead).
 
     Parameters:
@@ -193,7 +193,7 @@ extern "C"{
     Function: png_get_data
 
     This function decodes the opened png file and stores the result in data. data should be big enough to hold the decoded png. Required size will be:
-	
+
     > width*height*(bytes per pixel)
 
     Parameters:
@@ -214,7 +214,7 @@ extern "C"{
 
     Parameters:
     png - png to close.
-	
+
     Returns:
     PNG_NO_ERROR
   */

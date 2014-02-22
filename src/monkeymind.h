@@ -67,87 +67,87 @@
 
 /* name is stored as a single 32bit number,
    and contains sex, first name and last name */
-#define MM_NAME(sex, first_name, surname)						\
-	( ((((sex)&255)<<8)|((first_name)&255)) | ((surname)<<16) )
+#define MM_NAME(sex, first_name, surname)                       \
+    ( ((((sex)&255)<<8)|((first_name)&255)) | ((surname)<<16) )
 #define MM_SEX(name)             (((name)>>8)&255)
 #define MM_FIRST_NAME(name)      ((name)&255)
 #define MM_SURNAME(name)         ((name)>>16)
 
 /* different types of attention */
 enum {
-	MM_ATTENTION_SOCIAL_GRAPH = 0,
-	MM_ATTENTION_NARRATIVE,
-	MM_ATTENTION_SIZE
+    MM_ATTENTION_SOCIAL_GRAPH = 0,
+    MM_ATTENTION_NARRATIVE,
+    MM_ATTENTION_SIZE
 };
 
 typedef struct
 {
-	n_int value[MM_SOCIAL_CATEGORIES_DIMENSION*
-				MM_SOCIAL_CATEGORIES_DIMENSION];
+    n_int value[MM_SOCIAL_CATEGORIES_DIMENSION*
+                MM_SOCIAL_CATEGORIES_DIMENSION];
 } mm_som_categories;
 
 typedef struct
 {
     n_uint id;
 
-	mm_random_seed seed;
+    mm_random_seed seed;
 
-	/* intrinsic properties of the individual */
-	mm_object * properties;
+    /* intrinsic properties of the individual */
+    mm_object * properties;
 
-	/* self-organising map for classifying met individuals */
-	mm_som social_categories;
+    /* self-organising map for classifying met individuals */
+    mm_som social_categories;
 
-	/* friend or foe categories */
-	mm_som_categories category[MM_CATEGORIES];
+    /* friend or foe categories */
+    mm_som_categories category[MM_CATEGORIES];
 
-	/* Memory of recent sequences of events */
-	mm_episodic episodic_buffer;
+    /* Memory of recent sequences of events */
+    mm_episodic episodic_buffer;
 
-	/* memory which may contain a number of narratives
-	   which have been created from the sequence of
-	   events */
-	mm_narratives narratives;
+    /* memory which may contain a number of narratives
+       which have been created from the sequence of
+       events */
+    mm_narratives narratives;
 
-	/* details of each known agent */
+    /* details of each known agent */
     mm_object social_graph[MM_SIZE_SOCIAL_GRAPH];
 
-	/* different types of attention */
-	n_uint attention[MM_ATTENTION_SIZE];
+    /* different types of attention */
+    n_uint attention[MM_ATTENTION_SIZE];
 
-	/* abstracted individuals */
+    /* abstracted individuals */
     mm_object social_stereotype[MM_SIZE_SOCIAL_STEREOTYPES];
 
-	/* language machinery associated with each social graph entry */
-	mm_language_machine language[MM_SIZE_SOCIAL_GRAPH];
-	n_uint language_ptr;
+    /* language machinery associated with each social graph entry */
+    mm_language_machine language[MM_SIZE_SOCIAL_GRAPH];
+    n_uint language_ptr;
 
-	/* spatial memory */
-	mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
+    /* spatial memory */
+    mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
 
-	/* pointer to the state of the cognitive system */
-	n_byte * cognitive_system_state;
-	/* cognitive system state size in bytes */
-	n_uint cognitive_system_state_size;
+    /* pointer to the state of the cognitive system */
+    n_byte * cognitive_system_state;
+    /* cognitive system state size in bytes */
+    n_uint cognitive_system_state_size;
 } monkeymind;
 
 void mm_observe(monkeymind * mind, mm_object * observation);
 void mm_add_property(monkeymind * mind,
-					 n_uint property_type,
-					 n_uint property_value);
+                     n_uint property_type,
+                     n_uint property_value);
 void mm_set_property(monkeymind * mind,
-					 n_uint property_type,
-					 n_uint property_value);
+                     n_uint property_type,
+                     n_uint property_value);
 n_uint mm_get_property(monkeymind * mind,
-					   n_uint property_type);
+                       n_uint property_type);
 void mm_remove_property(monkeymind * mind,
-						n_uint property_type);
+                        n_uint property_type);
 void mm_init(monkeymind * mind,
-			 n_uint id,
-			 n_byte sex,
-			 n_byte first_name,
-			 n_byte surname,
-			 mm_random_seed * seed);
+             n_uint id,
+             n_byte sex,
+             n_byte first_name,
+             n_byte surname,
+             mm_random_seed * seed);
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1);
 void mm_dialogue_internal(monkeymind * mind);
 n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener);

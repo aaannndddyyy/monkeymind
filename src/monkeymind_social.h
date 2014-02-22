@@ -43,15 +43,15 @@
 #define MM_NEUTRAL                 65535
 
 #define SOCIAL_GRAPH_ENTRY_EXISTS(mind,index) \
-	(!((mm_obj_prop_get(&((mind)->social_graph[index]), MM_PROPERTY_MEETER) == 0) && \
-	   (mm_obj_prop_get(&((mind)->social_graph[index]), MM_PROPERTY_MET) == 0)))
+    (!((mm_obj_prop_get(&((mind)->social_graph[index]), MM_PROPERTY_MEETER) == 0) && \
+       (mm_obj_prop_get(&((mind)->social_graph[index]), MM_PROPERTY_MET) == 0)))
 
 n_int mm_social_index_from_id(monkeymind * mind, n_uint met_id);
 n_int mm_social_index_from_name(monkeymind * mind, n_uint met_name);
 void mm_social_meet(monkeymind * meeter, monkeymind * met);
 void mm_social_speak(monkeymind * speaker, monkeymind * listener);
 void mm_communicate_social_categorisation(monkeymind * mind,
-										  n_int index,
-										  monkeymind * other);
+                                          n_int index,
+                                          monkeymind * other);
 
 #endif

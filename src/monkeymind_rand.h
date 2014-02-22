@@ -38,7 +38,7 @@
 
 typedef struct
 {
-	n_uint value[4];
+    n_uint value[4];
 } mm_random_seed;
 
 n_uint mm_rand(mm_random_seed * seed);

@@ -34,248 +34,248 @@
 /* initialise an object */
 void mm_obj_init(mm_object * obj)
 {
-	obj->length = 0;
-	obj->observations = 0;
+    obj->length = 0;
+    obj->observations = 0;
 }
 
 /* returns the range of a given object property type */
 n_int mm_obj_prop_range(n_uint property_type,
-						n_uint * min, n_uint * max)
+                        n_uint * min, n_uint * max)
 {
     const n_uint property_range[] = {
-	    MM_PROPERTY_NONE, 0,0,
+        MM_PROPERTY_NONE, 0,0,
 
-		/* who */
-		MM_PROPERTY_MEETER, 0,0,
-		MM_PROPERTY_MET, 0,0,
-		MM_PROPERTY_NAME, 0,0,
-		MM_PROPERTY_MEETER_NAME, 0,0,
-		MM_PROPERTY_MET_NAME, 0,0,
-		MM_PROPERTY_RELATION, 0,0,
-		MM_PROPERTY_SOCIAL_X, 0, 64,
-		MM_PROPERTY_SOCIAL_Y, 0, 64,
+        /* who */
+        MM_PROPERTY_MEETER, 0,0,
+        MM_PROPERTY_MET, 0,0,
+        MM_PROPERTY_NAME, 0,0,
+        MM_PROPERTY_MEETER_NAME, 0,0,
+        MM_PROPERTY_MET_NAME, 0,0,
+        MM_PROPERTY_RELATION, 0,0,
+        MM_PROPERTY_SOCIAL_X, 0, 64,
+        MM_PROPERTY_SOCIAL_Y, 0, 64,
 
-		/* what */
-		MM_PROPERTY_OBJECT, 0,0,
-		MM_PROPERTY_NARRATIVE, 0,0,
-		MM_PROPERTY_EMOTION, 0,0,
-		MM_PROPERTY_HEIGHT, 0,0,
-		MM_PROPERTY_WEIGHT, 0,0,
-		MM_PROPERTY_HAIR_LENGTH, 0,0,
-		MM_PROPERTY_HAIR_COLOUR, 0,0,
+        /* what */
+        MM_PROPERTY_OBJECT, 0,0,
+        MM_PROPERTY_NARRATIVE, 0,0,
+        MM_PROPERTY_EMOTION, 0,0,
+        MM_PROPERTY_HEIGHT, 0,0,
+        MM_PROPERTY_WEIGHT, 0,0,
+        MM_PROPERTY_HAIR_LENGTH, 0,0,
+        MM_PROPERTY_HAIR_COLOUR, 0,0,
 
-		MM_PROPERTY_FRIEND_OR_FOE, 0,0,
-		MM_PROPERTY_ATTRACTION, 0,0,
-		MM_PROPERTY_NARRATIVE_PLOT, 0,0,
-		MM_PROPERTY_NARRATIVE_ACT, 0,0,
-		MM_PROPERTY_NARRATIVE_SCENE, 0,0,
-		MM_PROPERTY_NARRATIVE_VIEWPOINT, 0,0,
+        MM_PROPERTY_FRIEND_OR_FOE, 0,0,
+        MM_PROPERTY_ATTRACTION, 0,0,
+        MM_PROPERTY_NARRATIVE_PLOT, 0,0,
+        MM_PROPERTY_NARRATIVE_ACT, 0,0,
+        MM_PROPERTY_NARRATIVE_SCENE, 0,0,
+        MM_PROPERTY_NARRATIVE_VIEWPOINT, 0,0,
 
-		/* where */
-		MM_PROPERTY_PLACE_X, 0,0,
-		MM_PROPERTY_PLACE_Y, 0,0,
-		MM_PROPERTY_PLACE_Z, 0,0,
-		MM_PROPERTY_TERRITORY, 0,0,
+        /* where */
+        MM_PROPERTY_PLACE_X, 0,0,
+        MM_PROPERTY_PLACE_Y, 0,0,
+        MM_PROPERTY_PLACE_Z, 0,0,
+        MM_PROPERTY_TERRITORY, 0,0,
 
-		/* when */
-		MM_PROPERTY_DAY, 0,0,
-		MM_PROPERTY_SUBJECTIVE_TIME, 0,0,
-	};
+        /* when */
+        MM_PROPERTY_DAY, 0,0,
+        MM_PROPERTY_SUBJECTIVE_TIME, 0,0,
+    };
 
-	*min = 0;
-	*max = 0;
+    *min = 0;
+    *max = 0;
 
-	if (property_type >= MM_PROPERTIES) {
-		printf("Property type out of range\n");
-		return -1;
-	}
-	*min = property_range[property_type*3 + 1];
-	*max = property_range[property_type*3 + 2];
+    if (property_type >= MM_PROPERTIES) {
+        printf("Property type out of range\n");
+        return -1;
+    }
+    *min = property_range[property_type*3 + 1];
+    *max = property_range[property_type*3 + 2];
 
-	return 0;
+    return 0;
 }
 
 
 /* returns the array index of a given property type
    or -1 if not found */
 n_int mm_obj_prop_index(mm_object * obj,
-						n_uint property_type)
+                        n_uint property_type)
 {
-	n_int index = -1, start_index, end_index, curr_index;
+    n_int index = -1, start_index, end_index, curr_index;
 
-	if (obj->length == 1) {
-		if (obj->property_type[0] == property_type) {
-			return 0;
-		}
-	}
+    if (obj->length == 1) {
+        if (obj->property_type[0] == property_type) {
+            return 0;
+        }
+    }
 
-	start_index = 0;
-	end_index = obj->length-1;
-	curr_index = start_index + ((end_index-start_index)/2);
+    start_index = 0;
+    end_index = obj->length-1;
+    curr_index = start_index + ((end_index-start_index)/2);
 
-	if (property_type == obj->property_type[end_index]) {
-		index = end_index;
-	}
-	else if (property_type == obj->property_type[start_index]) {
-		index = start_index;
-	}
+    if (property_type == obj->property_type[end_index]) {
+        index = end_index;
+    }
+    else if (property_type == obj->property_type[start_index]) {
+        index = start_index;
+    }
 
-	while ((index == -1) &&
-		   (curr_index != start_index) &&
-		   (curr_index != end_index)) {
+    while ((index == -1) &&
+           (curr_index != start_index) &&
+           (curr_index != end_index)) {
 
-		if (property_type < obj->property_type[curr_index]) {
-			end_index = curr_index;
-			if (property_type == obj->property_type[end_index]) {
-				index = end_index;
-			}
-		}
-		else {
-			if (property_type > obj->property_type[curr_index]) {
-				start_index = curr_index;
-				if (property_type == obj->property_type[start_index]) {
-					index = start_index;
-				}
-			}
-			else {
-				index = curr_index;
-			}
-		}
-		curr_index = start_index + ((end_index-start_index)/2);
-	}
+        if (property_type < obj->property_type[curr_index]) {
+            end_index = curr_index;
+            if (property_type == obj->property_type[end_index]) {
+                index = end_index;
+            }
+        }
+        else {
+            if (property_type > obj->property_type[curr_index]) {
+                start_index = curr_index;
+                if (property_type == obj->property_type[start_index]) {
+                    index = start_index;
+                }
+            }
+            else {
+                index = curr_index;
+            }
+        }
+        curr_index = start_index + ((end_index-start_index)/2);
+    }
 
-	return index;
+    return index;
 }
 
 /* adds a property to an object and returns its array index */
 n_int mm_obj_prop_add(mm_object * obj,
-					  n_uint property_type,
-					  n_uint property_value)
+                      n_uint property_type,
+                      n_uint property_value)
 {
-	n_int i, index = 0;
+    n_int i, index = 0;
 
-	if (obj->length >= MM_MAX_OBJECT_PROPERTIES) return -1;
+    if (obj->length >= MM_MAX_OBJECT_PROPERTIES) return -1;
 
-	index = mm_obj_prop_index(obj, property_type);
-	if (index == -1) {
-		/* property doesn't already exist
-		   so find a location for it */
-		index = 0;
-		while (index < obj->length) {
-			if (obj->property_type[index] > property_type) {
-				break;
-			}
-			index++;
-		}
-	}
-	else {
-		/* overwrite existing entry for this property type */
-		obj->property_value[index] = property_value;
-		return index;
-	}
+    index = mm_obj_prop_index(obj, property_type);
+    if (index == -1) {
+        /* property doesn't already exist
+           so find a location for it */
+        index = 0;
+        while (index < obj->length) {
+            if (obj->property_type[index] > property_type) {
+                break;
+            }
+            index++;
+        }
+    }
+    else {
+        /* overwrite existing entry for this property type */
+        obj->property_value[index] = property_value;
+        return index;
+    }
 
-	if (index < obj->length) {
-		/* insert */
-		for (i = obj->length-1; i >= index; i--) {
-			obj->property_type[i+1] = obj->property_type[i];
-			obj->property_value[i+1] = obj->property_value[i];
-		}
-	}
-	obj->property_type[index] = property_type;
-	obj->property_value[index] = property_value;
-	obj->length++;
-	return index;
+    if (index < obj->length) {
+        /* insert */
+        for (i = obj->length-1; i >= index; i--) {
+            obj->property_type[i+1] = obj->property_type[i];
+            obj->property_value[i+1] = obj->property_value[i];
+        }
+    }
+    obj->property_type[index] = property_type;
+    obj->property_value[index] = property_value;
+    obj->length++;
+    return index;
 }
 
 /* copies one object to another */
 void mm_obj_copy(mm_object *src, mm_object * dest)
 {
-	memcpy((void*)dest,(void*)src,sizeof(mm_object));
+    memcpy((void*)dest,(void*)src,sizeof(mm_object));
 }
 
 /* removes a property from an object */
 n_int mm_obj_prop_remove(mm_object * obj,
-						 n_uint property_type)
+                         n_uint property_type)
 {
-	n_int i, index;
+    n_int i, index;
 
-	if (obj->length == 0) return -1;
+    if (obj->length == 0) return -1;
 
-	index = mm_obj_prop_index(obj, property_type);
-	if (index == -1) return -1;
+    index = mm_obj_prop_index(obj, property_type);
+    if (index == -1) return -1;
 
-	for (i = index+1; i < obj->length; i++) {
-		obj->property_type[i-1] = obj->property_type[i];
-		obj->property_value[i-1] = obj->property_value[i];
-	}
-	obj->length--;
-	return 0;
+    for (i = index+1; i < obj->length; i++) {
+        obj->property_type[i-1] = obj->property_type[i];
+        obj->property_value[i-1] = obj->property_value[i];
+    }
+    obj->length--;
+    return 0;
 }
 
 /* returns the value of the given object property */
 n_uint mm_obj_prop_get(mm_object * obj,
-					   n_uint property_type)
+                       n_uint property_type)
 {
-	n_int index = mm_obj_prop_index(obj, property_type);
-	if (index > -1) return obj->property_value[index];
-	return 0;
+    n_int index = mm_obj_prop_index(obj, property_type);
+    if (index > -1) return obj->property_value[index];
+    return 0;
 }
 
 /* sets an object property value */
 n_int mm_obj_prop_set(mm_object * obj,
-					  n_uint property_type,
-					  n_uint property_value)
+                      n_uint property_type,
+                      n_uint property_value)
 {
-	n_int index = mm_obj_prop_index(obj, property_type);
-	if (index > -1) {
-		obj->property_value[index] = property_value;
-		return 0;
-	}
-	return -1;
+    n_int index = mm_obj_prop_index(obj, property_type);
+    if (index > -1) {
+        obj->property_value[index] = property_value;
+        return 0;
+    }
+    return -1;
 }
 
 /* normalise property values into a single byte range */
 void mm_obj_to_vect(mm_object * obj,
-					n_byte * vect)
+                    n_byte * vect)
 {
-	n_uint i, p, min, max, v;
+    n_uint i, p, min, max, v;
 
-	memset((void*)vect, '\0',
-		   MM_PROPERTIES*sizeof(n_byte));
-	for (i = 0; i < obj->length; i++) {
-		p = obj->property_type[i];
-		min = max = 0;
-		if (mm_obj_prop_range(p, &min, &max) == 0) {
-			if (min + max > 0) {
-				v = obj->property_value[i];
-				vect[p] =
-					(n_byte)((v - min) * 255 / max);
-			}
-		}
-	}
+    memset((void*)vect, '\0',
+           MM_PROPERTIES*sizeof(n_byte));
+    for (i = 0; i < obj->length; i++) {
+        p = obj->property_type[i];
+        min = max = 0;
+        if (mm_obj_prop_range(p, &min, &max) == 0) {
+            if (min + max > 0) {
+                v = obj->property_value[i];
+                vect[p] =
+                    (n_byte)((v - min) * 255 / max);
+            }
+        }
+    }
 }
 
 n_int mm_obj_exists(mm_object * obj)
 {
-	return (obj->length > 0);
+    return (obj->length > 0);
 }
 
 /* compares two objects and returns 0 if they are the same, -1 otherwise */
 n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
 {
-	n_uint i;
+    n_uint i;
 
-	if (obj1->length != obj2->length) return -1;
+    if (obj1->length != obj2->length) return -1;
 
-	for (i = 0; i < obj1->length; i++) {
-		if (obj1->property_type[i] !=
-			obj2->property_type[i]) {
-			return -1;
-		}
-		if (obj1->property_value[i] !=
-			obj2->property_value[i]) {
-			return -1;
-		}
-	}
-	return 0;
+    for (i = 0; i < obj1->length; i++) {
+        if (obj1->property_type[i] !=
+            obj2->property_type[i]) {
+            return -1;
+        }
+        if (obj1->property_value[i] !=
+            obj2->property_value[i]) {
+            return -1;
+        }
+    }
+    return 0;
 }

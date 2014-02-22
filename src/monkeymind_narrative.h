@@ -48,8 +48,8 @@ typedef struct
     /* a unique reference for the narrative */
     n_uint id;
 
-	/* properties of the narrative */
-	mm_object properties;
+    /* properties of the narrative */
+    mm_object properties;
 
     /* the number of steps in the narrative */
     n_uint length;
@@ -57,23 +57,23 @@ typedef struct
     /* array storing the steps in the narrative */
     mm_object step[MM_MAX_TALE_SIZE];
 
-	/* the number of times told or heard */
-	n_uint times_told;
-	n_uint times_heard;
+    /* the number of times told or heard */
+    n_uint times_told;
+    n_uint times_heard;
 } mm_tale;
 
 void mm_tale_init(mm_tale * tale, n_uint id);
 n_int mm_tale_insert(mm_tale * tale,
-					 mm_object * obj, n_uint index,
-					 n_uint act,
-					 n_uint scene,
-					 n_uint viewpoint);
+                     mm_object * obj, n_uint index,
+                     n_uint act,
+                     n_uint scene,
+                     n_uint viewpoint);
 n_int mm_tale_remove(mm_tale * tale,
-					 n_uint index);
+                     n_uint index);
 n_int mm_tale_add(mm_tale * tale, mm_object * obj,
-				  n_uint act,
-				  n_uint scene,
-				  n_uint viewpoint);
+                  n_uint act,
+                  n_uint scene,
+                  n_uint viewpoint);
 mm_object * mm_tale_get(mm_tale * tale, n_uint index);
 n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale);
 
@@ -81,21 +81,21 @@ n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale);
 
 typedef struct
 {
-	n_uint length;
-	mm_tale tale[MM_SIZE_NARRATIVES];
+    n_uint length;
+    mm_tale tale[MM_SIZE_NARRATIVES];
 } mm_narratives;
 
 void mm_narratives_init(mm_narratives * narratives);
 void mm_narratives_copy(mm_narratives * narratives,
-						n_uint index,
-						mm_tale * tale);
+                        n_uint index,
+                        mm_tale * tale);
 n_int mm_narratives_insert(mm_narratives * narratives,
-						   n_uint index,
-						   mm_tale * tale);
+                           n_uint index,
+                           mm_tale * tale);
 n_int mm_narratives_remove(mm_narratives * narratives,
-						   n_uint index);
+                           n_uint index);
 n_int mm_narratives_add(mm_narratives * narratives,
-						mm_tale * tale);
+                        mm_tale * tale);
 n_int mm_narratives_get(mm_narratives * narratives, n_uint id);
 n_int mm_narratives_least_heard(mm_narratives * narratives);
 

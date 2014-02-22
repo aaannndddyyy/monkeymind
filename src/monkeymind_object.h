@@ -40,65 +40,65 @@
 #define MM_MAX_OBJECT_PROPERTIES  16
 
 enum {
-	MM_CATEGORY_FOF = 0,
-	MM_CATEGORY_ATTRACTION,
-	MM_CATEGORIES
+    MM_CATEGORY_FOF = 0,
+    MM_CATEGORY_ATTRACTION,
+    MM_CATEGORIES
 };
 
 enum relation_types
 {
-	MM_RELATION_SELF,
-	MM_RELATION_BROTHER,
-	MM_RELATION_SISTER,
-	MM_RELATION_FATHER,
-	MM_RELATION_MOTHER,
-	MM_RELATION_GRANDFATHER,
-	MM_RELATION_GRANDMOTHER,
-	MM_RELATION_UNCLE,
-	MM_RELATION_AUNT,
-	MM_RELATIONS
+    MM_RELATION_SELF,
+    MM_RELATION_BROTHER,
+    MM_RELATION_SISTER,
+    MM_RELATION_FATHER,
+    MM_RELATION_MOTHER,
+    MM_RELATION_GRANDFATHER,
+    MM_RELATION_GRANDMOTHER,
+    MM_RELATION_UNCLE,
+    MM_RELATION_AUNT,
+    MM_RELATIONS
 };
 
 enum property_types
 {
-	MM_PROPERTY_NONE = 0,
+    MM_PROPERTY_NONE = 0,
 
-	/* who */
-	MM_PROPERTY_MEETER,
-	MM_PROPERTY_MET,
-	MM_PROPERTY_NAME,
-	MM_PROPERTY_MEETER_NAME,
-	MM_PROPERTY_MET_NAME,
-	MM_PROPERTY_RELATION,
-	MM_PROPERTY_SOCIAL_X,
-	MM_PROPERTY_SOCIAL_Y,
+    /* who */
+    MM_PROPERTY_MEETER,
+    MM_PROPERTY_MET,
+    MM_PROPERTY_NAME,
+    MM_PROPERTY_MEETER_NAME,
+    MM_PROPERTY_MET_NAME,
+    MM_PROPERTY_RELATION,
+    MM_PROPERTY_SOCIAL_X,
+    MM_PROPERTY_SOCIAL_Y,
 
-	/* what */
+    /* what */
     MM_PROPERTY_OBJECT,
     MM_PROPERTY_NARRATIVE,
-	MM_PROPERTY_EMOTION,
-	MM_PROPERTY_HEIGHT,
-	MM_PROPERTY_WEIGHT,
-	MM_PROPERTY_HAIR_LENGTH,
-	MM_PROPERTY_HAIR_COLOUR,
-	MM_PROPERTY_FRIEND_OR_FOE,
-	MM_PROPERTY_ATTRACTION,
-	MM_PROPERTY_NARRATIVE_PLOT,
-	MM_PROPERTY_NARRATIVE_ACT,
-	MM_PROPERTY_NARRATIVE_SCENE,
-	MM_PROPERTY_NARRATIVE_VIEWPOINT,
+    MM_PROPERTY_EMOTION,
+    MM_PROPERTY_HEIGHT,
+    MM_PROPERTY_WEIGHT,
+    MM_PROPERTY_HAIR_LENGTH,
+    MM_PROPERTY_HAIR_COLOUR,
+    MM_PROPERTY_FRIEND_OR_FOE,
+    MM_PROPERTY_ATTRACTION,
+    MM_PROPERTY_NARRATIVE_PLOT,
+    MM_PROPERTY_NARRATIVE_ACT,
+    MM_PROPERTY_NARRATIVE_SCENE,
+    MM_PROPERTY_NARRATIVE_VIEWPOINT,
 
-	/* where */
-	MM_PROPERTY_PLACE_X,
-	MM_PROPERTY_PLACE_Y,
-	MM_PROPERTY_PLACE_Z,
-	MM_PROPERTY_TERRITORY,
+    /* where */
+    MM_PROPERTY_PLACE_X,
+    MM_PROPERTY_PLACE_Y,
+    MM_PROPERTY_PLACE_Z,
+    MM_PROPERTY_TERRITORY,
 
-	/* when */
-	MM_PROPERTY_DAY,
-	MM_PROPERTY_SUBJECTIVE_TIME,
+    /* when */
+    MM_PROPERTY_DAY,
+    MM_PROPERTY_SUBJECTIVE_TIME,
 
-	MM_PROPERTIES
+    MM_PROPERTIES
 };
 
 
@@ -120,24 +120,24 @@ typedef struct
 void mm_obj_init(mm_object * obj);
 n_int mm_obj_exists(mm_object * obj);
 n_int mm_obj_prop_index(mm_object * obj,
-						n_uint property_type);
+                        n_uint property_type);
 n_int mm_obj_prop_range(n_uint property_type,
-						n_uint * min, n_uint * max);
+                        n_uint * min, n_uint * max);
 n_int mm_obj_prop_add(mm_object * obj,
-					  n_uint property_type,
-					  n_uint property_value);
+                      n_uint property_type,
+                      n_uint property_value);
 n_int mm_obj_prop_remove(mm_object * obj,
-						 n_uint property_type);
+                         n_uint property_type);
 n_uint mm_obj_prop_get(mm_object * obj,
-					   n_uint property_type);
+                       n_uint property_type);
 n_uint mm_obj_prop_get_index(mm_object * obj,
-							 n_int index);
+                             n_int index);
 n_int mm_obj_prop_set(mm_object * obj,
-					  n_uint property_type,
-					  n_uint property_value);
+                      n_uint property_type,
+                      n_uint property_value);
 void mm_obj_copy(mm_object *src, mm_object * dest);
 void mm_obj_to_vect(mm_object * obj,
-					n_byte * vect);
+                    n_byte * vect);
 n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
 
 #endif

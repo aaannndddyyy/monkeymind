@@ -48,13 +48,13 @@
 #define MM_EMOTION_EXCITEMENT 7
 
 n_byte mm_neuro_to_emotion(n_uint serotonin,
-						   n_uint dopamine,
-						   n_uint noradrenaline,
-						   n_uint neurotransmitter_max);
+                           n_uint dopamine,
+                           n_uint noradrenaline,
+                           n_uint neurotransmitter_max);
 void mm_emotion_to_neuro(n_byte emotion,
-						 n_uint * serotonin,
-						 n_uint * dopamine,
-						 n_uint * noradrenaline,
-						 n_uint neurotransmitter_max);
+                         n_uint * serotonin,
+                         n_uint * dopamine,
+                         n_uint * noradrenaline,
+                         n_uint neurotransmitter_max);
 
 #endif

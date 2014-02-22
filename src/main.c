@@ -36,10 +36,10 @@
 
 int main(int argc, char* argv[])
 {
-	monkeymind mind;
+    monkeymind mind;
 
-	mm_init(&mind,1000,MM_SEX_FEMALE,8,2,NULL);
+    mm_init(&mind,1000,MM_SEX_FEMALE,8,2,NULL);
 
-	mm_run_tests();
-	return 1;
+    mm_run_tests();
+    return 1;
 }

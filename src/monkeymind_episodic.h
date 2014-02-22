@@ -48,30 +48,30 @@
 
 typedef struct
 {
-	/* the sequence of observed events */
-	mm_object sequence[MM_EVENT_MEMORY_SIZE];
+    /* the sequence of observed events */
+    mm_object sequence[MM_EVENT_MEMORY_SIZE];
 
-	/* current index within the buffer */
-	n_uint index;
+    /* current index within the buffer */
+    n_uint index;
 } mm_episodic;
 
 typedef struct {
-	n_uint agent_id;
-	n_uint hits;
-	n_uint category[MM_CATEGORIES];
+    n_uint agent_id;
+    n_uint hits;
+    n_uint category[MM_CATEGORIES];
 } mm_protagonist;
 
 void mm_episodic_init(mm_episodic * events);
 void mm_episodic_add(mm_episodic * events,
-					 mm_object * observation);
+                     mm_object * observation);
 n_uint mm_episodic_max(mm_episodic * events);
 mm_object * mm_episodic_get(mm_episodic * events, n_uint timestep);
 
 n_int mm_episodic_protagonists(mm_episodic * events,
-							   n_uint timestep_start,
-							   n_uint timestep_end,
-							   mm_protagonist * protagonists,
-							   n_uint max_protagonists);
+                               n_uint timestep_start,
+                               n_uint timestep_end,
+                               mm_protagonist * protagonists,
+                               n_uint max_protagonists);
 n_byte mm_event_exists(mm_episodic * events_list, mm_object * event);
 
 #endif
