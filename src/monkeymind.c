@@ -184,7 +184,8 @@ void mm_dialogue_internal(monkeymind * mind)
 n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 {
     n_uint speaker_attention = speaker->attention[MM_ATTENTION_NARRATIVE];
-    mm_tale * tale[2];
+	mm_tale * speaker_tale;
+	mm_tale * listener_tale;
     n_int listener_narrative_index;
 	n_int min_similarity = 0;
 	n_int offset = 0;
@@ -196,32 +197,33 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
     if (speaker->narratives.length == 0) return -1;
 
     /* get the tale which is the speaker's current focus of attention */
-    tale[0] =
+    speaker_tale =
         &speaker->narratives.tale[speaker_attention %
                                   speaker->narratives.length];
 
-    tale[0]->times_told++;
+    speaker_tale->times_told++;
 
 	/* get the array index of the closest matching tale */
 	listener_narrative_index =
-		mm_narratives_match_tale(&listener->narratives, tale[0],
+		mm_narratives_match_tale(&listener->narratives, speaker_tale,
 								 min_similarity, &offset);
 
 	if (listener_narrative_index == -1) {
 		/* if there are no matches then overwrite the least heard */
 		listener_narrative_index = mm_narratives_least_heard(&listener->narratives);
         mm_narratives_insert(&listener->narratives,
-                             listener_narrative_index, tale[0]);
+                             listener_narrative_index, speaker_tale);
+		listener_tale = &listener->narratives.tale[listener_narrative_index];
 	}
 	else {
+		listener_tale = &listener->narratives.tale[listener_narrative_index];
 		/* make the remembered tale more similar to the one just told */
-		mm_tale_confabulate(tale[0],
-							&listener->narratives.tale[listener_narrative_index],
+		mm_tale_confabulate(speaker_tale, listener_tale,
 							listener_interest_percent, &listener->seed);
 	}
 
 	/* increment the number of times heard */
-	listener->narratives.tale[listener_narrative_index].times_heard++;
+	listener_tale->times_heard++;
 
 	/* listener's attention is on the current narrative */
 	listener->attention[MM_ATTENTION_NARRATIVE] =
