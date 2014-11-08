@@ -37,7 +37,7 @@ void mm_tale_init(mm_tale * tale, n_uint id)
     tale->length = 0;
     tale->times_told = 0;
 
-	// clear the tale
+    // clear the tale
     memset((void*)tale->step, '\0',
            MM_MAX_TALE_SIZE*sizeof(mm_object));
 }
@@ -119,50 +119,79 @@ n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale)
 /* returns the similarity between two tales */
 n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset)
 {
-	n_int similarity, max_similarity=0;
-	n_int i, off;
-	mm_tale * t1, * t2;
+    n_int similarity, max_similarity=0;
+    n_uint i, off;
+    mm_tale * t1, * t2;
 
-	if (tale2->length > tale1->length) {
-		t1 = tale2;
-		t2 = tale1;
-	}
-	else {
-		t1 = tale1;
-		t2 = tale2;
-	}
+    if (tale2->length > tale1->length) {
+        t1 = tale2;
+        t2 = tale1;
+    }
+    else {
+        t1 = tale1;
+        t2 = tale2;
+    }
 
-	for (off = 0; off < t1->length - t2->length; off++) {
-		similarity = mm_obj_match(&t1->properties, &t2->properties);
-		for (i = 0; i < t2->length; i++) {
-			similarity += mm_obj_match(&t1->step[off+i],&t2->step[i]);
-		}
-		if (similarity > max_similarity) {
-			max_similarity = similarity;
-			*offset = off;
-		}
-	}
+    for (off = 0; off < t1->length - t2->length; off++) {
+        similarity = mm_obj_match(&t1->properties, &t2->properties);
+        for (i = 0; i < t2->length; i++) {
+            similarity += mm_obj_match(&t1->step[off+i],&t2->step[i]);
+        }
+        if (similarity > max_similarity) {
+            max_similarity = similarity;
+            *offset = off;
+        }
+    }
 
-	return max_similarity;
+    return max_similarity;
 }
 
 /* returns the similarity between a tale and the current
    episodic sequence of events */
 n_int mm_tale_match_events(mm_tale * tale, mm_episodic * events, n_int * offset)
 {
-	n_int similarity, max_similarity=0;
-	n_uint i, off, episodic_length = mm_episodic_max(events);
+    n_int similarity, max_similarity=0;
+    n_uint i, off, episodic_length = mm_episodic_max(events);
 
-	for (off = 0; off < episodic_length-tale->length; off++) {
-		similarity = 0;
-		for (i = 0; i < tale->length; i++) {
-			similarity += mm_obj_match(&events->sequence[off+i], &tale->step[i]);
-		}
-		if (similarity > max_similarity) {
-			max_similarity = similarity;
-			*offset = off;
-		}
-	}
+    for (off = 0; off < episodic_length-tale->length; off++) {
+        similarity = 0;
+        for (i = 0; i < tale->length; i++) {
+            similarity += mm_obj_match(&events->sequence[off+i], &tale->step[i]);
+        }
+        if (similarity > max_similarity) {
+            max_similarity = similarity;
+            *offset = off;
+        }
+    }
 
-	return max_similarity;
+    return max_similarity;
+}
+
+/* Change the destination tale so that it may include some
+   percentage of elements from the source tale */
+void mm_tale_confabulate(mm_tale * source, mm_tale * destination,
+                         n_uint percent, mm_random_seed * seed)
+{
+    n_int offset = 0;
+    n_uint i;
+
+    /* get the offset for the closest match between the tales */
+    mm_tale_match(source, destination, &offset);
+
+    if (source->length < destination->length) {
+        for (i = 0; i < source->length; i++) {
+            if (mm_rand(seed)%100 > percent) {
+                continue;
+            }
+            mm_obj_copy(&source->step[i], &destination->step[(n_uint)offset+i]);
+        }
+    }
+    else {
+        for (i = 0; i < destination->length; i++) {
+            if (mm_rand(seed)%100 > percent) {
+                continue;
+            }
+            mm_obj_copy(&source->step[(n_uint)offset+i], &destination->step[i]);
+        }
+    }
 }
