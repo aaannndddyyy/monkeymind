@@ -2,6 +2,10 @@
 
  Monkeymind - an experimental cogitive architecture
 
+ The episodic memory consists of a sequence of events
+ stores as a sequence. The memory length is finite and
+ wraps around.
+
  The event memory is similar to a hippocampus, recording
  the stream of perceived circumstances, then filtering
  out (or compressing) the relevant from the forgettable
@@ -43,7 +47,7 @@ void mm_episodic_init(mm_episodic * events)
            sizeof(mm_object)*MM_EVENT_MEMORY_SIZE);
 }
 
-/* add an event to the sequence */
+/* add an observation to the next index in the sequence */
 void mm_episodic_add(mm_episodic * events,
                      mm_object * observation)
 {
@@ -54,6 +58,8 @@ void mm_episodic_add(mm_episodic * events,
 
     /* increment the location in the sequence */
     events->index++;
+
+	/* position in the sequence wraps around */
     if (events->index >= MM_EVENT_MEMORY_SIZE) {
         events->index -= MM_EVENT_MEMORY_SIZE;
     }
@@ -159,7 +165,6 @@ n_int mm_episodic_protagonists(mm_episodic * events,
                     return no_of_protagonists;
                 }
             }
-
         }
     }
 

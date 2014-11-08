@@ -112,3 +112,25 @@ n_int mm_narratives_least_heard(mm_narratives * narratives)
     }
     return index;
 }
+
+/* Returns the array index of the closest matching tale.
+   This acts as a sort of frame matching */
+n_int mm_narratives_match_tale(mm_narratives * narratives,
+                               mm_tale * tale,
+                               n_int min_similarity,
+                               n_int * offset)
+{
+    n_int i, similarity, winner = -1;
+    n_int max_similarity = min_similarity;
+    n_int off = -1;
+
+    for (i = 0; i <narratives->length; i++) {
+        similarity = mm_tale_match(&narratives->tale[i], tale, &off);
+        if (similarity > max_similarity) {
+            max_similarity = similarity;
+            winner = i;
+            *offset = off;
+        }
+    }
+    return winner;
+}

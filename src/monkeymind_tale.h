@@ -73,5 +73,6 @@ n_int mm_tale_add(mm_tale * tale, mm_object * obj,
                   n_uint viewpoint);
 mm_object * mm_tale_get(mm_tale * tale, n_uint index);
 n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale);
+n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset);
 
 #endif

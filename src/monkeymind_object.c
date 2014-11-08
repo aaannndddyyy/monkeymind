@@ -279,3 +279,10 @@ n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
     }
     return 0;
 }
+
+n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
+{
+	n_int similarity = 0;
+	/* TODO */
+	return similarity;
+}

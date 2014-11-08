@@ -36,6 +36,8 @@ void mm_tale_init(mm_tale * tale, n_uint id)
     tale->id = id;
     tale->length = 0;
     tale->times_told = 0;
+
+	// clear the tale
     memset((void*)tale->step, '\0',
            MM_MAX_TALE_SIZE*sizeof(mm_object));
 }
@@ -112,4 +114,34 @@ n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale)
 {
     /* TODO */
     return -1;
+}
+
+/* returns the similarity between two tales */
+n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset)
+{
+	n_int similarity, max_similarity=0;
+	n_int i, off;
+	mm_tale * t1, * t2;
+
+	if (tale2->length > tale1->length) {
+		t1 = tale2;
+		t2 = tale1;
+	}
+	else {
+		t1 = tale1;
+		t2 = tale2;
+	}
+
+	for (off = 0; off < t1->length - t2->length; off++) {
+		similarity = 0;
+		for (i = 0; i < t2->length; i++) {
+			similarity += mm_obj_match(&t1->step[off+i],&t2->step[i]);
+		}
+		if (similarity > max_similarity) {
+			max_similarity = similarity;
+			*offset = off;
+		}
+	}
+
+	return max_similarity;
 }

@@ -60,5 +60,8 @@ n_int mm_narratives_add(mm_narratives * narratives,
                         mm_tale * tale);
 n_int mm_narratives_get(mm_narratives * narratives, n_uint id);
 n_int mm_narratives_least_heard(mm_narratives * narratives);
-
+n_int mm_narratives_match_tale(mm_narratives * narratives,
+                               mm_tale * tale,
+                               n_int min_similarity,
+                               n_int * offset);
 #endif

@@ -23,3 +23,7 @@ Abstract Persons
 ----------------
 
 Other individuals who are met are categorised using a self-origanising map, and maps may be partially aligned during conversation.  Friend or foe, or attraction values are then indexed against the 2D map.
+
+Installing
+----------
+sudo apt-get install build-essential libz-dev

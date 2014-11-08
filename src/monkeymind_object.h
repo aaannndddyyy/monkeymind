@@ -141,5 +141,6 @@ void mm_obj_copy(mm_object *src, mm_object * dest);
 void mm_obj_to_vect(mm_object * obj,
                     n_byte * vect);
 n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
+n_int mm_obj_match(mm_object * obj1, mm_object * obj2);
 
 #endif

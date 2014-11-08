@@ -44,7 +44,7 @@ void mm_add_property(monkeymind * mind,
     mm_obj_prop_add(mind->properties, property_type, property_value);
 }
 
-/* sets a property of the individualk */
+/* sets a property of the individual */
 void mm_set_property(monkeymind * mind,
                      n_uint property_type,
                      n_uint property_value)
@@ -54,7 +54,7 @@ void mm_set_property(monkeymind * mind,
 
 /* gets a property of the individual */
 n_uint mm_get_property(monkeymind * mind,
-                             n_uint property_type)
+                       n_uint property_type)
 {
     return mm_obj_prop_get(mind->properties, property_type);
 }
