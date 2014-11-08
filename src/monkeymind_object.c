@@ -280,9 +280,23 @@ n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
     return 0;
 }
 
+/* returns a score giving a rough indication of how
+   similar two objects are */
 n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
 {
-	n_int similarity = 0;
-	/* TODO */
-	return similarity;
+    n_int similarity;
+    n_uint i, value, same_types = 0;
+    n_uint same_values = 0;
+
+    for (i = 0; i < obj1->length; i++) {
+        value = mm_obj_prop_get(obj2, obj1->property_type[i]);
+        if (value > 0) {
+            same_types++;
+            if (value == obj1->property_value[i]) {
+                same_values++;
+            }
+        }
+    }
+    similarity = same_types + (2*same_values);
+    return similarity;
 }
