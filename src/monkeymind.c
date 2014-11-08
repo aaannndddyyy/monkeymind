@@ -186,7 +186,13 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
     n_uint speaker_attention = speaker->attention[MM_ATTENTION_NARRATIVE];
     mm_tale * tale[2];
     n_int listener_narrative_index;
+	n_int min_similarity = 0;
+	n_int offset = 0;
 
+	/* this should vary depending upon social and/or physiological factors */
+	n_int listener_interest_percent = 20;
+
+	/* does the speaker have nothing to say? */
     if (speaker->narratives.length == 0) return -1;
 
     /* get the tale which is the speaker's current focus of attention */
@@ -196,35 +202,30 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 
     tale[0]->times_told++;
 
-    /* does the listener already have the same narrative? */
-    listener_narrative_index =
-        mm_narratives_get(&listener->narratives, tale[0]->id);
-    if (listener_narrative_index > -1) {
-        /* the tale was already heard */
-        tale[1] = &listener->narratives.tale[listener_narrative_index];
-        tale[1]->times_heard++;
-        return 0;
-    }
+	/* get the array index of the closest matching tale */
+	listener_narrative_index =
+		mm_narratives_match_tale(&listener->narratives, tale[0],
+								 min_similarity, &offset);
 
-    /* listener has not heard the tale */
-    if (listener->narratives.length < MM_SIZE_NARRATIVES) {
-        /* narrative memory is not yet full */
-        listener_narrative_index = listener->narratives.length;
-        mm_narratives_add(&listener->narratives, tale[0]);
-    }
-    else {
-        /* narrative memory is full - choose the most forgettable */
-        listener_narrative_index =
-            mm_narratives_least_heard(&listener->narratives);
+	if (listener_narrative_index == -1) {
+		/* if there are no matches then overwrite the least heard */
+		listener_narrative_index = mm_narratives_least_heard(&listener->narratives);
         mm_narratives_insert(&listener->narratives,
                              listener_narrative_index, tale[0]);
-    }
+	}
+	else {
+		/* make the remembered tale more similar to the one just told */
+		mm_tale_confabulate(tale[0],
+							&listener->narratives.tale[listener_narrative_index],
+							listener_interest_percent, &listener->seed);
+	}
 
-    /* increment the number of times heard */
-    listener->narratives.tale[listener_narrative_index].times_heard++;
+	/* increment the number of times heard */
+	listener->narratives.tale[listener_narrative_index].times_heard++;
 
-    /* listener's attention is on the current narrative */
-    listener->attention[MM_ATTENTION_NARRATIVE] =
-        (n_uint)listener_narrative_index;
+	/* listener's attention is on the current narrative */
+	listener->attention[MM_ATTENTION_NARRATIVE] =
+		(n_uint)listener_narrative_index;
+
     return 0;
 }
