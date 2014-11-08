@@ -65,34 +65,30 @@ n_int mm_tale_remove(mm_tale * tale,
 
 /* insert a tale step at a given index */
 n_int mm_tale_insert(mm_tale * tale,
-                     mm_object * obj, n_uint index,
-                     n_uint act,
-                     n_uint scene,
-                     n_uint viewpoint)
+                     mm_object * obj, n_uint index)
 {
     if ((index > tale->length) ||
         (tale->length >= MM_MAX_TALE_SIZE)) {
         return -1;
     }
+
+	/* default properties */
     mm_obj_prop_add(obj,
-                    MM_PROPERTY_TALE_ACT, act);
+                    MM_PROPERTY_TALE_ACT, 0);
     mm_obj_prop_add(obj,
-                    MM_PROPERTY_TALE_SCENE, scene);
+                    MM_PROPERTY_TALE_SCENE, 0);
     mm_obj_prop_add(obj,
-                    MM_PROPERTY_TALE_VIEWPOINT, viewpoint);
+                    MM_PROPERTY_TALE_VIEWPOINT, 0);
+
     mm_obj_copy(obj, &tale->step[index]);
     return 0;
 }
 
 /* adds a tale step */
-n_int mm_tale_add(mm_tale * tale, mm_object * obj,
-                  n_uint act,
-                  n_uint scene,
-                  n_uint viewpoint)
+n_int mm_tale_add(mm_tale * tale, mm_object * obj)
 {
     if (tale->length >= MM_MAX_TALE_SIZE) return -1;
-    if (mm_tale_insert(tale, obj, tale->length,
-                       act, scene, viewpoint) != 0) {
+    if (mm_tale_insert(tale, obj, tale->length) != 0) {
         return -1;
     }
     tale->length++;

@@ -61,16 +61,10 @@ typedef struct
 
 void mm_tale_init(mm_tale * tale, n_uint id);
 n_int mm_tale_insert(mm_tale * tale,
-                     mm_object * obj, n_uint index,
-                     n_uint act,
-                     n_uint scene,
-                     n_uint viewpoint);
+                     mm_object * obj, n_uint index);
 n_int mm_tale_remove(mm_tale * tale,
                      n_uint index);
-n_int mm_tale_add(mm_tale * tale, mm_object * obj,
-                  n_uint act,
-                  n_uint scene,
-                  n_uint viewpoint);
+n_int mm_tale_add(mm_tale * tale, mm_object * obj);
 mm_object * mm_tale_get(mm_tale * tale, n_uint index);
 n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset);
 n_int mm_tale_match_events(mm_tale * tale, mm_episodic * events, n_int * offset);

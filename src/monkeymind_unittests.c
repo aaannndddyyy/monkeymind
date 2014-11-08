@@ -471,10 +471,10 @@ static void test_tale()
     assert(mm_obj_exists(&observation2));
 
     /* Add a first step to the tale */
-    assert(mm_tale_add(&tale, &observation1, 1,2,3) == 0);
+    assert(mm_tale_add(&tale, &observation1) == 0);
     assert(tale.length == 1);
     /* Add a second step to the tale */
-    assert(mm_tale_add(&tale, &observation2, 4,5,6) == 0);
+    assert(mm_tale_add(&tale, &observation2) == 0);
     assert(tale.length == 2);
 
     /* Retrieve the first and second steps from the tale */
@@ -498,7 +498,7 @@ static void test_tale()
 
 static void test_narratives()
 {
-    n_int i;
+    n_int i, j;
     mm_tale tale;
     mm_narratives narratives;
 
@@ -506,8 +506,12 @@ static void test_narratives()
 
     mm_narratives_init(&narratives);
 
+	/* create some tales */
     for (i = 0; i < 10; i++) {
         mm_tale_init(&tale, i);
+		for (j = 0; j < 10; j++) {
+
+		}
         assert(mm_narratives_add(&narratives, &tale) == 0);
         assert(narratives.length == i+1);
     }
