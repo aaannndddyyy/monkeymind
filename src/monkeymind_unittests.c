@@ -729,7 +729,7 @@ static void test_language_set_data()
 static void test_confabulation()
 {
     n_uint i, j;
-    n_int offset=0, similarity;
+    n_int offset=0, similarity, index;
     mm_narratives narratives;
 
     printf("test_confabulation...");
@@ -779,6 +779,15 @@ static void test_confabulation()
         assert(similarity == target_similarity[i]);
         assert(offset == target_offset[i]);
     }
+
+	/* test locating the closest tale within a set of narratives */
+	offset = -1;
+	index = mm_narratives_match_tale(&narratives, &tale_source,
+									 (n_int)-1, &offset);
+	if (index != 2) {
+		printf("index = %d\n",(int)index);
+	}
+	assert(index == 2);
 
     printf("Ok\n");
 }
