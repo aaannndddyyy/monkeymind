@@ -498,29 +498,33 @@ static void test_tale()
 
 static void test_narratives()
 {
-    n_int i, j;
+    n_uint i, j;
     mm_narratives narratives;
 
     printf("test_narratives...");
 
     mm_narratives_init(&narratives);
 
-	/* create some tales */
+    /* create some tales */
     for (i = 0; i < 10; i++) {
-		mm_tale tale;
+        mm_tale tale;
         mm_tale_init(&tale, i);
-		for (j = 0; j < 10; j++) {
-			mm_object scene;
-			mm_obj_init(&scene);
-			mm_tale_add(&tale, &scene);
-		}
+        for (j = 0; j < 11; j++) {
+            mm_object scene;
+            mm_obj_init(&scene);
+            mm_obj_prop_add(&scene, j, i*2);
+            mm_tale_add(&tale, &scene);
+        }
+        assert(tale.length == 11);
         assert(mm_narratives_add(&narratives, &tale) == 0);
         assert(narratives.length == i+1);
     }
 
+    /* check IDs */
     assert(mm_narratives_get(&narratives, 2) == 2);
     assert(mm_narratives_get(&narratives, 9) == 9);
 
+    /* remove a tale */
     assert(mm_narratives_remove(&narratives, 3) == 0);
     assert(narratives.length == 9);
     assert(mm_narratives_get(&narratives, 2) == 2);
@@ -722,6 +726,63 @@ static void test_language_set_data()
     printf("Ok\n");
 }
 
+static void test_confabulation()
+{
+    n_uint i, j;
+    n_int offset=0, similarity;
+    mm_narratives narratives;
+
+    printf("test_confabulation...");
+
+    mm_narratives_init(&narratives);
+
+    /* create some tales */
+    for (i = 0; i < 10; i++) {
+        mm_tale tale;
+        mm_tale_init(&tale, i);
+        for (j = 0; j < 11; j++) {
+            mm_object scene;
+            mm_obj_init(&scene);
+            mm_obj_prop_add(&scene, (j%5)+i, (j*2)%10);
+            mm_tale_add(&tale, &scene);
+        }
+        assert(tale.length == 11);
+        assert(mm_narratives_add(&narratives, &tale) == 0);
+        assert(narratives.length == i+1);
+    }
+
+    /* create a source tale */
+    mm_tale tale_source;
+    mm_tale_init(&tale_source, 0);
+    for (j = 0; j < 4; j++) {
+        mm_object scene;
+        mm_obj_init(&scene);
+        mm_obj_prop_add(&scene, (j%5)+2, (j*2)%10);
+        mm_tale_add(&tale_source, &scene);
+    }
+
+    /* test tale matching */
+    n_int target_similarity[] = {
+        2,3,9,3,2,1,0,0,0,0
+    };
+    n_int target_offset[] = {
+        2,1,0,4,3,2,-1,-1,-1,-1
+    };
+    for (i = 0; i < 10; i++) {
+        offset = -1;
+        similarity = mm_tale_match(&tale_source, &narratives.tale[i], &offset);
+        if ((similarity != target_similarity[i]) ||
+            (offset != target_offset[i])) {
+            printf("%d similarity = %d  %d\n",
+                   (int)i, (int)similarity, (int)offset);
+        }
+        assert(similarity == target_similarity[i]);
+        assert(offset == target_offset[i]);
+    }
+
+    printf("Ok\n");
+}
+
 void mm_run_tests()
 {
     test_init();
@@ -734,6 +795,7 @@ void mm_run_tests()
     test_episodic();
     test_tale();
     test_narratives();
+    test_confabulation();
     test_language_get_address();
     test_language_get_data();
     test_language_set_data();
