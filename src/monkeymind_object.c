@@ -300,3 +300,18 @@ n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
     similarity = same_types + (2*same_values);
     return similarity;
 }
+
+/* change the perspective of the meeter to a given being */
+void mm_obj_change_perspective(mm_object * obj, n_uint id, n_uint name)
+{
+    n_uint i;
+
+    for (i = 0; i < obj->length; i++) {
+        if (obj->property_type[i] == MM_PROPERTY_MEETER) {
+			obj->property_value[i] = id;
+		}
+        if (obj->property_type[i] == MM_PROPERTY_MEETER_NAME) {
+			obj->property_value[i] = name;
+		}
+    }
+}

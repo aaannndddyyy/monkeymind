@@ -72,7 +72,7 @@ n_int mm_tale_insert(mm_tale * tale,
         return -1;
     }
 
-	/* default properties */
+    /* default properties */
     mm_obj_prop_add(obj,
                     MM_PROPERTY_TALE_ACT, 0);
     mm_obj_prop_add(obj,
@@ -194,8 +194,8 @@ void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
     n_uint i, episodic_length = mm_episodic_max(events);
 
     if (tale->length <= episodic_length) {
-		/* get the offset for the closest match between the tales */
-		mm_tale_match_events(tale, events, &offset);
+        /* get the offset for the closest match between the tales */
+        mm_tale_match_events(tale, events, &offset);
 
         for (i = 0; i < tale->length; i++) {
             if (mm_rand(seed)%100 > percent) {
@@ -203,5 +203,15 @@ void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
             }
             mm_obj_copy(&tale->step[i], &events->sequence[(n_uint)offset+i]);
         }
+    }
+}
+
+/* change perspective of a tale */
+void mm_tale_change_perspective(mm_tale * tale, n_uint id, n_uint name)
+{
+    n_uint i;
+
+    for (i = 0; i < tale->length; i++) {
+        mm_obj_change_perspective(&tale->step[i], id, name);
     }
 }

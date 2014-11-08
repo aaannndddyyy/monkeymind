@@ -194,7 +194,9 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 	n_int listener_interest_percent = 20;
 
 	/* does the speaker have nothing to say? */
-    if (speaker->narratives.length == 0) return -1;
+    if (speaker->narratives.length == 0) {
+		return -1;
+	}
 
     /* get the tale which is the speaker's current focus of attention */
     speaker_tale =
