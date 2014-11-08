@@ -71,3 +71,13 @@ n_uint mm_rand_id(mm_random_seed * seed)
 {
     return mm_rand(seed);
 }
+
+/* seeds the randim number generator with four values */
+void mm_rand_init(mm_random_seed * seed,
+                  n_uint a, n_uint b, n_uint c, n_uint d)
+{
+    seed->value[0] = a;
+    seed->value[1] = b;
+    seed->value[2] = c;
+    seed->value[3] = d;
+}

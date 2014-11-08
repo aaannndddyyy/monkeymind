@@ -757,13 +757,13 @@ static void test_confabulation()
     for (j = 0; j < 4; j++) {
         mm_object scene;
         mm_obj_init(&scene);
-        mm_obj_prop_add(&scene, (j%5)+2, (j*2)%10);
+        mm_obj_prop_add(&scene, (j%5)+2, (j*3)%10);
         mm_tale_add(&tale_source, &scene);
     }
 
     /* test tale matching */
     n_int target_similarity[] = {
-        2,3,9,3,2,1,0,0,0,0
+        2,5,3,3,2,1,0,0,0,0
     };
     n_int target_offset[] = {
         2,1,0,4,3,2,-1,-1,-1,-1
@@ -777,17 +777,35 @@ static void test_confabulation()
                    (int)i, (int)similarity, (int)offset);
         }
         assert(similarity == target_similarity[i]);
-        assert(offset == target_offset[i]);
+		assert(offset == target_offset[i]);
     }
 
 	/* test locating the closest tale within a set of narratives */
 	offset = -1;
 	index = mm_narratives_match_tale(&narratives, &tale_source,
 									 (n_int)-1, &offset);
-	if (index != 2) {
+	if (index != 1) {
 		printf("index = %d\n",(int)index);
 	}
-	assert(index == 2);
+	assert(index == 1);
+
+	/* make the narrative closer to the source */
+	mm_random_seed seed;
+	mm_rand_init(&seed, 1,2,3,4);
+	mm_tale_confabulate(&tale_source, &narratives.tale[index],
+						100, &seed);
+
+	/* test the match again to ensure that it is more similar
+	   than before */
+	offset = -1;
+	similarity = mm_tale_match(&tale_source, &narratives.tale[index], &offset);
+    if ((similarity != 9) ||
+		(offset != target_offset[index])) {
+		printf("%d similarity = %d  %d\n",
+			   (int)index, (int)similarity, (int)offset);
+	}
+	assert(similarity == 9);
+	assert(offset == target_offset[index]);
 
     printf("Ok\n");
 }
