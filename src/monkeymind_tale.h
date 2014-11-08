@@ -72,10 +72,11 @@ n_int mm_tale_add(mm_tale * tale, mm_object * obj,
                   n_uint scene,
                   n_uint viewpoint);
 mm_object * mm_tale_get(mm_tale * tale, n_uint index);
-n_int mm_tale_from_events(mm_episodic * events, mm_tale * tale);
 n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset);
 n_int mm_tale_match_events(mm_tale * tale, mm_episodic * events, n_int * offset);
 void mm_tale_confabulate(mm_tale * source, mm_tale * destination,
                          n_uint percent, mm_random_seed * seed);
+void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
+                             n_uint percent, mm_random_seed * seed);
 
 #endif

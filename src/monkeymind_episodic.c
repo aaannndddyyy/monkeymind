@@ -59,7 +59,7 @@ void mm_episodic_add(mm_episodic * events,
     /* increment the location in the sequence */
     events->index++;
 
-	/* position in the sequence wraps around */
+    /* position in the sequence wraps around */
     if (events->index >= MM_EVENT_MEMORY_SIZE) {
         events->index -= MM_EVENT_MEMORY_SIZE;
     }
