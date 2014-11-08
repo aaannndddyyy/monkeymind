@@ -189,16 +189,18 @@ void mm_tale_confabulate(mm_tale * source, mm_tale * destination,
     }
 }
 
+/* Alter a percentage of current episodic memories based upon
+   a given tale from narrative memory */
 void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
                              n_uint percent, mm_random_seed * seed)
 {
     n_int offset = 0;
     n_uint i, episodic_length = mm_episodic_max(events);
 
-    /* get the offset for the closest match between the tales */
-    mm_tale_match_events(tale, events, &offset);
-
     if (tale->length <= episodic_length) {
+		/* get the offset for the closest match between the tales */
+		mm_tale_match_events(tale, events, &offset);
+
         for (i = 0; i < tale->length; i++) {
             if (mm_rand(seed)%100 > percent) {
                 continue;
