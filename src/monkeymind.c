@@ -66,16 +66,6 @@ void mm_remove_property(monkeymind * mind,
     mm_obj_prop_remove(mind->properties, property_type);
 }
 
-/* initialise the language machine */
-static void mm_init_language(monkeymind * mind)
-{
-    n_int i;
-
-    for (i = 0; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-        mm_language_init(&mind->language[i], &mind->seed);
-    }
-}
-
 /* initialise the spatial memory */
 static void mm_init_spatial(monkeymind * mind)
 {
@@ -142,7 +132,6 @@ void mm_init(monkeymind * mind,
     }
 
     mm_episodic_init(&mind->episodic_buffer);
-    mm_init_language(mind);
     mm_init_spatial(mind);
     mm_som_init(&mind->social_categories,
                 MM_SOCIAL_CATEGORIES_DIMENSION,
@@ -172,95 +161,17 @@ void mm_init(monkeymind * mind,
     /* no cognitive system specified */
     mind->cognitive_system_state = 0;
     mind->cognitive_system_state_size = 0;
-
-    /* during dialog where to start in the language program
-       and how many steps to continue for */
-    mind->language_ptr = 0;
-}
-
-/* A dialogue between two language machines.
-   These would typically be the inner and outer systems */
-static void mm_language_dialogue(monkeymind * mind,
-                                 mm_language_machine * m0,
-                                 mm_language_machine * m1,
-                                 n_byte * data, n_uint data_size,
-                                 mm_episodic * e0,
-                                 mm_episodic * e1)
-{
-    n_uint index = 0;
-    n_int ctr = (n_int)mind->language_ptr; /* program counter */
-    n_int instruction_type;
-
-    /* for each step in the language program */
-    while (index < MM_SIZE_LANGUAGE_INSTRUCTIONS) {
-        instruction_type = m0->instruction[ctr].function%MM_INSTRUCTIONS;
-        switch(instruction_type) {
-        case MM_INSTRUCTION_MATHS: {
-            mm_language_maths(m0, m1, data, data_size, ctr);
-            break;
-        }
-        case MM_INSTRUCTION_COPY: {
-            mm_language_copy(m0, m1, data, data_size, ctr);
-            break;
-        }
-        case MM_INSTRUCTION_JUMP: {
-            ctr =
-                (ctr + mm_language_jump(m0, m1, data, data_size, ctr)) %
-                MM_SIZE_LANGUAGE_INSTRUCTIONS;
-            if (ctr < 0) ctr += MM_SIZE_LANGUAGE_INSTRUCTIONS;
-            break;
-        }
-        }
-
-        index++;
-        ctr++;
-
-        /* keep the program counter within range */
-        if (ctr >= MM_SIZE_LANGUAGE_INSTRUCTIONS) {
-            ctr -= MM_SIZE_LANGUAGE_INSTRUCTIONS;
-        }
-
-        /* the program stops here */
-        if (instruction_type == MM_INSTRUCTION_HALT) {
-            break;
-        }
-    }
-
-    /* record the program counter position */
-    mind->language_ptr = (n_uint)ctr;
 }
 
 /* external dialogue between two agents */
 void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 {
+	/*
     n_uint attention0 = mind0->attention[MM_ATTENTION_SOCIAL_GRAPH];
     n_uint attention1 = mind1->attention[MM_ATTENTION_SOCIAL_GRAPH];
-    mm_language_machine * m0, * m1;
+	*/
 
-    if (mind0 == mind1) {
-        /* dialogue with the self */
-        m0 = &mind0->language[MM_SELF];
-    }
-    else {
-        /* dialogue with another */
-        m0 = &mind0->language[attention0];
-    }
-
-    m1 = &mind0->language[attention1];
-
-    /* A talks to B */
-    mm_language_dialogue(mind0, m0, m1,
-                         mind0->cognitive_system_state,
-                         mind0->cognitive_system_state_size,
-                         &mind0->episodic_buffer,
-                         &mind1->episodic_buffer);
-
-    /* B replies to A */
-    mm_language_dialogue(mind1, m1, m0,
-                         mind1->cognitive_system_state,
-                         mind1->cognitive_system_state_size,
-                         &mind1->episodic_buffer,
-                         &mind0->episodic_buffer);
+	/* TODO narrative based dialogue */
 }
 
 /* internal dialogue within an agent */

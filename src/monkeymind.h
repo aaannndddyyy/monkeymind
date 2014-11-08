@@ -40,7 +40,6 @@
 #include "monkeymind_object.h"
 #include "monkeymind_som.h"
 #include "monkeymind_narratives.h"
-#include "monkeymind_language.h"
 #include "monkeymind_episodic.h"
 #include "monkeymind_motives.h"
 
@@ -117,10 +116,6 @@ typedef struct
 
     /* abstracted individuals */
     mm_object social_stereotype[MM_SIZE_SOCIAL_STEREOTYPES];
-
-    /* language machinery associated with each social graph entry */
-    mm_language_machine language[MM_SIZE_SOCIAL_GRAPH];
-    n_uint language_ptr;
 
     /* spatial memory */
     mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
