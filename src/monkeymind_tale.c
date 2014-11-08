@@ -133,9 +133,30 @@ n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset)
 	}
 
 	for (off = 0; off < t1->length - t2->length; off++) {
-		similarity = 0;
+		similarity = mm_obj_match(&t1->properties, &t2->properties);
 		for (i = 0; i < t2->length; i++) {
 			similarity += mm_obj_match(&t1->step[off+i],&t2->step[i]);
+		}
+		if (similarity > max_similarity) {
+			max_similarity = similarity;
+			*offset = off;
+		}
+	}
+
+	return max_similarity;
+}
+
+/* returns the similarity between a tale and the current
+   episodic sequence of events */
+n_int mm_tale_match_events(mm_tale * tale, mm_episodic * events, n_int * offset)
+{
+	n_int similarity, max_similarity=0;
+	n_uint i, off, episodic_length = mm_episodic_max(events);
+
+	for (off = 0; off < episodic_length-tale->length; off++) {
+		similarity = 0;
+		for (i = 0; i < tale->length; i++) {
+			similarity += mm_obj_match(&events->sequence[off+i], &tale->step[i]);
 		}
 		if (similarity > max_similarity) {
 			max_similarity = similarity;
