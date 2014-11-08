@@ -499,7 +499,6 @@ static void test_tale()
 static void test_narratives()
 {
     n_int i, j;
-    mm_tale tale;
     mm_narratives narratives;
 
     printf("test_narratives...");
@@ -508,9 +507,12 @@ static void test_narratives()
 
 	/* create some tales */
     for (i = 0; i < 10; i++) {
+		mm_tale tale;
         mm_tale_init(&tale, i);
 		for (j = 0; j < 10; j++) {
-
+			mm_object scene;
+			mm_obj_init(&scene);
+			mm_tale_add(&tale, &scene);
 		}
         assert(mm_narratives_add(&narratives, &tale) == 0);
         assert(narratives.length == i+1);
