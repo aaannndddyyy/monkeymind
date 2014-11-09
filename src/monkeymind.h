@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "monkeymind_id.h"
 #include "monkeymind_rand.h"
 #include "monkeymind_time.h"
 #include "monkeymind_emotion.h"
@@ -87,7 +88,7 @@ typedef struct
 
 typedef struct
 {
-    n_uint id;
+    mm_id id;
 
     mm_random_seed seed;
 
@@ -138,7 +139,6 @@ n_uint mm_get_property(monkeymind * mind,
 void mm_remove_property(monkeymind * mind,
                         n_uint property_type);
 void mm_init(monkeymind * mind,
-             n_uint id,
              n_byte sex,
              n_byte first_name,
              n_byte surname,

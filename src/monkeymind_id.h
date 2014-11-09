@@ -2,6 +2,10 @@
 
  Monkeymind - an experimental cogitive architecture
 
+ The episodic buffer records the stream of perceived
+ circumstances, then filtering out (or compressing) the
+ relevant from the forgettable
+
  =============================================================
 
  Copyright 2013-2014 Bob Mottram
@@ -29,40 +33,25 @@
 
 ****************************************************************/
 
-#ifndef MONKEYMIND_NARRATIVES_H
-#define MONKEYMIND_NARRATIVES_H
+#ifndef MONKEYMIND_ID_H
+#define MONKEYMIND_ID_H
 
 #include <stdio.h>
 #include <string.h>
-#include "monkeymind_id.h"
-#include "monkeymind_object.h"
-#include "monkeymind_episodic.h"
-#include "monkeymind_tale.h"
+#include "monkeymind_datatypes.h"
+#include "monkeymind_rand.h"
 
-/* size of narrative memory */
-#define MM_SIZE_NARRATIVES     32
+#define MM_ID_LENGTH 3
+typedef struct {
+    n_uint value[MM_ID_LENGTH];
+} mm_id;
 
-typedef struct
-{
-    n_uint length;
-    mm_tale tale[MM_SIZE_NARRATIVES];
-} mm_narratives;
+void mm_id_create(mm_random_seed * seed, mm_id * id);
+n_int mm_id_equals(mm_id * id1, mm_id * id2);
+void mm_id_copy(mm_id * source, mm_id * destination);
+void mm_id_set(mm_id * id, n_uint value);
+n_uint mm_id_get(mm_id * id, n_uint index);
+n_int mm_id_exists(mm_id * id);
+void mm_id_clear(mm_id * id);
 
-void mm_narratives_init(mm_narratives * narratives);
-void mm_narratives_copy(mm_narratives * narratives,
-                        n_uint index,
-                        mm_tale * tale);
-n_int mm_narratives_insert(mm_narratives * narratives,
-                           n_uint index,
-                           mm_tale * tale);
-n_int mm_narratives_remove(mm_narratives * narratives,
-                           n_uint index);
-n_int mm_narratives_add(mm_narratives * narratives,
-                        mm_tale * tale);
-n_int mm_narratives_get(mm_narratives * narratives, mm_id * id);
-n_int mm_narratives_least_heard(mm_narratives * narratives);
-n_int mm_narratives_match_tale(mm_narratives * narratives,
-                               mm_tale * tale,
-                               n_int min_similarity,
-                               n_int * offset);
 #endif

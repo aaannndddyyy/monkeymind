@@ -87,12 +87,12 @@ n_int mm_narratives_add(mm_narratives * narratives,
 }
 
 /* returns the array index of the narrative with the given id */
-n_int mm_narratives_get(mm_narratives * narratives, n_uint id)
+n_int mm_narratives_get(mm_narratives * narratives, mm_id * id)
 {
     n_uint i;
 
     for (i = 0; i < narratives->length; i++) {
-        if (narratives->tale[i].id == id) return i;
+        if (mm_id_equals(&narratives->tale[i].id, id)) return i;
     }
     return -1;
 }

@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "monkeymind_datatypes.h"
+#include "monkeymind_id.h"
 
 /* the maximum number of properties of an object */
 #define MM_MAX_OBJECT_PROPERTIES  16
@@ -105,12 +106,13 @@ enum property_types
 
 typedef struct
 {
-    n_uint id;
+    mm_id id;
 
     /* a number of properties of the object */
     n_uint length;
     n_uint property_type[MM_MAX_OBJECT_PROPERTIES];
     n_uint property_value[MM_MAX_OBJECT_PROPERTIES];
+    mm_id property_id[MM_MAX_OBJECT_PROPERTIES];
 
     /* how often has this property been observed or known */
     n_uint property_frequency[MM_MAX_OBJECT_PROPERTIES];
@@ -129,22 +131,29 @@ n_int mm_obj_prop_range(n_uint property_type,
 n_int mm_obj_prop_add(mm_object * obj,
                       n_uint property_type,
                       n_uint property_value);
+n_int mm_obj_prop_add_id(mm_object * obj,
+                         n_uint property_type,
+                         mm_id * property_id);
 n_int mm_obj_prop_remove(mm_object * obj,
                          n_uint property_type);
 n_uint mm_obj_prop_get(mm_object * obj,
                        n_uint property_type);
-n_uint mm_obj_prop_get_index(mm_object * obj,
-                             n_int index);
+void mm_obj_prop_get_id(mm_object * obj,
+                        n_uint property_type,
+                        mm_id * id);
 n_int mm_obj_prop_set(mm_object * obj,
                       n_uint property_type,
                       n_uint property_value);
+n_int mm_obj_prop_set_id(mm_object * obj,
+                         n_uint property_type,
+                         mm_id * property_id);
 void mm_obj_copy(mm_object *src, mm_object * dest);
 void mm_obj_to_vect(mm_object * obj,
                     n_byte * vect);
 n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
 n_int mm_obj_match(mm_object * obj1, mm_object * obj2);
 void mm_obj_change_perspective(mm_object * obj,
-                               n_uint from_id, n_uint from_name,
-                               n_uint to_id, n_uint to_name);
+                               mm_id * from_id, n_uint from_name,
+                               mm_id * to_id, n_uint to_name);
 
 #endif

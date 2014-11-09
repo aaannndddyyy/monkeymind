@@ -31,9 +31,9 @@
 
 #include "monkeymind_tale.h"
 
-void mm_tale_init(mm_tale * tale, n_uint id)
+void mm_tale_init(mm_tale * tale, mm_random_seed * seed)
 {
-    tale->id = id;
+    mm_id_create(seed, &tale->id);
     tale->length = 0;
     tale->times_told = 0;
 
@@ -124,7 +124,7 @@ n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset)
     for (off = 0; off < t1->length - t2->length; off++) {
         similarity = mm_obj_match(&t1->properties, &t2->properties);
         for (i = 0; i < t2->length; i++) {
-            similarity += mm_obj_match(&t1->step[off+i],&t2->step[i]);
+            similarity += mm_obj_match(&t1->step[off+i], &t2->step[i]);
         }
         if (similarity > max_similarity) {
             max_similarity = similarity;
@@ -208,8 +208,8 @@ void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
 
 /* change perspective of a tale */
 void mm_tale_change_perspective(mm_tale * tale,
-                                n_uint from_id, n_uint from_name,
-                                n_uint to_id, n_uint to_name)
+                                mm_id * from_id, n_uint from_name,
+                                mm_id * to_id, n_uint to_name)
 {
     n_uint i;
 

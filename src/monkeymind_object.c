@@ -179,10 +179,54 @@ n_int mm_obj_prop_add(mm_object * obj,
         for (i = obj->length-1; i >= index; i--) {
             obj->property_type[i+1] = obj->property_type[i];
             obj->property_value[i+1] = obj->property_value[i];
+            mm_id_copy(&obj->property_id[i], &obj->property_id[i+1]);
         }
     }
     obj->property_type[index] = property_type;
     obj->property_value[index] = property_value;
+    mm_id_clear(&obj->property_id[index]);
+    obj->length++;
+    return index;
+}
+
+/* adds a property to an object and returns its array index */
+n_int mm_obj_prop_add_id(mm_object * obj,
+                         n_uint property_type,
+                         mm_id * property_id)
+{
+    n_int i, index = 0;
+
+    if (obj->length >= MM_MAX_OBJECT_PROPERTIES) return -1;
+
+    index = mm_obj_prop_index(obj, property_type);
+    if (index == -1) {
+        /* property doesn't already exist
+           so find a location for it */
+        index = 0;
+        while (index < obj->length) {
+            if (obj->property_type[index] > property_type) {
+                break;
+            }
+            index++;
+        }
+    }
+    else {
+        /* overwrite existing id for this property type */
+        mm_id_copy(property_id, &obj->property_id[index]);
+        return index;
+    }
+
+    if (index < obj->length) {
+        /* insert */
+        for (i = obj->length-1; i >= index; i--) {
+            obj->property_type[i+1] = obj->property_type[i];
+            obj->property_value[i+1] = obj->property_value[i];
+            mm_id_copy(&obj->property_id[i], &obj->property_id[i+1]);
+        }
+    }
+    obj->property_type[index] = property_type;
+    obj->property_value[index] = 1;
+    mm_id_copy(property_id, &obj->property_id[index]);
     obj->length++;
     return index;
 }
@@ -207,6 +251,7 @@ n_int mm_obj_prop_remove(mm_object * obj,
     for (i = index+1; i < obj->length; i++) {
         obj->property_type[i-1] = obj->property_type[i];
         obj->property_value[i-1] = obj->property_value[i];
+        mm_id_copy(&obj->property_id[i], &obj->property_id[i-1]);
     }
     obj->length--;
     return 0;
@@ -221,6 +266,18 @@ n_uint mm_obj_prop_get(mm_object * obj,
     return 0;
 }
 
+/* returns an id for the given property type */
+void mm_obj_prop_get_id(mm_object * obj,
+                        n_uint property_type,
+                        mm_id * id)
+{
+    n_int index = mm_obj_prop_index(obj, property_type);
+    if (index > -1) {
+        mm_id_copy(&obj->property_id[index], id);
+    }
+    mm_id_clear(id);
+}
+
 /* sets an object property value */
 n_int mm_obj_prop_set(mm_object * obj,
                       n_uint property_type,
@@ -229,6 +286,19 @@ n_int mm_obj_prop_set(mm_object * obj,
     n_int index = mm_obj_prop_index(obj, property_type);
     if (index > -1) {
         obj->property_value[index] = property_value;
+        return 0;
+    }
+    return -1;
+}
+
+/* sets an object property id */
+n_int mm_obj_prop_set_id(mm_object * obj,
+                         n_uint property_type,
+                         mm_id * property_id)
+{
+    n_int index = mm_obj_prop_index(obj, property_type);
+    if (index > -1) {
+        mm_id_copy(property_id, &obj->property_id[index]);
         return 0;
     }
     return -1;
@@ -276,6 +346,10 @@ n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2)
             obj2->property_value[i]) {
             return -1;
         }
+        if (!mm_id_equals(&obj1->property_id[i],
+                          &obj2->property_id[i])) {
+            return -1;
+        }
     }
     return 0;
 }
@@ -287,6 +361,7 @@ n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
     n_int similarity;
     n_uint i, value, same_types = 0;
     n_uint same_values = 0;
+	mm_id test_id;
 
     for (i = 0; i < obj1->length; i++) {
         value = mm_obj_prop_get(obj2, obj1->property_type[i]);
@@ -296,6 +371,13 @@ n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
                 same_values++;
             }
         }
+		if (mm_id_exists(&obj1->property_id[i])) {
+			mm_obj_prop_get_id(obj2, obj1->property_type[i], &test_id);
+			if (mm_id_equals(&test_id,
+							 &obj1->property_id[i])) {
+				same_values++;
+			}
+		}
     }
     similarity = same_types + (2*same_values);
     return similarity;
@@ -303,16 +385,16 @@ n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
 
 /* change the perspective of the meeter to a given being */
 void mm_obj_change_perspective(mm_object * obj,
-                               n_uint from_id, n_uint from_name,
-                               n_uint to_id, n_uint to_name)
+                               mm_id * from_id, n_uint from_name,
+                               mm_id * to_id, n_uint to_name)
 {
     n_uint i;
 
     for (i = 0; i < obj->length; i++) {
         if (((obj->property_type[i] == MM_PROPERTY_MEETER) ||
              (obj->property_type[i] == MM_PROPERTY_MET)) &&
-            (obj->property_value[i] == from_id)) {
-            obj->property_value[i] = to_id;
+            (mm_id_equals(&obj->property_id[i], from_id))) {
+            mm_id_copy(to_id, &obj->property_id[i]);
         }
         if ((obj->property_type[i] == MM_PROPERTY_MEETER_NAME) &&
             (obj->property_value[i] == from_name)) {

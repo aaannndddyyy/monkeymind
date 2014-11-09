@@ -72,7 +72,7 @@ static void mm_init_spatial(monkeymind * mind)
     n_int i;
 
     for (i = 0; i < MM_SIZE_SPATIAL*MM_SIZE_SPATIAL; i++) {
-        mind->spatial[i].id = i;
+		mm_id_set(&mind->spatial[i].id, i);
     }
 }
 
@@ -92,7 +92,6 @@ static void random_categories(mm_random_seed * seed,
 
 /* initialises a mind */
 void mm_init(monkeymind * mind,
-             n_uint id,
              n_byte sex,
              n_byte first_name,
              n_byte surname,
@@ -101,17 +100,15 @@ void mm_init(monkeymind * mind,
     mm_object * individual;
     n_uint name, i;
 
-    mind->id = id;
-
     if (seed != NULL) {
         mm_rand_copy(seed, &mind->seed);
     }
     else {
         /* a default random seed */
-        for (i = 0; i < 4; i++) {
-            mind->seed.value[i] = i;
-        }
+		mm_rand_init(&mind->seed, 0,1,2,3);
     }
+
+    mm_id_create(&mind->seed, &mind->id);
 
     name = MM_NAME(sex,first_name,surname);
 
@@ -144,14 +141,14 @@ void mm_init(monkeymind * mind,
     individual = &mind->social_graph[MM_SELF];
     individual->length = 0;
 
-    mm_obj_prop_add(individual,
-                    MM_PROPERTY_MEETER, id);
+    mm_obj_prop_add_id(individual,
+					   MM_PROPERTY_MEETER, &mind->id);
 
     mm_obj_prop_add(individual,
                     MM_PROPERTY_MEETER_NAME, name);
 
-    mm_obj_prop_add(individual,
-                    MM_PROPERTY_MET, id);
+    mm_obj_prop_add_id(individual,
+					   MM_PROPERTY_MET, &mind->id);
 
     mm_obj_prop_add(individual,
                     MM_PROPERTY_MET_NAME, name);

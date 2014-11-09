@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "monkeymind_id.h"
 #include "monkeymind_object.h"
 #include "monkeymind_episodic.h"
 
@@ -43,7 +44,7 @@
 typedef struct
 {
     /* a unique reference for the tale */
-    n_uint id;
+    mm_id id;
 
     /* properties of the tale */
     mm_object properties;
@@ -59,7 +60,7 @@ typedef struct
     n_uint times_heard;
 } mm_tale;
 
-void mm_tale_init(mm_tale * tale, n_uint id);
+void mm_tale_init(mm_tale * tale, mm_random_seed * seed);
 n_int mm_tale_insert(mm_tale * tale,
                      mm_object * obj, n_uint index);
 n_int mm_tale_remove(mm_tale * tale,
@@ -71,8 +72,8 @@ n_int mm_tale_match_events(mm_tale * tale, mm_episodic * events, n_int * offset)
 void mm_tale_confabulate(mm_tale * source, mm_tale * destination,
                          n_uint percent, mm_random_seed * seed);
 void mm_tale_change_perspective(mm_tale * tale,
-                                n_uint from_id, n_uint from_name,
-                                n_uint to_id, n_uint to_name);
+                                mm_id * from_id, n_uint from_name,
+                                mm_id * to_id, n_uint to_name);
 void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
                              n_uint percent, mm_random_seed * seed);
 

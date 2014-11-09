@@ -31,16 +31,29 @@
 
 #include "monkeymind_social.h"
 
+n_int mm_social_graph_entry_exists(monkeymind *mind, n_int index)
+{
+	mm_id test_id;
+
+	mm_obj_prop_get_id(&mind->social_graph[index],
+					   MM_PROPERTY_MEETER, &test_id);
+
+	return mm_id_exists(&test_id);
+}
+
 /* returns the social graph array index of the individual having the
    given id */
-n_int mm_social_index_from_id(monkeymind * mind, n_uint met_id)
+n_int mm_social_index_from_id(monkeymind * mind, mm_id * met_id)
 {
     n_int i;
+	mm_id test_id;
 
     for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-        if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
-        if (mm_obj_prop_get(&mind->social_graph[i],
-                            MM_PROPERTY_MEETER) == met_id) {
+		if (!mm_social_graph_entry_exists(mind, i)) break;
+
+		mm_obj_prop_get_id(&mind->social_graph[i],
+						   MM_PROPERTY_MEETER, &test_id);
+        if (mm_id_equals(&test_id, met_id)) {
             return i;
         }
     }
@@ -54,7 +67,8 @@ n_int mm_social_index_from_name(monkeymind * mind, n_uint met_name)
     n_int i;
 
     for (i = MM_SELF+1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-        if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
+		if (!mm_social_graph_entry_exists(mind, i)) break;
+
         if (mm_obj_prop_get(&mind->social_graph[i],
                             MM_PROPERTY_MET_NAME) == met_name) {
             return i;
@@ -71,7 +85,8 @@ static n_int mm_social_forget(monkeymind * mind)
 
     /* pick the individual with the fewest observations */
     for (i = 1; i < MM_SIZE_SOCIAL_GRAPH; i++) {
-        if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind,i)) break;
+		if (!mm_social_graph_entry_exists(mind, i)) break;
+
         if (mind->social_graph[i].observations < min_observations) {
             min_observations = mind->social_graph[i].observations;
             index = i;
@@ -275,7 +290,8 @@ void mm_communicate_social_categorisation(monkeymind * mind,
     n_uint social_x, social_y;
     n_byte normalised_properties[MM_PROPERTIES];
 
-    if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
+	if (!mm_social_graph_entry_exists(mind, index)) return;
+
     individual = &mind->social_graph[index];
 
     social_x = mm_obj_prop_get(individual, MM_PROPERTY_SOCIAL_X);
@@ -303,7 +319,8 @@ static void mm_social_categorisation(monkeymind * mind,
     n_byte normalised_properties[MM_PROPERTIES];
     n_uint fof, attraction, social_x=0, social_y=0;
 
-    if (!SOCIAL_GRAPH_ENTRY_EXISTS(mind, index)) return;
+	if (!mm_social_graph_entry_exists(mind, index)) return;
+
     individual = &mind->social_graph[index];
 
     /* normalise property values into a single byte range */
@@ -375,15 +392,15 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
     /* remember properties of the met individual */
     mm_obj_copy(met->properties, individual);
 
-    mm_obj_prop_add(individual,
-                    MM_PROPERTY_MEETER, meeter->id);
+    mm_obj_prop_add_id(individual,
+					   MM_PROPERTY_MEETER, &meeter->id);
 
     mm_obj_prop_add(individual,
                     MM_PROPERTY_MEETER_NAME,
                     mm_get_property(meeter, MM_PROPERTY_NAME));
 
-    mm_obj_prop_add(individual,
-                    MM_PROPERTY_MET, met->id);
+    mm_obj_prop_add_id(individual,
+					   MM_PROPERTY_MET, &met->id);
 
     mm_obj_prop_add(individual,
                     MM_PROPERTY_MET_NAME,
@@ -416,17 +433,17 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 void mm_social_meet(monkeymind * meeter, monkeymind * met)
 {
     n_byte familiar = 0;
-    n_int index = mm_social_index_from_id(meeter, met->id);
+    n_int index = mm_social_index_from_id(meeter, &met->id);
 
     if (index == -1) {
         /* are all array entries occupied? */
-        if (SOCIAL_GRAPH_ENTRY_EXISTS(meeter,MM_SIZE_SOCIAL_GRAPH-1)) {
+		if (mm_social_graph_entry_exists(meeter, MM_SIZE_SOCIAL_GRAPH-1)) {
             index = mm_social_forget(meeter);
         }
         else {
             /* find the last entry */
             for (index = MM_SIZE_SOCIAL_GRAPH-1; index >= 0; index--) {
-                if (SOCIAL_GRAPH_ENTRY_EXISTS(meeter,index)) {
+				if (mm_social_graph_entry_exists(meeter, index)) {
                     index++;
                     break;
                 }
