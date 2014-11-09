@@ -31,6 +31,33 @@
 
 #include "monkeymind_unittests.h"
 
+static void test_id()
+{
+    mm_random_seed seed;
+    mm_id id;
+    n_uint i;
+
+    printf("test_id...");
+
+    /* Set a random seed */
+    mm_rand_init(&seed, 0,1,2,3);
+
+    mm_id_create(&seed, &id);
+
+    for (i = 0; i < MM_ID_LENGTH; i++) {
+        assert(mm_id_get(&id, i) != 0);
+    }
+    assert(mm_id_exists(&id));
+
+    mm_id_clear(&id);
+    for (i = 0; i < MM_ID_LENGTH; i++) {
+        assert(mm_id_get(&id, i) == 0);
+    }
+    assert(!mm_id_exists(&id));
+
+    printf("Ok\n");
+}
+
 static void test_init()
 {
     monkeymind mind;
@@ -237,7 +264,7 @@ static void test_som()
     printf("test_som...");
 
     /* Set a random seed */
-	mm_rand_init(&seed, 0,1,2,3);
+    mm_rand_init(&seed, 0,1,2,3);
 
     /* Initialise the SOM */
     mm_som_init(&som,
@@ -456,7 +483,7 @@ static void test_tale()
     printf("test_tale...");
 
     /* Set a random seed */
-	mm_rand_init(&seed, 0,1,2,3);
+    mm_rand_init(&seed, 0,1,2,3);
 
     /* Create a tale and some observation steps to insert into it */
     mm_tale_init(&tale, &seed);
@@ -503,12 +530,12 @@ static void test_narratives()
     n_uint i, j;
     mm_narratives narratives;
     mm_random_seed seed;
-	mm_id id[10];
+    mm_id id[10];
 
     printf("test_narratives...");
 
     /* Set a random seed */
-	mm_rand_init(&seed, 0,1,2,3);
+    mm_rand_init(&seed, 0,1,2,3);
 
     mm_narratives_init(&narratives);
 
@@ -516,7 +543,7 @@ static void test_narratives()
     for (i = 0; i < 10; i++) {
         mm_tale tale;
         mm_tale_init(&tale, &seed);
-		mm_id_copy(&tale.id, &id[i]);
+        mm_id_copy(&tale.id, &id[i]);
         for (j = 0; j < 11; j++) {
             mm_object scene;
             mm_obj_init(&scene);
@@ -551,7 +578,7 @@ static void test_confabulation()
     printf("test_confabulation...");
 
     /* Set a random seed */
-	mm_rand_init(&seed, 0,1,2,3);
+    mm_rand_init(&seed, 0,1,2,3);
 
     mm_narratives_init(&narratives);
 
@@ -596,52 +623,53 @@ static void test_confabulation()
                    (int)i, (int)similarity, (int)offset);
         }
         assert(similarity == target_similarity[i]);
-		assert(offset == target_offset[i]);
+        assert(offset == target_offset[i]);
     }
 
-	/* test locating the closest tale within a set of narratives */
-	offset = -1;
-	index = mm_narratives_match_tale(&narratives, &tale_source,
-									 (n_int)-1, &offset);
-	if (index != 1) {
-		printf("index = %d\n",(int)index);
-	}
-	assert(index == 1);
+    /* test locating the closest tale within a set of narratives */
+    offset = -1;
+    index = mm_narratives_match_tale(&narratives, &tale_source,
+                                     (n_int)-1, &offset);
+    if (index != 1) {
+        printf("index = %d\n",(int)index);
+    }
+    assert(index == 1);
 
-	/* make the narrative closer to the source */
-	mm_tale_confabulate(&tale_source, &narratives.tale[index],
-						100, &seed);
+    /* make the narrative closer to the source */
+    mm_tale_confabulate(&tale_source, &narratives.tale[index],
+                        100, &seed);
 
-	/* test the match again to ensure that it is more similar
-	   than before */
-	offset = -1;
-	similarity = mm_tale_match(&tale_source, &narratives.tale[index], &offset);
+    /* test the match again to ensure that it is more similar
+       than before */
+    offset = -1;
+    similarity = mm_tale_match(&tale_source, &narratives.tale[index], &offset);
     if ((similarity != 9) ||
-		(offset != target_offset[index])) {
-		printf("%d similarity = %d  %d\n",
-			   (int)index, (int)similarity, (int)offset);
-	}
-	assert(similarity == 9);
-	assert(offset == target_offset[index]);
+        (offset != target_offset[index])) {
+        printf("%d similarity = %d  %d\n",
+               (int)index, (int)similarity, (int)offset);
+    }
+    assert(similarity == 9);
+    assert(offset == target_offset[index]);
 
     printf("Ok\n");
 }
 
 void mm_run_tests()
 {
+    test_id();
     test_init();
-	/*
     test_spatial();
     test_object_add_remove_properties();
     test_name();
     test_social_meet();
+    /*
     test_som();
     test_communicate_social_categorisation();
     test_episodic();
     test_tale();
     test_narratives();
     test_confabulation();
-	*/
+    */
 
     printf("All tests passed\n");
 }
