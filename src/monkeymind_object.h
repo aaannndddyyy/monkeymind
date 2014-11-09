@@ -87,6 +87,7 @@ enum property_types
     MM_PROPERTY_TALE_ACT,
     MM_PROPERTY_TALE_SCENE,
     MM_PROPERTY_TALE_VIEWPOINT,
+    MM_PROPERTY_AWAKE_PERCENT,
 
     /* where */
     MM_PROPERTY_PLACE_X,
@@ -142,6 +143,8 @@ void mm_obj_to_vect(mm_object * obj,
                     n_byte * vect);
 n_int mm_obj_cmp(mm_object * obj1, mm_object * obj2);
 n_int mm_obj_match(mm_object * obj1, mm_object * obj2);
-void mm_obj_change_perspective(mm_object * obj, n_uint id, n_uint name);
+void mm_obj_change_perspective(mm_object * obj,
+                               n_uint from_id, n_uint from_name,
+                               n_uint to_id, n_uint to_name);
 
 #endif

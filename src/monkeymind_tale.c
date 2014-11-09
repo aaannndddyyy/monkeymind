@@ -207,11 +207,15 @@ void mm_episodic_confabulate(mm_episodic * events, mm_tale * tale,
 }
 
 /* change perspective of a tale */
-void mm_tale_change_perspective(mm_tale * tale, n_uint id, n_uint name)
+void mm_tale_change_perspective(mm_tale * tale,
+                                n_uint from_id, n_uint from_name,
+                                n_uint to_id, n_uint to_name)
 {
     n_uint i;
 
     for (i = 0; i < tale->length; i++) {
-        mm_obj_change_perspective(&tale->step[i], id, name);
+        mm_obj_change_perspective(&tale->step[i],
+                                  from_id, from_name,
+                                  to_id, to_name);
     }
 }

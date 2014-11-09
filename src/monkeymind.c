@@ -158,6 +158,8 @@ void mm_init(monkeymind * mind,
 
     mm_add_property(mind, MM_PROPERTY_NAME, name);
 
+    mm_add_property(mind, MM_PROPERTY_AWAKE_PERCENT, 100);
+
     /* no cognitive system specified */
     mind->cognitive_system_state = 0;
     mind->cognitive_system_state_size = 0;
@@ -177,7 +179,15 @@ void mm_dialogue(monkeymind * mind0, monkeymind * mind1)
 /* internal dialogue within an agent */
 void mm_dialogue_internal(monkeymind * mind)
 {
-    mm_dialogue(mind, mind);
+	/* IDEA: when sleeping narrative memories can be transfered
+	   to the episodic buffer and vice versa */
+	n_uint awake_percent =
+		mm_obj_prop_get(mind->properties,
+						MM_PROPERTY_AWAKE_PERCENT);
+
+	/*mm_episodic_confabulate(&mind->episodic_buffer, mm_tale * tale,
+	  awake_percent, mind->seed);*/
+
 }
 
 /* transmits a narrative from a speaker to a listener */
@@ -190,7 +200,7 @@ n_int mm_dialogue_narrative(monkeymind * speaker, monkeymind * listener)
 	n_int min_similarity = 0;
 	n_int offset = 0;
 
-	/* this should vary depending upon social and/or physiological factors */
+	/* TODO this should vary depending upon social and/or physiological factors */
 	n_int listener_interest_percent = 20;
 
 	/* does the speaker have nothing to say? */

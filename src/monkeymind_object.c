@@ -302,16 +302,21 @@ n_int mm_obj_match(mm_object * obj1, mm_object * obj2)
 }
 
 /* change the perspective of the meeter to a given being */
-void mm_obj_change_perspective(mm_object * obj, n_uint id, n_uint name)
+void mm_obj_change_perspective(mm_object * obj,
+                               n_uint from_id, n_uint from_name,
+                               n_uint to_id, n_uint to_name)
 {
     n_uint i;
 
     for (i = 0; i < obj->length; i++) {
-        if (obj->property_type[i] == MM_PROPERTY_MEETER) {
-			obj->property_value[i] = id;
-		}
-        if (obj->property_type[i] == MM_PROPERTY_MEETER_NAME) {
-			obj->property_value[i] = name;
-		}
+        if (((obj->property_type[i] == MM_PROPERTY_MEETER) ||
+             (obj->property_type[i] == MM_PROPERTY_MET)) &&
+            (obj->property_value[i] == from_id)) {
+            obj->property_value[i] = to_id;
+        }
+        if ((obj->property_type[i] == MM_PROPERTY_MEETER_NAME) &&
+            (obj->property_value[i] == from_name)) {
+            obj->property_value[i] = to_name;
+        }
     }
 }
