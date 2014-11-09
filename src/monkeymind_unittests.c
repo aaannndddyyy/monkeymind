@@ -34,8 +34,8 @@
 static void test_id()
 {
     mm_random_seed seed;
-    mm_id id;
-    n_uint i;
+    mm_id id, id2;
+    n_uint i, itt;
 
     printf("test_id...");
 
@@ -50,6 +50,23 @@ static void test_id()
         assert(mm_id_get(&id, i) != 0);
     }
     assert(mm_id_exists(&id));
+
+	/* check that the same id isn't created repeatedly */
+	for (itt = 0; itt < 10; itt++) {
+		mm_id_create(&seed, &id2);
+		if (mm_id_equals(&id, &id2)) {
+			printf("\n(itt %d)\n  ", itt);
+			for (i = 0; i < MM_ID_LENGTH; i++) {
+				printf("%d ", mm_id_get(&id, i));
+			}
+			printf("\n");
+			for (i = 0; i < MM_ID_LENGTH; i++) {
+				printf("%d ", mm_id_get(&id2, i));
+			}
+			printf("\n");
+		}
+		assert(!mm_id_equals(&id, &id2));
+	}
 
     /* clear the id */
     mm_id_clear(&id);

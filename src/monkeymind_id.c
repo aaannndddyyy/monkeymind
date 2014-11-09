@@ -17,10 +17,10 @@ n_int mm_id_equals(mm_id * id1, mm_id * id2)
 
     for (i = 0; i < MM_ID_LENGTH; i++) {
         if (id1->value[i] != id2->value[i]) {
-            return -1;
+            return 0;
         }
     }
-    return 0;
+    return 1;
 }
 
 /* copy an id */
