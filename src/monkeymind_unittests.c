@@ -42,14 +42,19 @@ static void test_id()
     /* Set a random seed */
     mm_rand_init(&seed, 0,1,2,3);
 
+    /* create an id */
     mm_id_create(&seed, &id);
 
+    /* test that the id exists */
     for (i = 0; i < MM_ID_LENGTH; i++) {
         assert(mm_id_get(&id, i) != 0);
     }
     assert(mm_id_exists(&id));
 
+    /* clear the id */
     mm_id_clear(&id);
+
+    /* check that it has been cleared */
     for (i = 0; i < MM_ID_LENGTH; i++) {
         assert(mm_id_get(&id, i) == 0);
     }
