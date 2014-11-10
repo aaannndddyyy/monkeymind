@@ -697,7 +697,7 @@ static void test_confabulation()
 
     /* create a source tale */
     mm_tale tale_source;
-    mm_tale_init(&tale_source, 0);
+    mm_tale_init(&tale_source, &seed);
     for (j = 0; j < 4; j++) {
         mm_object scene;
         mm_obj_init(&scene);
@@ -766,7 +766,7 @@ void mm_run_tests()
     test_episodic();
     test_tale();
     test_narratives();
-    /*test_confabulation();*/
+    test_confabulation();
 
     printf("All tests passed\n");
 }
