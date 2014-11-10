@@ -380,12 +380,17 @@ static void test_communicate_social_categorisation()
 {
     monkeymind m0, m1;
     n_int c, i, ctr;
+    mm_random_seed seed_m0, seed_m1;
 
     printf("test_communicate_social_categorisation...");
 
+    /* Set a random seeds */
+    mm_rand_init(&seed_m0, 0,1,2,3);
+    mm_rand_init(&seed_m1, 5,6,2,8);
+
     /* Initialise two agents */
-    mm_init(&m0, MM_SEX_MALE, 10,20, NULL);
-    mm_init(&m1, MM_SEX_FEMALE, 11,31, NULL);
+    mm_init(&m0, MM_SEX_MALE, 10,20, &seed_m0);
+    mm_init(&m1, MM_SEX_FEMALE, 11,31, &seed_m1);
 
     /* The two agents meet */
     mm_social_meet(&m0,&m1);
@@ -756,14 +761,12 @@ void mm_run_tests()
     test_object_add_remove_properties();
     test_name();
     test_social_meet();
-    /*
     test_som();
     test_communicate_social_categorisation();
     test_episodic();
     test_tale();
     test_narratives();
-    test_confabulation();
-    */
+    /*test_confabulation();*/
 
     printf("All tests passed\n");
 }
