@@ -66,6 +66,8 @@ void mm_episodic_add(mm_episodic * events,
                      mm_object * observation);
 n_uint mm_episodic_max(mm_episodic * events);
 mm_object * mm_episodic_get(mm_episodic * events, n_uint timestep);
+mm_object * mm_episodic_get_relative(mm_episodic * events,
+                                     n_uint max_steps, n_uint timestep);
 
 n_int mm_episodic_protagonists(mm_episodic * events,
                                n_uint timestep_start,

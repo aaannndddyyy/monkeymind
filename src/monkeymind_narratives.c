@@ -134,3 +134,61 @@ n_int mm_narratives_match_tale(mm_narratives * narratives,
     }
     return winner;
 }
+
+n_int mm_narratives_predict_events(mm_narratives * narratives,
+                                   mm_episodic * events,
+                                   n_uint no_of_past_events,
+                                   n_uint max_results,
+                                   n_uint * results)
+{
+    n_uint i, j, k, off;
+    mm_tale * tale;
+    n_uint no_of_results = 0;
+    n_uint index, similarity;
+    const n_uint results_fields = 3;
+
+    for (i = 0; i < narratives->length; i++) {
+        tale = &narratives->tale[i];
+        if (tale->length <= no_of_past_events) {
+            continue;
+        }
+        for (off = 0; off < tale->length - no_of_past_events; off++) {
+            /* calculate the similarity of this series of events
+               within the tale at the given offset */
+            similarity = 0;
+            for (j = 0; j < no_of_past_events; j++) {
+                similarity +=
+                    mm_obj_match(mm_episodic_get_relative(events,
+                                                          no_of_past_events,
+                                                          j),
+                                 &tale->step[off+j]);
+            }
+            if (similarity > 0) {
+                /* update the results table
+                   fields are similarity, tale index and offset
+                 */
+                index = 0;
+                for (j = 0; j < no_of_results; j++) {
+                    if (similarity > results[j*results_fields]) {
+                        index = j;
+                        break;
+                    }
+                }
+                if (index < max_results) {
+                    /* move results with lower similarity down the list */
+                    for (j = max_results-1; j > index; j--) {
+                        for (k = 0; k < results_fields; k++) {
+                            results[j*results_fields + k] =
+                                results[(j-1)*results_fields + k];
+                        }
+                    }
+                    /* insert the new result */
+                    results[index*results_fields] = similarity;
+                    results[index*results_fields + 1] = i;
+                    results[index*results_fields + 2] = off+no_of_past_events;
+                }
+            }
+        }
+    }
+    return no_of_results;
+}

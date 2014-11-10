@@ -93,6 +93,22 @@ mm_object * mm_episodic_get(mm_episodic * events, n_uint timestep)
     return &events->sequence[index];
 }
 
+/* returns an event relative to the current time */
+mm_object * mm_episodic_get_relative(mm_episodic * events,
+                                     n_uint window_steps, n_uint timestep)
+{
+    n_uint max = mm_episodic_max(events);
+    n_int index;
+
+    if ((max == 0) || (timestep >= max)) return 0;
+    index = (n_int)events->index - (n_int)window_steps + (n_int)timestep;
+    if (index < 0) index += MM_EVENT_MEMORY_SIZE;
+    if (!mm_obj_exists(&events->sequence[index])) {
+        return 0;
+    }
+    return &events->sequence[index];
+}
+
 /* returns a list of protagonists which appear between certain time steps in
    the event sequence */
 n_int mm_episodic_protagonists(mm_episodic * events,
