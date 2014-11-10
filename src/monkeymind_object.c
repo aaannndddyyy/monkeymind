@@ -274,6 +274,7 @@ void mm_obj_prop_get_id(mm_object * obj,
     n_int index = mm_obj_prop_index(obj, property_type);
     if (index > -1) {
         mm_id_copy(&obj->property_id[index], id);
+		return;
     }
     mm_id_clear(id);
 }

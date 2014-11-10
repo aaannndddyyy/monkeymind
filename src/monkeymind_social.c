@@ -33,12 +33,19 @@
 
 n_int mm_social_graph_entry_exists(monkeymind *mind, n_int index)
 {
-	mm_id test_id;
+	mm_id meeter_id, met_id;
 
 	mm_obj_prop_get_id(&mind->social_graph[index],
-					   MM_PROPERTY_MEETER, &test_id);
+					   MM_PROPERTY_MEETER, &meeter_id);
 
-	return mm_id_exists(&test_id);
+	if (!mm_id_exists(&meeter_id)) {
+		return 0;
+	}
+
+	mm_obj_prop_get_id(&mind->social_graph[index],
+					   MM_PROPERTY_MET, &met_id);
+
+	return mm_id_exists(&met_id);
 }
 
 /* returns the social graph array index of the individual having the
@@ -394,6 +401,9 @@ static void mm_social_add(monkeymind * meeter, monkeymind * met,
 
     mm_obj_prop_add_id(individual,
 					   MM_PROPERTY_MEETER, &meeter->id);
+
+	/* add an id for the social graph entry */
+	mm_id_create(&meeter->seed, &individual->id);
 
     mm_obj_prop_add(individual,
                     MM_PROPERTY_MEETER_NAME,

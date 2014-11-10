@@ -55,13 +55,13 @@ static void test_id()
 	for (itt = 0; itt < 10; itt++) {
 		mm_id_create(&seed, &id2);
 		if (mm_id_equals(&id, &id2)) {
-			printf("\n(itt %d)\n  ", itt);
+			printf("\n(itt %d)\n  ", (int)itt);
 			for (i = 0; i < MM_ID_LENGTH; i++) {
-				printf("%d ", mm_id_get(&id, i));
+				printf("%d ", (int)mm_id_get(&id, i));
 			}
 			printf("\n");
 			for (i = 0; i < MM_ID_LENGTH; i++) {
-				printf("%d ", mm_id_get(&id2, i));
+				printf("%d ", (int)mm_id_get(&id2, i));
 			}
 			printf("\n");
 		}
@@ -89,6 +89,53 @@ static void test_init()
     mm_init(&mind, MM_SEX_FEMALE, 3, 6, NULL);
 
     printf("Ok\n");
+}
+
+static void test_object_id()
+{
+    mm_object obj;
+	mm_id id, test_id;
+    mm_random_seed seed;
+	n_uint i;
+
+    printf("test_object_id...");
+
+    /* Set a random seed */
+    mm_rand_init(&seed, 0,1,2,3);
+
+    /* create an id */
+    mm_id_create(&seed, &id);
+    mm_id_clear(&test_id);
+
+    /* test that the id exists */
+    for (i = 0; i < MM_ID_LENGTH; i++) {
+        assert(mm_id_get(&id, i) != 0);
+    }
+    assert(mm_id_exists(&id));
+
+	/* add the id as an object property */
+	mm_obj_init(&obj);
+	mm_obj_prop_add_id(&obj,
+					   MM_PROPERTY_MEETER, &id);
+
+	/* check that the id is returned */
+	mm_obj_prop_get_id(&obj,
+					   MM_PROPERTY_MEETER, &test_id);
+
+	if (!mm_id_equals(&id, &test_id)) {
+		printf("\nid =");
+		for (i = 0; i < MM_ID_LENGTH; i++) {
+			printf(" %d", (int)id.value[i]);
+		}
+		printf("\nreturned id =");
+		for (i = 0; i < MM_ID_LENGTH; i++) {
+			printf(" %d", (int)test_id.value[i]);
+		}
+		printf("\n");
+	}
+	assert(mm_id_equals(&id, &test_id));
+
+	printf("Ok\n");
 }
 
 static void test_spatial()
@@ -200,13 +247,20 @@ static void test_social_meet()
     n_int i;
     n_uint name;
     mm_object * g;
+    mm_random_seed seed_m0, seed_m1, seed_m2;
+	mm_id test_id;
 
     printf("test_social_meet...");
 
+    /* Set a random seed */
+    mm_rand_init(&seed_m0, 0,1,2,3);
+    mm_rand_init(&seed_m1, 5,6,2,8);
+    mm_rand_init(&seed_m2, 9,4,6,1);
+
     /* Create three agents */
-    mm_init(&m0, MM_SEX_MALE, 10,20, NULL);
-    mm_init(&m1, MM_SEX_FEMALE, 11,31, NULL);
-    mm_init(&m2, MM_SEX_FEMALE, 7,8, NULL);
+    mm_init(&m0, MM_SEX_MALE, 10,20, &seed_m0);
+    mm_init(&m1, MM_SEX_FEMALE, 11,31, &seed_m1);
+    mm_init(&m2, MM_SEX_FEMALE, 7,8, &seed_m2);
 
     /* Get the name of the first agent */
     name = mm_get_property(&m0, MM_PROPERTY_NAME);
@@ -226,7 +280,12 @@ static void test_social_meet()
     assert(MM_FIRST_NAME(name) == 7);
     assert(MM_SURNAME(name) == 8);
 
-    /* First agent meets the second agent */
+	/* check that the IDs are different */
+	assert(!mm_id_equals(&m0.id,&m1.id));
+	assert(!mm_id_equals(&m0.id,&m2.id));
+	assert(!mm_id_equals(&m1.id,&m2.id));
+
+	/* First agent meets the second agent */
     mm_social_meet(&m0,&m1);
     /* First agent meets the third agent */
     mm_social_meet(&m0,&m2);
@@ -248,8 +307,14 @@ static void test_social_meet()
     /* Get the first non-self social graph entry */
     g = &m0.social_graph[MM_SELF+1];
     /* Verify that the properties are what we expect */
-    assert(mm_obj_prop_get(g,MM_PROPERTY_MET) == 2000);
-    assert(mm_obj_prop_get(g,MM_PROPERTY_MEETER) == 1000);
+	mm_id_clear(&test_id);
+	mm_obj_prop_get_id(g,MM_PROPERTY_MET, &test_id);
+    assert(mm_id_equals(&test_id,&m1.id));
+
+	mm_id_clear(&test_id);
+	mm_obj_prop_get_id(g,MM_PROPERTY_MEETER, &test_id);
+    assert(mm_id_equals(&test_id,&m0.id));
+
     name = mm_obj_prop_get(g,MM_PROPERTY_MET_NAME);
     assert(MM_FIRST_NAME(name) == 11);
     assert(MM_SURNAME(name) == 31);
@@ -260,8 +325,14 @@ static void test_social_meet()
     /* Get the second non-self social graph entry */
     g = &m0.social_graph[MM_SELF+2];
     /* Verify that the properties are what we expect */
-    assert(mm_obj_prop_get(g,MM_PROPERTY_MET) == 3000);
-    assert(mm_obj_prop_get(g,MM_PROPERTY_MEETER) == 1000);
+	mm_id_clear(&test_id);
+	mm_obj_prop_get_id(g,MM_PROPERTY_MET, &test_id);
+    assert(mm_id_equals(&test_id,&m2.id));
+
+	mm_id_clear(&test_id);
+	mm_obj_prop_get_id(g,MM_PROPERTY_MEETER, &test_id);
+    assert(mm_id_equals(&test_id,&m0.id));
+
     name = mm_obj_prop_get(g,MM_PROPERTY_MEETER_NAME);
     assert(MM_FIRST_NAME(name) == 10);
     assert(MM_SURNAME(name) == 20);
@@ -679,6 +750,7 @@ static void test_confabulation()
 void mm_run_tests()
 {
     test_id();
+	test_object_id();
     test_init();
     test_spatial();
     test_object_add_remove_properties();
