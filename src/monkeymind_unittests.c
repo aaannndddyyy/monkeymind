@@ -674,7 +674,7 @@ static void test_confabulation_with_narratives()
     mm_random_seed seed;
 
     printf("test_confabulation_with_narratives...");
-    
+
     /* Set a random seed */
     mm_rand_init(&seed, 0,1,2,3);
 
@@ -760,7 +760,7 @@ static void test_confabulation_with_episodic()
     mm_narratives narratives;
     mm_random_seed seed;
 
-    printf("test_confabulation_with_narratives...");
+    printf("test_confabulation_with_episodic...");
 
     /* Set a random seed */
     mm_rand_init(&seed, 0,1,2,3);
@@ -825,7 +825,7 @@ static void test_confabulation_with_episodic()
         assert(offset == target_offset[i]);
     }
 
-    /* test locating the closest tale to the episodic memory 
+    /* test locating the closest tale to the episodic memory
        within a set of narratives */
     offset = -1;
     index = mm_narratives_match_episodic(&narratives, &events,
