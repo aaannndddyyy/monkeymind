@@ -87,7 +87,6 @@ static void test_init()
     printf("test_init...");
 
     mm_init(&mind, MM_SEX_FEMALE, 3, 6, NULL);
-
     printf("Ok\n");
 }
 
@@ -713,7 +712,6 @@ static void test_confabulation_with_narratives()
         2,1,0,4,3,2,-1,-1,-1,-1
     };
     for (i = 0; i < 10; i++) {
-        offset = -1;
         similarity = mm_tale_match(&tale_source, &narratives.tale[i], &offset);
         if ((similarity != target_similarity[i]) ||
             (offset != target_offset[i])) {
@@ -725,7 +723,6 @@ static void test_confabulation_with_narratives()
     }
 
     /* test locating the closest tale within a set of narratives */
-    offset = -1;
     index = mm_narratives_match_tale(&narratives, &tale_source,
                                      (n_int)-1, &offset);
     if (index != 1) {
@@ -739,7 +736,6 @@ static void test_confabulation_with_narratives()
 
     /* test the match again to ensure that it is more similar
        than before */
-    offset = -1;
     similarity = mm_tale_match(&tale_source, &narratives.tale[index], &offset);
     if ((similarity != 9) ||
         (offset != target_offset[index])) {
@@ -767,17 +763,17 @@ static void test_confabulation_with_episodic()
 
     mm_narratives_init(&narratives);
 
-    /* create some tales and add them to te narratives */
+    /* create some tales and add them to the narratives */
     for (i = 0; i < 10; i++) {
         mm_tale tale;
         mm_tale_init(&tale, &seed);
-        for (j = 0; j < 11; j++) {
+        for (j = 0; j < MM_EVENT_MEMORY_SIZE/2; j++) {
             mm_object scene;
             mm_obj_init(&scene);
             mm_obj_prop_add(&scene, (j%5)+i, (j*2)%10);
             mm_tale_add(&tale, &scene);
         }
-        assert(tale.length == 11);
+        assert(tale.length == j);
         assert(mm_narratives_add(&narratives, &tale) == 0);
         assert(narratives.length == i+1);
     }
@@ -785,16 +781,18 @@ static void test_confabulation_with_episodic()
     /* create an episodic memory and fill it with events*/
     mm_episodic events;
     mm_episodic_init(&events);
-    for (j = 0; j < MM_EVENT_MEMORY_SIZE; j++) {
+    for (i = 0; i < MM_EVENT_MEMORY_SIZE; i++) {
         mm_object scene;
         mm_obj_init(&scene);
-        mm_obj_prop_add(&scene, (j%5)+2, (j*3)%10);
+        for (j = 0; j < 11; j++) {
+			mm_obj_prop_add(&scene, (j%5)+2, (j*3)%10);
+		}
         mm_episodic_add(&events, &scene);
-        if (mm_episodic_max(&events) != j+1) {
+        if (mm_episodic_max(&events) != i+1) {
             printf("\n%d mm_episodic_max(&events) %d\n",
-                   (int)j, (int)mm_episodic_max(&events));
+                   (int)i, (int)mm_episodic_max(&events));
         }
-        assert(mm_episodic_max(&events) == j+1);
+        assert(mm_episodic_max(&events) == i+1);
     }
 
     /* Check that the sequence length increases */
@@ -807,16 +805,19 @@ static void test_confabulation_with_episodic()
 
     /* test episodic matching */
     n_int target_similarity[] = {
-        6,10,8,8,4,4,0,0,0,0
+		4,6,6,9,4,2,0,0,0,0
     };
     n_int target_offset[] = {
-        3,4,0,1,2,3,-1,-1,-1,-1
+		0,0,0,0,0,0,-1,-1,-1,-1
     };
     for (i = 0; i < 10; i++) {
-        offset = -1;
         /* how similar are the events to the tale ? */
         similarity = mm_tale_match_events(&narratives.tale[i], &events, &offset);
-        if ((similarity != target_similarity[i]) ||
+
+		/*printf("%d,", similarity);*/
+		/*printf("%d,", offset);*/
+
+		if ((similarity != target_similarity[i]) ||
             (offset != target_offset[i])) {
             printf("%d similarity = %d  %d\n",
                    (int)i, (int)similarity, (int)offset);
@@ -827,13 +828,12 @@ static void test_confabulation_with_episodic()
 
     /* test locating the closest tale to the episodic memory
        within a set of narratives */
-    offset = -1;
     index = mm_narratives_match_episodic(&narratives, &events,
                                          (n_int)-1, &offset);
-    if (index != 1) {
+    if (index != 3) {
         printf("index = %d\n",(int)index);
     }
-    assert(index == 1);
+    assert(index == 3);
 
     /* make the events closer to the narrative */
     mm_episodic_confabulate(&events, &narratives.tale[index],
@@ -841,14 +841,13 @@ static void test_confabulation_with_episodic()
 
     /* test the match again to ensure that it is more similar
        than before */
-    offset = -1;
     similarity = mm_tale_match_events(&narratives.tale[index], &events, &offset);
-    if ((similarity != 24) ||
+    if ((similarity != 18) ||
         (offset != target_offset[index])) {
         printf("%d similarity = %d  %d\n",
                (int)index, (int)similarity, (int)offset);
     }
-    assert(similarity == 24);
+    assert(similarity == 18);
     assert(offset == target_offset[index]);
 
     printf("Ok\n");

@@ -39,7 +39,7 @@
 #include "monkeymind_episodic.h"
 
 /* the maximum number of steps within a tale sequence */
-#define MM_MAX_TALE_SIZE       16
+#define MM_MAX_TALE_SIZE       (MM_EVENT_MEMORY_SIZE)
 
 typedef struct
 {

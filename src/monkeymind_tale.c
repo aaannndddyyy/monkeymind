@@ -122,6 +122,7 @@ n_int mm_tale_match(mm_tale * tale1, mm_tale * tale2, n_int * offset)
         t2 = tale2;
     }
 
+	*offset = -1;
     for (off = 0; off < t1->length - t2->length; off++) {
         similarity = mm_obj_match(&t1->properties, &t2->properties);
         for (i = 0; i < t2->length; i++) {
@@ -144,17 +145,33 @@ n_int mm_tale_match_events(mm_tale * tale,
     n_int similarity, max_similarity=0;
     n_uint i, off, episodic_length = mm_episodic_max(events);
 
-    for (off = 0; off < episodic_length-tale->length; off++) {
-        similarity = 0;
-        for (i = 0; i < tale->length; i++) {
-            similarity +=
-                mm_obj_match(mm_episodic_get(events, off+i), &tale->step[i]);
-        }
-        if (similarity > max_similarity) {
-            max_similarity = similarity;
-            *offset = off;
-        }
-    }
+	*offset = -1;
+	if (episodic_length >= tale->length) {
+		for (off = 0; off < episodic_length-tale->length; off++) {
+			similarity = 0;
+			for (i = 0; i < tale->length; i++) {
+				similarity +=
+					mm_obj_match(mm_episodic_get(events, off+i), &tale->step[i]);
+			}
+			if (similarity > max_similarity) {
+				max_similarity = similarity;
+				*offset = off;
+			}
+		}
+	}
+	else {
+		for (off = 0; off < tale->length-episodic_length; off++) {
+			similarity = 0;
+			for (i = 0; i < episodic_length; i++) {
+				similarity +=
+					mm_obj_match(mm_episodic_get(events, i), &tale->step[off+i]);
+			}
+			if (similarity > max_similarity) {
+				max_similarity = similarity;
+				*offset = off;
+			}
+		}
+	}
 
     return max_similarity;
 }
