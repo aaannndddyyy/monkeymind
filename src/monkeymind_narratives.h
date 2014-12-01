@@ -65,6 +65,10 @@ n_int mm_narratives_match_tale(mm_narratives * narratives,
                                mm_tale * tale,
                                n_int min_similarity,
                                n_int * offset);
+n_int mm_narratives_match_episodic(mm_narratives * narratives,
+                                   mm_episodic * events,
+                                   n_int min_similarity,
+                                   n_int * offset);
 n_int mm_narratives_predict_events(mm_narratives * narratives,
                                    mm_episodic * events,
                                    n_uint no_of_past_events,

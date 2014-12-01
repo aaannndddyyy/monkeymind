@@ -51,22 +51,22 @@ static void test_id()
     }
     assert(mm_id_exists(&id));
 
-	/* check that the same id isn't created repeatedly */
-	for (itt = 0; itt < 10; itt++) {
-		mm_id_create(&seed, &id2);
-		if (mm_id_equals(&id, &id2)) {
-			printf("\n(itt %d)\n  ", (int)itt);
-			for (i = 0; i < MM_ID_LENGTH; i++) {
-				printf("%d ", (int)mm_id_get(&id, i));
-			}
-			printf("\n");
-			for (i = 0; i < MM_ID_LENGTH; i++) {
-				printf("%d ", (int)mm_id_get(&id2, i));
-			}
-			printf("\n");
-		}
-		assert(!mm_id_equals(&id, &id2));
-	}
+    /* check that the same id isn't created repeatedly */
+    for (itt = 0; itt < 10; itt++) {
+        mm_id_create(&seed, &id2);
+        if (mm_id_equals(&id, &id2)) {
+            printf("\n(itt %d)\n  ", (int)itt);
+            for (i = 0; i < MM_ID_LENGTH; i++) {
+                printf("%d ", (int)mm_id_get(&id, i));
+            }
+            printf("\n");
+            for (i = 0; i < MM_ID_LENGTH; i++) {
+                printf("%d ", (int)mm_id_get(&id2, i));
+            }
+            printf("\n");
+        }
+        assert(!mm_id_equals(&id, &id2));
+    }
 
     /* clear the id */
     mm_id_clear(&id);
@@ -94,9 +94,9 @@ static void test_init()
 static void test_object_id()
 {
     mm_object obj;
-	mm_id id, test_id;
+    mm_id id, test_id;
     mm_random_seed seed;
-	n_uint i;
+    n_uint i;
 
     printf("test_object_id...");
 
@@ -113,29 +113,29 @@ static void test_object_id()
     }
     assert(mm_id_exists(&id));
 
-	/* add the id as an object property */
-	mm_obj_init(&obj);
-	mm_obj_prop_add_id(&obj,
-					   MM_PROPERTY_MEETER, &id);
+    /* add the id as an object property */
+    mm_obj_init(&obj);
+    mm_obj_prop_add_id(&obj,
+                       MM_PROPERTY_MEETER, &id);
 
-	/* check that the id is returned */
-	mm_obj_prop_get_id(&obj,
-					   MM_PROPERTY_MEETER, &test_id);
+    /* check that the id is returned */
+    mm_obj_prop_get_id(&obj,
+                       MM_PROPERTY_MEETER, &test_id);
 
-	if (!mm_id_equals(&id, &test_id)) {
-		printf("\nid =");
-		for (i = 0; i < MM_ID_LENGTH; i++) {
-			printf(" %d", (int)id.value[i]);
-		}
-		printf("\nreturned id =");
-		for (i = 0; i < MM_ID_LENGTH; i++) {
-			printf(" %d", (int)test_id.value[i]);
-		}
-		printf("\n");
-	}
-	assert(mm_id_equals(&id, &test_id));
+    if (!mm_id_equals(&id, &test_id)) {
+        printf("\nid =");
+        for (i = 0; i < MM_ID_LENGTH; i++) {
+            printf(" %d", (int)id.value[i]);
+        }
+        printf("\nreturned id =");
+        for (i = 0; i < MM_ID_LENGTH; i++) {
+            printf(" %d", (int)test_id.value[i]);
+        }
+        printf("\n");
+    }
+    assert(mm_id_equals(&id, &test_id));
 
-	printf("Ok\n");
+    printf("Ok\n");
 }
 
 static void test_spatial()
@@ -248,7 +248,7 @@ static void test_social_meet()
     n_uint name;
     mm_object * g;
     mm_random_seed seed_m0, seed_m1, seed_m2;
-	mm_id test_id;
+    mm_id test_id;
 
     printf("test_social_meet...");
 
@@ -280,12 +280,12 @@ static void test_social_meet()
     assert(MM_FIRST_NAME(name) == 7);
     assert(MM_SURNAME(name) == 8);
 
-	/* check that the IDs are different */
-	assert(!mm_id_equals(&m0.id,&m1.id));
-	assert(!mm_id_equals(&m0.id,&m2.id));
-	assert(!mm_id_equals(&m1.id,&m2.id));
+    /* check that the IDs are different */
+    assert(!mm_id_equals(&m0.id,&m1.id));
+    assert(!mm_id_equals(&m0.id,&m2.id));
+    assert(!mm_id_equals(&m1.id,&m2.id));
 
-	/* First agent meets the second agent */
+    /* First agent meets the second agent */
     mm_social_meet(&m0,&m1);
     /* First agent meets the third agent */
     mm_social_meet(&m0,&m2);
@@ -307,12 +307,12 @@ static void test_social_meet()
     /* Get the first non-self social graph entry */
     g = &m0.social_graph[MM_SELF+1];
     /* Verify that the properties are what we expect */
-	mm_id_clear(&test_id);
-	mm_obj_prop_get_id(g,MM_PROPERTY_MET, &test_id);
+    mm_id_clear(&test_id);
+    mm_obj_prop_get_id(g,MM_PROPERTY_MET, &test_id);
     assert(mm_id_equals(&test_id,&m1.id));
 
-	mm_id_clear(&test_id);
-	mm_obj_prop_get_id(g,MM_PROPERTY_MEETER, &test_id);
+    mm_id_clear(&test_id);
+    mm_obj_prop_get_id(g,MM_PROPERTY_MEETER, &test_id);
     assert(mm_id_equals(&test_id,&m0.id));
 
     name = mm_obj_prop_get(g,MM_PROPERTY_MET_NAME);
@@ -325,12 +325,12 @@ static void test_social_meet()
     /* Get the second non-self social graph entry */
     g = &m0.social_graph[MM_SELF+2];
     /* Verify that the properties are what we expect */
-	mm_id_clear(&test_id);
-	mm_obj_prop_get_id(g,MM_PROPERTY_MET, &test_id);
+    mm_id_clear(&test_id);
+    mm_obj_prop_get_id(g,MM_PROPERTY_MET, &test_id);
     assert(mm_id_equals(&test_id,&m2.id));
 
-	mm_id_clear(&test_id);
-	mm_obj_prop_get_id(g,MM_PROPERTY_MEETER, &test_id);
+    mm_id_clear(&test_id);
+    mm_obj_prop_get_id(g,MM_PROPERTY_MEETER, &test_id);
     assert(mm_id_equals(&test_id,&m0.id));
 
     name = mm_obj_prop_get(g,MM_PROPERTY_MEETER_NAME);
@@ -666,21 +666,21 @@ static void test_narratives()
     printf("Ok\n");
 }
 
-static void test_confabulation()
+static void test_confabulation_with_narratives()
 {
     n_uint i, j;
     n_int offset=0, similarity, index;
     mm_narratives narratives;
     mm_random_seed seed;
 
-    printf("test_confabulation...");
-
+    printf("test_confabulation_with_narratives...");
+    
     /* Set a random seed */
     mm_rand_init(&seed, 0,1,2,3);
 
     mm_narratives_init(&narratives);
 
-    /* create some tales */
+    /* create some tales and add them to the narratives */
     for (i = 0; i < 10; i++) {
         mm_tale tale;
         mm_tale_init(&tale, &seed);
@@ -746,7 +746,109 @@ static void test_confabulation()
         printf("%d similarity = %d  %d\n",
                (int)index, (int)similarity, (int)offset);
     }
+
     assert(similarity == 9);
+    assert(offset == target_offset[index]);
+
+    printf("Ok\n");
+}
+
+static void test_confabulation_with_episodic()
+{
+    n_uint i, j;
+    n_int offset=0, similarity, index;
+    mm_narratives narratives;
+    mm_random_seed seed;
+
+    printf("test_confabulation_with_narratives...");
+
+    /* Set a random seed */
+    mm_rand_init(&seed, 0,1,2,3);
+
+    mm_narratives_init(&narratives);
+
+    /* create some tales and add them to te narratives */
+    for (i = 0; i < 10; i++) {
+        mm_tale tale;
+        mm_tale_init(&tale, &seed);
+        for (j = 0; j < 11; j++) {
+            mm_object scene;
+            mm_obj_init(&scene);
+            mm_obj_prop_add(&scene, (j%5)+i, (j*2)%10);
+            mm_tale_add(&tale, &scene);
+        }
+        assert(tale.length == 11);
+        assert(mm_narratives_add(&narratives, &tale) == 0);
+        assert(narratives.length == i+1);
+    }
+
+    /* create an episodic memory and fill it with events*/
+    mm_episodic events;
+    mm_episodic_init(&events);
+    for (j = 0; j < MM_EVENT_MEMORY_SIZE; j++) {
+        mm_object scene;
+        mm_obj_init(&scene);
+        mm_obj_prop_add(&scene, (j%5)+2, (j*3)%10);
+        mm_episodic_add(&events, &scene);
+        if (mm_episodic_max(&events) != j+1) {
+            printf("\n%d mm_episodic_max(&events) %d\n",
+                   (int)j, (int)mm_episodic_max(&events));
+        }
+        assert(mm_episodic_max(&events) == j+1);
+    }
+
+    /* Check that the sequence length increases */
+    if (mm_episodic_max(&events) != MM_EVENT_MEMORY_SIZE) {
+        printf("\nmm_episodic_max(&events) %d/%d\n",
+               (int)mm_episodic_max(&events),
+               MM_EVENT_MEMORY_SIZE);
+    }
+    assert(mm_episodic_max(&events) == MM_EVENT_MEMORY_SIZE);
+
+    /* test episodic matching */
+    n_int target_similarity[] = {
+        6,10,8,8,4,4,0,0,0,0
+    };
+    n_int target_offset[] = {
+        3,4,0,1,2,3,-1,-1,-1,-1
+    };
+    for (i = 0; i < 10; i++) {
+        offset = -1;
+        /* how similar are the events to the tale ? */
+        similarity = mm_tale_match_events(&narratives.tale[i], &events, &offset);
+        if ((similarity != target_similarity[i]) ||
+            (offset != target_offset[i])) {
+            printf("%d similarity = %d  %d\n",
+                   (int)i, (int)similarity, (int)offset);
+        }
+        assert(similarity == target_similarity[i]);
+        assert(offset == target_offset[i]);
+    }
+
+    /* test locating the closest tale to the episodic memory 
+       within a set of narratives */
+    offset = -1;
+    index = mm_narratives_match_episodic(&narratives, &events,
+                                         (n_int)-1, &offset);
+    if (index != 1) {
+        printf("index = %d\n",(int)index);
+    }
+    assert(index == 1);
+
+    /* make the events closer to the narrative */
+    mm_episodic_confabulate(&events, &narratives.tale[index],
+                            100, &seed);
+
+    /* test the match again to ensure that it is more similar
+       than before */
+    offset = -1;
+    similarity = mm_tale_match_events(&narratives.tale[index], &events, &offset);
+    if ((similarity != 24) ||
+        (offset != target_offset[index])) {
+        printf("%d similarity = %d  %d\n",
+               (int)index, (int)similarity, (int)offset);
+    }
+    assert(similarity == 24);
     assert(offset == target_offset[index]);
 
     printf("Ok\n");
@@ -755,7 +857,7 @@ static void test_confabulation()
 void mm_run_tests()
 {
     test_id();
-	test_object_id();
+    test_object_id();
     test_init();
     test_spatial();
     test_object_add_remove_properties();
@@ -766,7 +868,8 @@ void mm_run_tests()
     test_episodic();
     test_tale();
     test_narratives();
-    test_confabulation();
+    test_confabulation_with_narratives();
+    test_confabulation_with_episodic();
 
     printf("All tests passed\n");
 }

@@ -36,6 +36,7 @@ void mm_tale_init(mm_tale * tale, mm_random_seed * seed)
     mm_id_create(seed, &tale->id);
     tale->length = 0;
     tale->times_told = 0;
+    mm_obj_init(&tale->properties);
 
     // clear the tale
     memset((void*)tale->step, '\0',
@@ -149,7 +150,7 @@ n_int mm_tale_match_events(mm_tale * tale,
             similarity +=
                 mm_obj_match(mm_episodic_get(events, off+i), &tale->step[i]);
         }
-		if (similarity > max_similarity) {
+        if (similarity > max_similarity) {
             max_similarity = similarity;
             *offset = off;
         }

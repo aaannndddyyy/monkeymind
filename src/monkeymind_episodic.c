@@ -68,11 +68,11 @@ void mm_episodic_add(mm_episodic * events,
 /* returns the number of events in the sequence */
 n_uint mm_episodic_max(mm_episodic * events)
 {
-    if (events->index == 0) return 0;
-
     if (mm_obj_exists(&events->sequence[MM_EVENT_MEMORY_SIZE-1])) {
         return MM_EVENT_MEMORY_SIZE;
     }
+
+    if (events->index == 0) return 0;
 
     return events->index;
 }

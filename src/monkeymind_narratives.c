@@ -135,6 +135,29 @@ n_int mm_narratives_match_tale(mm_narratives * narratives,
     return winner;
 }
 
+/* Returns the narratives array index of the closest matching tale
+   to the given episodic memory.
+   This acts as a sort of frame matching */
+n_int mm_narratives_match_episodic(mm_narratives * narratives,
+                                   mm_episodic * events,
+                                   n_int min_similarity,
+                                   n_int * offset)
+{
+    n_int i, similarity, winner = -1;
+    n_int max_similarity = min_similarity;
+    n_int off = -1;
+
+    for (i = 0; i <narratives->length; i++) {
+        similarity = mm_tale_match_events(&narratives->tale[i], events, &off);
+        if (similarity > max_similarity) {
+            max_similarity = similarity;
+            winner = i;
+            *offset = off;
+        }
+    }
+    return winner;
+}
+
 n_int mm_narratives_predict_events(mm_narratives * narratives,
                                    mm_episodic * events,
                                    n_uint no_of_past_events,
