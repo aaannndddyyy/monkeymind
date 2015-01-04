@@ -178,9 +178,9 @@ void mm_dialogue_internal(monkeymind * mind)
 {
 	/* IDEA: when sleeping narrative memories can be transfered
 	   to the episodic buffer and vice versa */
-	n_uint awake_percent =
+	/*n_uint awake_percent =
 		mm_obj_prop_get(mind->properties,
-						MM_PROPERTY_AWAKE_PERCENT);
+		MM_PROPERTY_AWAKE_PERCENT);*/
 
 	/*mm_episodic_confabulate(&mind->episodic_buffer, mm_tale * tale,
 	  awake_percent, mind->seed);*/
