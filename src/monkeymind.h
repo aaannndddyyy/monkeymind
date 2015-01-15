@@ -122,7 +122,7 @@ typedef struct
     mm_object spatial[MM_SIZE_SPATIAL*MM_SIZE_SPATIAL];
 
 	/* Here "cognitive system" refers to something like
-       the reaction-diffuction system in Noble Ape */
+       the reaction-diffusion system in Noble Ape */
 
     /* pointer to the state of the cognitive system */
     n_byte * cognitive_system_state;
