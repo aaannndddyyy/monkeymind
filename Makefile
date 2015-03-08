@@ -5,9 +5,9 @@ ARCH_TYPE=`uname -m`
 PREFIX?=/usr/local
 
 all:
-	gcc -Wall -std=gnu99 -pedantic -O3 -o ${APP} src/*.c -Isrc src/png/*.c -lz
+	gcc -Wall -std=gnu99 -pedantic -O3 -o ${APP} src/*.c -Isrc
 debug:
-	gcc -Wall -std=gnu99 -pedantic -g -o ${APP} src/*.c -Isrc src/png/*.c -lz
+	gcc -Wall -std=gnu99 -pedantic -g -o ${APP} src/*.c -Isrc
 source:
 	tar -cvf ../${APP}_${VERSION}.orig.tar ../${APP}-${VERSION} --exclude-vcs
 	gzip -f9n ../${APP}_${VERSION}.orig.tar

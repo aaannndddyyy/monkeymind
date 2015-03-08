@@ -37,7 +37,6 @@
 #include <assert.h>
 #include "monkeymind.h"
 #include "monkeymind_social.h"
-#include "png/png2.h"
 
 void mm_run_tests();
 
